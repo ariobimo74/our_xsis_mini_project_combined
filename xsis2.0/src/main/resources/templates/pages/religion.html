@@ -1,0 +1,523 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+    <div class="bottom p-4">
+        <div class="col">
+            <div class="container">
+                <h1 id="header" class="h1">Religion</h1>
+                <!-- Button trigger modal -->
+                <div>
+                    <div style="float: left;">
+
+                        <div class="input-group input-group-sm" style="width: 280px;">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                                id="inputSearch">
+                            <div class="input-group-append">
+                                <button type="submit" id="btn-reset" class="btn btn-default">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button type="submit" id="btn-search" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div style="float: right; margin-right: 50px;">
+
+                        <h4>
+                            <a data-toggle="modal" data-target="#addData" href="#"><i class="fa fa-plus-circle"
+                                    aria-hidden="true"></i></a>
+                        </h4>
+
+                    </div>
+                    <!-- <div style="float: right; margin-right: 25px;">
+
+            <div class="input-group-prepend"></div>
+            <select id="maxRows" onchange="row_per_page(this.value)">
+              <option value="100">Show All</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+            </select>
+          </div> -->
+                    <div style="float: right; margin-right: 25px;">
+                        <h4>
+                            <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href=""
+                                id="page_show"><i class="fa fa-align-justify" aria-hidden="true" aria-haspopup="true"
+                                    aria-expanded="false"></i></a>
+                            <div class="dropdown-menu dropdown-menu-lg-right">
+                                <a class="dropdown-item"> Row Per Page </a>
+                                <a id="data-show-10" class="dropdown-item" type="button">10</a>
+                                <a id="data-show-20" class="dropdown-item" type="button">20</a>
+                                <a id="data-show-30" class="dropdown-item" type="button">30</a>
+                                <a id="data-show-40" class="dropdown-item" type="button">40</a>
+                                <a id="data-show-50" class="dropdown-item" type="button">50</a>
+                            </div>
+                        </h4>
+                    </div>
+
+                    <!-- <div style="float: right; margin-right: 25px;">
+
+            <div class="input-group-prepend"></div>
+            <select id="sort" onchange="order(this.value)">
+              <option><i class="fa fa-plus-circle"></i></option>
+              <option value="Ascending">Ascending</option>
+              <option value="Descending">Descending</option>
+            </select>
+          </div> -->
+
+                    <div style="float: right; margin-right: 25px;">
+
+                        <h4>
+                            <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href=""
+                                id="page_sort_show"><i class="fa fa-sort-alpha-down" aria-hidden="true"
+                                    aria-haspopup="true" aria-expanded="false"></i></a>
+                            <div class="dropdown-menu dropdown-menu-lg-right">
+                                <a class="dropdown-item"> Order </a>
+                                <a onclick="dataShowAsc()" class="dropdown-item" type="button">Ascending</a>
+                                <a onclick="dataShowDesc()" class="dropdown-item" type="button">Descending</a>
+                            </div>
+                        </h4>
+                    </div>
+
+                </div>
+                <table class="table table-striped" id="tableReligion">
+                    <thead>
+                        <tr class='text-center'>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Deskripsi</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbReligion">
+
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-4 align-right text-left" id="show_pagination">
+                        <div id="pager" class="paginationjs-big">
+                            <ul id="pagination" class="pagination-sm"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal add -->
+    <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Form Add Religion</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formData">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="title">Nama Agama *</label><br>
+                                <input class="form-control" type="text" id="name" name="name"
+                                    placeholder="Religion Name">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="title">Deskripsi :</label><br>
+                                <textarea class="form-control" type="text" id="description" name="description" rows="6"
+                                    maxlength="255"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <p>Kolom Bertanda (*) Wajib Diisi</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <input readonly class="form-control" type="hidden" id="editReligionId" name="id"
+                                placeholder="Role id">
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="title">Nama Agama *</label><br>
+                                <input class="form-control" type="text" id="editReligionName" name="name"
+                                    placeholder="Religion Name">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="title">Deskripsi :</label><br>
+                                <textarea class="form-control" type="text" id="editReligionDescription"
+                                    name="description"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="editBtn" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="religion">
+    <script>
+        $(() => {
+            loadData();
+
+        });
+
+        loadData = () => {
+
+            var rowperpage = 100;
+            row_per_page("", rowperpage);
+
+        }
+
+        function row_per_page(name, rowperpage) {
+            var $pagination = $('#pagination');
+            if (name == "") {
+                $.ajax({
+                    url: "api/religion",
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        $pagination.pagination({
+                            dataSource: data,
+                            pageSize: rowperpage,
+                            showPageNumbers: false,
+                            showNavigator: true,
+                            callback: function (displayRecords, pagination) {
+                                $('#tbReligion').html('');
+                                for (var i = 0; i < displayRecords.length; i++) {
+                                    tr = $('<tr class="text-center">');
+                                    tr.append("<td>" + displayRecords[i].name + "</td>");
+                                    tr.append("<td>" + displayRecords[i].description + "</td>");
+                                    tr.append('<td>\n' +
+                                        '<div class="input-group-btn">\n' +
+                                        '             <div class="dropdown show">\n' +
+                                        '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                                        '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                                        '                 <a class="dropdown-item" onclick="editAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#editModal">Edit</a>\n' +
+                                        '                 <a class="dropdown-item" onclick="deleteAction(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')">Delete</a>\n' +
+                                        '            </div>\n' +
+                                        '             </div>\n' +
+                                        '        </div>\n' +
+                                        '</td>\n' +
+                                        '</tr>')
+                                    $('#tbReligion').append(tr);
+                                }
+                            }
+                        });
+                    }
+                });
+            } else if (name != "") {
+                $.ajax({
+                    url: 'api/religion/search?name=' + name,
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        $pagination.pagination({
+                            dataSource: data,
+                            pageSize: rowperpage,
+                            showPageNumbers: false,
+                            showNavigator: true,
+                            callback: function (displayRecords, pagination) {
+                                $('#tbReligion').html('');
+                                for (var i = 0; i < displayRecords.length; i++) {
+                                    tr = $('<tr class="text-center">');
+                                    tr.append("<td>" + displayRecords[i].name + "</td>");
+                                    tr.append("<td>" + displayRecords[i].description + "</td>");
+                                    tr.append('<td>\n' +
+                                        '<div class="input-group-btn">\n' +
+                                        '             <div class="dropdown show">\n' +
+                                        '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                                        '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                                        '                 <a class="dropdown-item" onclick="editAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#editModal">Edit</a>\n' +
+                                        '                 <a class="dropdown-item" onclick="deleteAction(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')">Delete</a>\n' +
+                                        '            </div>\n' +
+                                        '             </div>\n' +
+                                        '        </div>\n' +
+                                        '</td>\n' +
+                                        '</tr>')
+                                    $('#tbReligion').append(tr);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        $('#btn-search').click(() => {
+            var x = document.getElementById("show_pagination");
+            x.style.display = "block";
+            if ($('#inputSearch').val() == "") {
+                swal.fire("Data Search Empty!", "Set Role Name Keyword", "Warning");
+            } else if ($('#inputSearch').val() != "") {
+                var search_name = $('#inputSearch').val();
+                var name = search_name.toLowerCase();
+                row_per_page(name, 100);
+            }
+        })
+
+        $('#btn-reset').click(() => {
+            var x = document.getElementById("show_pagination");
+            x.style.display = "block";
+            $('#inputSearch').val("");
+            var search_name = $('#inputSearch').val();
+            row_per_page(search_name, 100);
+        })
+
+        $("#inputSearch").on("keydown", function (e) {
+            var x = document.getElementById("show_pagination");
+            x.style.display = "block";
+            var search_name = $('#inputSearch').val();
+            if (e.which == 13) {
+                row_per_page(search_name, 100);
+            }
+        });
+
+        function dataShowAsc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("tableReligion");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function dataShowDesc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("tableReligion");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+
+        $('#saveBtn').click(() => {
+            var data = getFormData($('#formData'));
+            console.log(JSON.stringify(data));
+
+            if ($('#name').val() == "") {
+                swal.fire("Nama Agama Tidak Boleh Kosong", "", "error");
+            } else {
+                $.ajax({
+                    url: 'api/religion/',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: (res) => {
+
+                        $('#addData').modal('hide');
+                        swal.fire("Data Berhasil Disimpan ", "", "success");
+                        $('#formData input[type=text]').val("");
+                        $('#formData textarea[type=text]').val("");
+                        loadData();
+                    },
+                    error: () => {
+                        swal.fire("Data Gagal Disimpan", "", "error")
+                    }
+                })
+            }
+        })
+        function editAction(id) {
+            $.ajax({
+                url: 'api/religion/' + id,
+                type: 'get',
+                contentType: 'application/json',
+                success: (res) => {
+                    $('#editReligionId').val(res.id)
+                    $('#editReligionName').val(res.name)
+                    $('#editReligionDescription').val(res.description)
+                },
+                error: () => {
+                    console.log("error fetch data")
+                }
+            })
+        }
+        $('#editBtn').click(() => {
+            var data = getFormData($('#formEdit'));
+            var id = $('#editReligionId').val();
+            if ($('#editReligionName').val() == "") {
+                swal.fire("Nama Agama Tidak Boleh Kosong", "", "error");
+            } else {
+                $.ajax({
+                    url: 'api/religion/' + id,
+                    type: 'put',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: (res) => {
+                        $('#editModal').modal('hide');
+                        swal.fire("Data Berhasil Diubah ", "", "success");
+                        $('#formEdit input[type=text]').val("");
+                        $('#formEdit textarea[type=text]').val("");
+                        $('#inputSearch').val("");
+                        loadData();
+                    },
+                    error: () => {
+                        swal.fire("Data Gagal Di Ubah", "", "error")
+                    }
+                })
+            }
+        });
+        function deleteAction(id, name) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-warning'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Hapus Agama ?',
+                text: "Anda yakin ingin menghapus Agama " + name + " ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: 'api/religion/' + id,
+                        type: 'delete',
+                        contentType: 'application/json',
+                        success: () => {
+                            $('#inputSearch').val("");
+                            loadData();
+                            swal.fire("Agama Berhasil Dihapus ", "", "success");
+                        },
+                    })
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your data file is safe :)',
+                        'error'
+                    )
+                    loadData();
+                }
+            })
+
+        }
+
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+            return indexed_array;
+        }
+
+        $('#data-show-10').on('click', function () {
+            var result_name = $('#inputSearch').val();
+            row_per_page(result_name, 1);
+
+        });
+
+        $('#data-show-20').on('click', function () {
+            var result_name = $('#inputSearch').val();
+            row_per_page(result_name, 2);
+        });
+
+        $('#data-show-30').on('click', function () {
+            var result_name = $('#inputSearch').val();
+            row_per_page(result_name, 3);
+        });
+
+        $('#data-show-40').on('click', function () {
+            var result_name = $('#inputSearch').val();
+            row_per_page(result_name, 4);
+        });
+
+        $('#data-show-50').on('click', function () {
+            var result_name = $('#inputSearch').val();
+            row_per_page(result_name, 5);
+        });
+
+        $("#inputSearch").keyup(function () {
+            var input = $(this);
+            if (input.val() == "") {
+                var x = document.getElementById("show_pagination");
+                x.style.display = "none";
+                row_per_page("", 100);
+            }
+        });
+
+    </script>
+
+</th:block>

@@ -1,0 +1,252 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+    <h1 id="header" class="h1">Time Period</h1>
+    <!-- Button trigger modal -->
+    <div>
+        <div style="float: right; margin-right: 50px;">
+            
+            <h4>
+                <a data-toggle="modal" data-target="#addData" href="#"><i
+                    class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                </h4>
+            
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class='text-center' scope="col">Period Name</th>
+                    <th class='text-center' scope="col">Description</th>
+                    <th class='text-center' scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbTimePeriod">
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal add -->
+    <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Form Add Time Period</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formData">
+                        <div class="form-row">
+                            <div class=col-md-6>
+                            <label for="pengarang">Name Period: :</label><br>
+                            <input class="form-control" type="text" id="name" name="name" 
+                                placeholder="Role Code">
+                            </div>
+                            
+                            <div class=col-md-6>
+                                <label for="pengarang">Description :</label><br>
+                                <input class="form-control" type="text" id="description" name="description" 
+                                    placeholder="Role Name" >
+                                </div>
+                        </div>
+                    </form>
+                    <p>Kolom Bertanda (*) Wajib Diisi</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <input readonly class="form-control" type="hidden" id="eid" name="id"
+                                placeholder="Role id">
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                            <label for="title">Name Period :</label><br>
+                            <input class="form-control" type="text" id="editPeriodName" name="name"
+                                placeholder="Role Code">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pengarang">Description :</label><br>
+                                <input class="form-control" type="text" id="editPeriodDescription" name="description"
+                                placeholder="Role Name">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="editBtn" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="timeperiod">
+    <script>
+        $(() => {
+            loadData();
+        });
+        loadData = () => {
+            $.ajax({
+                url: 'api/time/',
+                type: 'get',
+                contentType: 'application/json',
+                success: (res) => {
+                    $('#tbTimePeriod').html("");
+                    res.map((data) => {
+                        var actions = '<div class="btn-group">\n' +
+                            '            <button type="button" class="btn btn-primary" >More</button>\n' +
+                            '            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">\n' +
+                            '                <span class="caret"></span>\n' +
+                            '                <span class="sr-only">Toggle Dropdown</span></button>\n' +
+                            '            <ul class="dropdown-menu">\n' +
+                            '                <li onclick="editAction(this)" value=' + data.id + ' data-toggle="modal" data-target="#editModal"><a>Ubah</a></li>\n' +
+                            '                <li onclick="deleteAction(\'' + data.id + '\',\'' + data.name + '\')"><a>Hapus</a></li>\n' +
+                            '            </ul>\n' +
+                            '        </div>'
+                        var markup = "<tr><td class='text-center'>" + data.name + "</td><td class='text-center'>" + data.description + "</td><td class='text-center'>" + actions + "</td></tr>"
+                        $('#tbTimePeriod').append(markup)
+                    })
+                },
+                error: () => {
+                    console.log('fetch data failed')
+                }
+            })
+        }
+
+        
+
+        $('#saveBtn').click(() => {
+            var data = getFormData($('#formData'));
+            console.log(JSON.stringify(data));
+            $.ajax({
+                url: 'api/time/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (res) => {
+                    $('#addData').modal('hide');
+                    swal.fire("Data Berhasil Disimpan ","","success");
+                    $('#formData input[type=text]').val("")
+                    loadData();
+                },
+                error: () => {
+                    swal.fire("Data Gagal Disimpan","","error")
+                }
+            })
+            
+        })
+        function editAction(e) {
+            console.log(e)
+            $.ajax({
+                url: 'api/time/' + e.value,
+                type: 'get',
+                contentType: 'application/json',
+                success: (res) => {
+                    $('#eid').val(res.id)
+                    $('#editPeriodName').val(res.name)
+                    $('#editPeriodDescription').val(res.description)
+                },
+                error: () => {
+                    console.log("error fetch data")
+                }
+            })
+        }
+        $('#editBtn').click(() => {
+            var data = getFormData($('#formEdit'));
+            var id = $('#eid').val();
+            $.ajax({
+
+                url: 'api/time/'+id,
+                type: 'put',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (res) => {
+                    $('#editModal').modal('hide');
+                    swal.fire("Data Berhasil Diubah ","","success");
+                    $('#formEdit input[type=text]').val("")
+                    loadData();
+                },
+                error: () => {
+                    swal.fire("Data Gagal Di Ubah","","error")
+                }
+            })
+            
+        });
+        function deleteAction(id, name) {
+            const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+            confirmButton: 'btn btn-danger',
+            cancelButton: 'btn btn-warning'
+        },
+        buttonsStyling: false
+    })
+
+        swalWithBootstrapButtons.fire({
+        title: 'Hapus Role ?',
+        text: "Anda yakin ingin menghapus Time Period " + name + " ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: 'api/time/' + id,
+                type: 'delete',
+                contentType: 'application/json',
+                success: () => {
+                    loadData(urlFindRole);
+                    swal.fire("Role Berhasil Dihapus ","","success");
+                    },
+                })
+        } else if (
+        /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Your data file is safe :)',
+                'error'
+            )
+        loadData();
+        }
+    })
+               
+    }
+
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+            return indexed_array;
+        }
+
+    </script>
+
+</th:block>

@@ -1,0 +1,2947 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+  <div class="bottom">
+    <div class=" col">
+      <div class="container">
+        <div class="card">
+          <div class="card-block">
+            <div class="row mt-3 ml-3">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <input type="search" class="form-control" id="input-search" placeholder="Nama Pelamar">
+                  <input type="hidden" class="form-control" id="temp-input-search">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-primary" id="searchNamaPelamar">Cari</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <button class="btn btn-primary" id="resetNamaPelamar">Reset</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-9 mt-2"></div>
+              <div class="col-md-1 align-right text-right mt-2" id="show_icon1">
+                <button class="btn" data-toggle="dropdown" style="color:black;"><i class="fa fa-sort-alpha-up"
+                    style="margin-left: 50px;"></i>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" style="color: black; text-align: left; font-size: 10;">Order</a>
+                    <a class="dropdown-item" id="asc" style="color: black">Ascending</a>
+                    <a class="dropdown-item" id="desc" style="color: black">Descending</a>
+                  </div>
+              </div>
+              <div class="col-md-2 align-left text-left mt-2" id="show_icon2">
+                <button class="btn" data-toggle="dropdown" style="color: black;"><i class="fa fa-bars"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" style="color: black; text-align: left; font-size: 10;">Row Per Page</a>
+                  <a class="dropdown-item" id="rowperpage_1" style="color: black">1</a>
+                  <a class="dropdown-item" id="rowperpage_2" style="color: black">2</a>
+                  <a class="dropdown-item" id="rowperpage_3" style="color: black">3</a>
+                  <a class="dropdown-item" id="rowperpage_4" style="color: black">4</a>
+                  <a class="dropdown-item" id="rowperpage_5" style="color: black">5</a>
+                </div>
+                <button class="btn" style="color: black;" id="add_button"><i class="fa fa-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+            <div id="showList" class="products">
+              <div class="row" style="display:none" id="loading_gif">
+                <div class="col-md-12 text-center align-middle">
+                  <img src="../../images/search.gif" width="200" height="200">
+                </div>
+              </div>
+              <!-- Show List Vacancy -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 align-right text-left" id="show_pagination">
+              <div id="pager" class="paginationjs-big">
+                <ul id="pagination" class="pagination-sm"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="detailVacancy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" style="overflow-y:auto;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Detail Pelamar</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <i class="fa fa-times" aria-hidden="true" style="color: white;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="sidebar-nav">
+                <div class="navbar navbar-default" role="navigation">
+                  <div class="navbar-collapse sidebar-navbar-collapse">
+                    <div class="list-group" id="list-tab" role="tablist">
+                      <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list"
+                        href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+                      <a class="list-group-item list-group-item-action" id="list-biodata-list" data-toggle="list"
+                        href="#list-biodata" role="tab" aria-controls="biodata">Biodata</a>
+                      <a class="list-group-item list-group-item-action" id="list-pengalaman-kerja-list"
+                        data-toggle="list" href="#list-pengalaman-kerja" role="tab"
+                        aria-controls="pengalaman-kerja">Pengalamann Kerja</a>
+                      <a class="list-group-item list-group-item-action" id="list-pendidikan-list" data-toggle="list"
+                        href="#list-pendidikan" role="tab" aria-controls="pendidikan">Pendidikan</a>
+                      <a class="list-group-item list-group-item-action" id="list-pelatihan-list" data-toggle="list"
+                        href="#list-pelatihan" role="tab" aria-controls="pelatihan">Pelatihan</a>
+                      <a class="list-group-item list-group-item-action" id="list-sertifikasi-list" data-toggle="list"
+                        href="#list-sertifikasi" role="tab" aria-controls="sertifikasi">Sertifikasi</a>
+                      <a class="list-group-item list-group-item-action" id="list-sumber-lowongan-kerja-list"
+                        data-toggle="list" href="#list-sumber-lowongan-kerja" role="tab"
+                        aria-controls="sumber-lowongan-kerja">Sumber Lowongan Kerja</a>
+                      <a class="list-group-item list-group-item-action" id="list-organisasi-list" data-toggle="list"
+                        href="#list-organisasi" role="tab" aria-controls="organisasi">Organisasi</a>
+                      <a class="list-group-item list-group-item-action" id="list-keluarga-list" data-toggle="list"
+                        href="#list-keluarga" role="tab" aria-controls="keluarga">Keluarga</a>
+                      <a class="list-group-item list-group-item-action" id="list-keahlian-list" data-toggle="list"
+                        href="#list-keahlian" role="tab" aria-controls="keahlian">Keahlian</a>
+                      <a class="list-group-item list-group-item-action" id="list-lain-lain-list" data-toggle="list"
+                        href="#list-lain-lain" role="tab" aria-controls="lain-lain">Lain - Lain</a>
+                      <a class="list-group-item list-group-item-action" id="list-dokumen-list" data-toggle="list"
+                        href="#list-dokumen" role="tab" aria-controls="dokumen">Dokumen</a>
+                      <a class="list-group-item list-group-item-action" id="list-catatan-list" data-toggle="list"
+                        href="#list-catatan" role="tab" aria-controls="catatan">Catatan</a>
+                      <a class="list-group-item list-group-item-action" id="list-aktivasi-akun-list" data-toggle="list"
+                        href="#list-aktivasi-akun" role="tab" aria-controls="aktivasi-akun">Aktivasi Akun</a>
+                      <a class="list-group-item list-group-item-action" id="list-lihat-tes-list" data-toggle="list"
+                        href="#list-lihat-tes" role="tab" aria-controls="lihat-tes">Lihat Tes</a>
+                      <a class="list-group-item list-group-item-action" id="list-hasil-tes-list" data-toggle="list"
+                        href="#list-hasil-tes" role="tab" aria-controls="hasil-tes">Hasil Tes</a>
+                    </div>
+                  </div>
+                  <!--/.nav-collapse -->
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="tab-content" id="nav-tabContent">
+                <!-- Profile -->
+                <div class="tab-pane fade show active" id="list-profile" role="tabpanel"
+                  aria-labelledby="list-profile-list">
+                  <div class="col-md-12">
+                    <div class="row mb-3">
+                      <div class="col-md-2">
+                        <div id="showPhoto">
+                          <!-- Show Photo -->
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div id="showProfile">
+                          <!-- Show Profile -->
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <button type="button" class="btn btn-primary mt-1 ml-5">Unduh</button>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12" style="background:#F4F4F4;">
+                        <h5><strong>Pendidikan</strong></h5>
+                        <div id="showListPendidikan">
+                          <!-- Show Pendidikan -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h5><strong>Pengalaman</strong></h5>
+                        <div id="showListPengalaman">
+                          <!-- Show Pengalaman -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12" style="background:#F4F4F4;">
+                        <h5><strong>Keterampilan</strong></h5>
+                        <div class="row">
+                          <div class="col-md-2">
+                            <p>Tingkat Lanjutan</p>
+                            <p>Menengah</p>
+                            <p>Pemula</p>
+                          </div>
+                          <div class="col-md-10">
+                            <div id="keterampilanL1"></div>
+                            <div id="keterampilanL2"></div>
+                            <div id="keterampilanL3"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h5><strong>Training</strong></h5>
+                        <div id="showListTraining">
+                          <!-- Show Training -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12" style="background:#F4F4F4;">
+                        <h5><strong>Sertifikasi</strong></h5>
+                        <div id="showListSertifikasi">
+                          <!-- Show Sertifikasi -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Profile -->
+
+                <!-- Biodata -->
+                <div class="tab-pane fade show" id="list-biodata" role="tabpanel" aria-labelledby="list-biodata-list">
+                  <h4 class="font-weight-bold">Biodata <a data-toggle="modal" data-target="#addModal" href="#"
+                      onclick="get_edit()" id="showEdit"><i class="fa fa-edit" aria-hidden="true"></i></a></h4>
+                  <hr>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-striped font-weight-bold">
+                        <thead>
+                          <tr class="text-center">
+                          </tr>
+                        </thead>
+                        <tbody id="biodata-rows">
+                          <!-- mengisi data pelamara  -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- Biodata -->
+
+                <!-- Pengalaman Kerja -->
+                <div class="tab-pane fade" id="list-pengalaman-kerja" role="tabpanel"
+                  aria-labelledby="list-pengalaman-kerja-list">
+                  <h4>Pengalaman Kerja <a href="#" id="add_button_peker" data-toggle="modal"
+                      data-target="#modal-pengker"><i class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div>
+                    <div>
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="text-left" scope="col">Detail Pekerjaan</th>
+                            <th class="text-left" scope="col">Catatan</th>
+                            <th class="text-left" scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbPengker">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- Pengalaman Kerja -->
+
+                <!-- Pendidikan -->
+                <div class="tab-pane fade" id="list-pendidikan" role="tabpanel" aria-labelledby="list-pendidikan-list">
+                  <h4>Pendidikan <a data-toggle="modal" data-target="#addModal" href="#" id="showAddData"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr class="text-center">
+                              <th scope="col">SEKOLAH/INSTANSI</th>
+                              <th scope="col">JENJANG</th>
+                              <th scope="col">PERIODE</th>
+                              <th scope="col">JURUSAN</th>
+                              <th scope="col">IPK</th>
+                              <th scope="col">#</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbEducation">
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Content will be loaded here...  -->
+                  </div>
+                </div>
+                <!-- Pendidikan -->
+
+                <!-- Pelatihan -->
+                <div class="tab-pane fade" id="list-pelatihan" role="tabpanel" aria-labelledby="list-pelatihan-list">
+                  <h4>Pelatihan <a data-toggle="modal" data-target="#addModal" href="#" id="showaddDataPelatihan"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">PELATIHAN/WORKSHOP</th>
+                            <th scope="col">PENYELENGGARA</th>
+                            <th scope="col">WAKTU</th>
+                            <th scope="col">DURASI</th>
+                            <th scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbPelatihan">
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Content will be loaded here...  -->
+                    </div>
+                  </div>
+                </div>
+                <!-- Pelatihan -->
+
+                <!-- Sertifikasi -->
+                <div class="tab-pane fade" id="list-sertifikasi" role="tabpanel"
+                  aria-labelledby="list-sertifikasi-list">
+                  <h4>Sertifikasi <a data-toggle="modal" data-target="#addModal" href="#" id="showAddDataSertifikasi"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="text-left" scope="col">Nama Sertifikasi</th>
+                            <th class="text-left" scope="col">Penerbit</th>
+                            <th class="text-left" scope="col">Masa Berlaku Sertifikasi</th>
+                            <th class="text-left" scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbSertif">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- Sertifikasi -->
+
+                <!-- Sumber Lowongan Kerja -->
+                <div class="tab-pane fade" id="list-sumber-lowongan-kerja" role="tabpanel"
+                  aria-labelledby="list-sumber-lowongan-kerja-list">
+                  <h4 style="font-size: 15pt">Sumber Loker</h4>
+                  <div class="modal-body">
+                    <div class="card">
+                      <div class="card-block p-3">
+                        <form id="get_sumber_loker">
+                          <input class="form-control" type="hidden" id="biodataId2" name="biodataId" value="">
+                          <input type="hidden" id="get_sumber_loker_id" name="id" class="get_sumber_loker" value="">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label for="get_sumber_loker_sumber">Sumber</label>
+                              <select id="get_sumber_loker_sumber" class="form-control get_sumber">
+                                <option selected hidden disabled>- Pilih -</option>
+                                <option value="Career Center">Career Center</option>
+                                <option value="Referensi">Referensi</option>
+                                <option value="Sumber Lain">Sumber Lain</option>
+                              </select>
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="get_sumber_loker_tipepelamar">Tipe Pelamar</label>
+                              <select id="get_sumber_loker_tipepelamar" class="form-control">
+                                <option selected hidden disabled>- Pilih -</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Senior">Senior</option>
+                                <option value="Profesional">Profesional</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group mt-3">
+                            <label for="get_sumber_loker_namaevent">Nama Event <span><i id="mandatory_name_event"
+                                  class="get_sumber_loker_career_center1 " style="color:red">*</i></span></label>
+                            <input type="text" name="nameevent" id="get_sumber_loker_namaevent"
+                              class="form-control get_sumber_loker_career_center" maxlength="100" required="false">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="get_sumber_loker_namacareercenter">Nama Career Center <span><i
+                                  id="mandatory_carer_center" class="get_sumber_loker_career_center1"
+                                  style="color:red">*</i></span></label>
+                            <input type="text" name="namecareercenter" id="get_sumber_loker_namacareercenter"
+                              class="form-control get_sumber_loker_career_center" maxlength="100" required="false">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="get_sumber_loker_referrername">Referrer Name <span><i
+                                  id="mandatory_referrer_name" class="get_sumber_loker_refrensi1 "
+                                  style="color:red">*</i></span></label>
+                            <input type="text" name="referrername" id="get_sumber_loker_referrername"
+                              class="form-control get_sumber_loker_refrensi" maxlength="100" required="false">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="get_sumber_loker_referrerphonenumber">Referrer Mobile Number <span><i
+                                  id="mandatory_referrer_mobile_number " class="get_sumber_loker_refrensi1"
+                                  style="color:red">*</i></span></label>
+                            <input type="text" name="referrermobilenumber" id="get_sumber_loker_referrerphonenumber"
+                              class="form-control get_sumber_loker_refrensi" maxlength="100" required="false"
+                              onkeypress="return event.charCode >= 48 && event.charCode <=57">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="get_sumber_loker_referreremail">Referrer Email <span><i
+                                  id="mandatory_referrer_email" class="get_sumber_loker_refrensi1"
+                                  style="color:red">*</i></span></label>
+                            <input type="email" name="referreremail" pattern=".+@globex.com" size="30"
+                              id="get_sumber_loker_referreremail" class="form-control get_sumber_loker_refrensi"
+                              maxlength="100" required="false">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="get_sumber_loker_sumberlain">Sumber Lain <span><i id="mandatory_sumber_lain"
+                                  class="get_sumber_loker_sumber_lain1" style="color:red">*</i></span></label>
+                            <input type="text" name="referrersumberlain" id="get_sumber_loker_sumberlain"
+                              class="form-control get_sumber_loker_sumber_lain" maxlength="100" required="false">
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label for="get_sumber_loker_income">Penghasilan Terakhir (IDR) </label>
+                              <input type="text" name="income" id="get_sumber_loker_income"
+                                class="form-control get_sumber_loker" maxlength="100"
+                                onkeypress="return event.charCode >= 48 && event.charCode <=57">
+                            </div>
+
+                            <div class="col-md-6">
+                              <label for="get_sumber_loker_tipepelamar">Tgl. Lamaran Kerja(yyyy-mm-dd)</label>
+                              <div class="input-group">
+                                <input placeholder="Selected date" type="text" id="date-picker"
+                                  class="form-control datepicker get_sumber_loker">
+                                <div class="input-group-prepend">
+                                  <button type="button" id="toggle" class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <p style="color: red; font-size: small;" class="mt-3">kolom bertanda ( * ) merah wajib diisi
+                          </p>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success get_sumber_loker" id="save_button_sumberloker">Save
+                    </button>
+
+                  </div> <!-- /.modal-footer -->
+                </div>
+                <!-- Sumber Lowongan Kerja -->
+
+                <!-- Organisasi -->
+                <div class="tab-pane fade" id="list-organisasi" role="tabpanel" aria-labelledby="list-organisasi-list-">
+                  <h4>Organisasi <a data-toggle="modal" data-target="#AddOrg" href="#" id="tambahOrg"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">NAMA</th>
+                            <th scope="col">JABATAN</th>
+                            <th scope="col">PERIODE</th>
+                            <th scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbOrganisasi">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Content will be loaded here...  -->
+                  </div>
+                </div>
+                <!-- Organisasi -->
+
+                <!-- Keluarga -->
+                <div class="tab-pane fade" id="list-keluarga" role="tabpanel" aria-labelledby="list-keluargra-list">
+                  <h4>Keluarga <a data-toggle="modal" data-target="#addDataKel" href="#" id="showAddDataKel"
+                      onclick="formSaveKel()"><i class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr class="text-center">
+                              <th>Hubungan</th>
+                              <th>Nama</th>
+                              <th>Jenis Kelamin</th>
+                              <th>Tanggal Lahir</th>
+                              <th>Pendidikan</th>
+                              <th>Pekerjaan</th>
+                              <th>Aksi</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbKel">
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                </div>
+                <!-- Keluarga -->
+
+                <!-- Keahlian -->
+                <div class="tab-pane fade" id="list-keahlian" role="tabpanel" aria-labelledby="list-keahlian-list">
+                  <h4>Keahlian <a data-toggle="modal" data-target="#addDataKe" href="#" id="showAddDataKe"
+                      onclick="formSaveKe()"><i class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th>Nama Keahlian</th>
+                            <th>Level Keahlian</th>
+                            <th>Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbKe"></tbody>
+                      </table>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                  </div>
+                </div>
+                <!-- Keahlian -->
+
+                <!-- Lain-Lain -->
+                <div class="tab-pane fade" id="list-lain-lain" role="tabpanel" aria-labelledby="list-lain-lain-list">
+                  <h4>Referensi<small>(Dosen Pembimbing/Atasan sebelumnya yang dapat dimintai keterangan diri)</small><a
+                      data-toggle="modal" data-target="#addRefModal" href="#" id="showAddRef"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="text-left" scope="col">NAMA</th>
+                            <th class="text-left" scope="col">ALAMAT</th>
+                            <th class="text-left" scope="col">JABATAN</th>
+                            <th class="text-left" scope="col">HUBUNGAN</th>
+                            <th class="text-left" scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbReferensi">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <h4>Keterangan Tambahan
+                    <a data-toggle="modal" data-target="#detailKetModal" href="#" id="showDetailKet"><i
+                        class="fa fa-search" aria-hidden="true"></i></a>
+                    <a data-toggle="modal" data-target="#editKetModal" href="#" id="showEditKet"><i class="fa fa-edit"
+                        aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <input type="hidden" id="idketam" name="id" value="">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="text-left" scope="col">Gaji Yang Diharapkan</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="salary"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-left" scope="col">Negotiable</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="nego"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-left" scope="col">Kapan Siap Mulai Bekerja</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="readyToWork"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-left" scope="col">Bersedia Ditempatkan Di Luar Kota</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="readyToOutoftown"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-left" scope="col">Kontak Darurat (Keluarga Tidak Serumah)</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="emergencyName"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-left" scope="col">Nomor Telp.Darurat</th>
+                            <th class="text-left" scope="col">:</th>
+                            <th class="text-left" scope="col" id="emergencyCall"></th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- Lain-Lain -->
+
+                <!-- Dokumen -->
+                <div class="tab-pane fade" id="list-dokumen" role="tabpanel" aria-labelledby="list-dokumen-list-">
+                  <h4>Dokumen <a data-toggle="modal" data-target="#AddDoc" href="#" id="tambahDoc"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">NAMA FILE</th>
+                            <th scope="col">KETERANGAN</th>
+                            <th scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbDokumen">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Content will be loaded here...  -->
+                  </div>
+                </div>
+                <!-- Dokumen -->
+
+                <!-- Catatan -->
+                <div class="tab-pane fade" id="list-catatan" role="tabpanel" aria-labelledby="list-catatan-list">
+                  <h4>Catatan <a data-toggle="modal" data-target="#addDataCat" href="#" id="showAddDataCat">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">Judul Catatan</th>
+                            <th scope="col">Jenis Catatan</th>
+                            <th scope="col">Dibuat Oleh</th>
+                            <th scope="col">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbCat">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                </div>
+                <!-- Catatan -->
+
+                <!-- Aktivasi Akun -->
+                <div class="tab-pane fade" id="list-aktivasi-akun" role="tabpanel"
+                  aria-labelledby="list-aktivasi-akun-list-">
+                  <div class="form-row">
+                    <div class="col-md-9">
+                      <h4>Aktifasi Akun Tes Online</h4>
+                    </div>
+                    <div class="col-md-3">
+                      <button class="btn btn-primary mb-2" id="aktifasi" data-toggle="modal"
+                        onclick="click_aktifasi()">Aktifkan</button>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <hr />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <table>
+                        <tr>
+                          <th scope="col">Username</th>
+                          <th scope="col">: </th>
+                          <th scope="col"><input type="text" name="abuid" id="uname" value=""
+                              style="width: 70px; border: none; border-width: 0px;"></th>
+                          <th scope="col"> - </th>
+                          <th scope="col"><input type="text" id="state" value=""
+                              style="border: none; border-width: 0px;"></th>
+                        </tr>
+                        <tr>
+                          <th scope="col">Password</th>
+                          <th scope="col">: </th>
+                          <th scope="col"><input type="text" name="abpwd" id="pass" value=""
+                              style="width: 70px; border: none; border-width: 0px;"></th>
+                        </tr>
+                      </table>
+                    </div>
+
+                  </div>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">KODE PERIODE</th>
+                            <th scope="col">PERIODE</th>
+                            <th scope="col">TGL. TES</th>
+                            <th scope="col">TGL. BERAKHIR TES</th>
+                            <th scope="col">AKSES</th>
+                            <th scope="col">STATUS</th>
+                            <th scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbAktifasi">
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Content will be loaded here...  -->
+                  </div>
+                </div>
+                <!-- Aktivasi Akun -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- Form Add Data  -->
+  <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Form Add Education</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <i class="fa fa-times" aria-hidden="true" style="color: white;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formAddData">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="biodataId" name="biodataId">
+                <label style="font-size: 10pt;" for="schoolName">Nama Sekolah/Instansi*</label>
+                <input class="form-control" type="text" id="schoolName" name="schoolName" maxlength="100">
+                <!-- <div class="invalid-feedback">
+                  Please enter a Nama Sekolah/Instansi
+                </div> -->
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="city">Kota</label>
+                <input class="custom-form-control" type="text" id="city" name="city" maxlength="50">
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="country">Negara</label>
+                <input class="custom-form-control" type="text" id="country" name="country" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="educationLevelId">Jenjang Pendidikan*</label>
+                <select class="form-control get_education_level" name="educationLevelId" id="educationLevelId"></select>
+                <!-- <div class="invalid-feedback">
+                  Choose your Level Education
+                </div> -->
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="entryYear">Tahun Masuk</label>
+                <select class="custom-form-control get_entry_year" name="entryYear" id="entryYear"></select>
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="graduationYear">Tahun Lulus</label>
+                <select class="custom-form-control get_graduation_year" name="graduationYear"
+                  id="graduationYear"></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="major">Jurusan</label>
+                <input class="custom-form-control" type="text" id="major" name="major" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="gpa">IPK</label>
+                <input class="custom-form-control" type="number" id="gpa" name="gpa" step=".01" min="0" value="0"
+                  max="4" pattern="/^-?\d+\.?\d*$/"
+                  onkeypress="if(this.value.length==4) return false; return event.charCode >= 48 && event.charCode <=57 || event.charCode == 46">
+              </div>
+            </div>
+            <!-- <div class="form-row" id="gradSchool1" style="display:none">
+                <div class="col-md-12">
+                    <label style="font-size: 10pt;" for="judulTa">Judul TA/Skripsi</label><br>
+                    <input class="form-control" type="text" id="judulTa" name="judulTa" maxlength="255" value="-">
+            </div>
+        </div>
+        <div class="form-row" id="gradSchool2" style="display:none">
+                <div class="col-md-12">
+                    <label style="font-size: 10pt;" for="deskripsiTa">Deskripsi TA/Skripsi</label>
+                    <input class="form-control" type="text" id="deskripsiTa" name="deskripsiTa" maxlength="5000" value="-">
+            </div>
+        </div> -->
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="notes">Catatan</label>
+                <textarea class="custom-form-control" type="text" id="notes" name="notes" maxlength="1000"></textarea>
+              </div>
+            </div>
+            <!-- <div class="form-row mt-3">
+              <div class="col-md-12 text-right align-right">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="saveBtn" class="btn btn-primary">Save</button>
+              </div>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Form Edit Data  -->
+  <div class="modal fade" id="editData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Form Edit Education</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <i class="fa fa-times" aria-hidden="true" style="color: white;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" type="hidden" id="ebiodata_id" name="biodataId">
+          <form id="formEditData">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="eid" name="id">
+                <label style="font-size: 10pt;" for="schoolName">Nama Sekolah/Instansi*</label>
+                <input class="form-control" type="text" id="eschoolName" name="schoolName" maxlength="100">
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="city">Kota</label>
+                <input class="custom-form-control" type="text" id="ecity" name="city" maxlength="50">
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="country">Negara</label>
+                <input class="custom-form-control" type="text" id="ecountry" name="country" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="educationLevelId">Jenjang Pendidikan *</label>
+                <select class="form-control" name="educationLevelId" id="eeducationLevelId"></select>
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="entryYear">Tahun Masuk</label>
+                <select class="custom-form-control eget_entry_year" name="entryYear" id="eentryYear"></select>
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="graduationYear">Tahun Lulus</label>
+                <select class="custom-form-control eget_graduation_year" name="graduationYear"
+                  id="egraduationYear"></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="major">Jurusan</label>
+                <input class="custom-form-control" type="text" id="emajor" name="major" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="gpa">IPK</label><br>
+                <input class="custom-form-control" type="text" id="egpa" name="gpa" step=".01" min="0" value="0" max="4"
+                  pattern="/^-?\d+\.?\d*$/"
+                  onkeypress="if(this.value.length==4) return false; return event.charCode >= 48 && event.charCode <=57 || event.charCode == 46">
+              </div>
+            </div>
+            <!-- <div class="form-row" id="egradSchool1" style="display:none">
+            <div class="col-md-12">
+                <label style="font-size: 10pt;" for="judulTa">Judul TA/Skripsi</label><br>
+                <input class="form-control" type="text" id="ejudulTa" name="judulTa" maxlength="255">
+        </div>
+        </div>
+        <div class="form-row" id="egradSchool2" style="display:none">
+            <div class="col-md-12">
+                <label style="font-size: 10pt;" for="deskripsiTa">Deskripsi TA/Skripsi</label>
+                <input class="form-control" type="text" id="edeskripsiTa" name="deskripsiTa" maxlength="5000">
+        </div>
+        </div> -->
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="notes">Catatan</label>
+                <textarea class="custom-form-control" type="text" id="enotes" name="notes" maxlength="1000"></textarea>
+              </div>
+            </div>
+            <!-- <div class="form-row mt-3">
+              <div class="col-md-12 text-right align-right">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="editBtn" class="btn btn-primary">Update</button>
+              </div>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="editBtn" class="btn btn-primary">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal untuk menampilkna cuy..tinggal modif aja isinya sesuai kebutuhan -->
+  <div class="modal fade" id="modal-biodata" style="overflow-y:auto;">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: dodgerblue;">
+          <h3 class="modal-judul" style="color: white;">Biodata</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span class="text-white" aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body p-4">
+          <input type="hidden" id="action" value="">
+          <form id="get_form_biodata" class="needs-validation">
+            <input type="hidden" id="get_id" name="id">
+            <input type="hidden" id="get_addressid" name="id">
+
+            <input type="hidden" id="get_companyid" name="id" value="1">
+
+            <input type="hidden" id="get_createdBy" name="createdBy">
+            <input type="hidden" id="get_createdOn" name="createdOn">
+
+
+            <!-- ROw Pertama -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_full_name">Nama Lengkap*</label>
+                  <input type="text" name="fullName" id="get_full_name" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_nickname">Nama Panggilan*</label>
+                  <input type="text" name="nickName" id="get_nickname" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+            <!-- Row kedua -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_pob">Tempat Lahir*</label>
+                  <input type="text" name="pob" id="get_pob" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+
+
+                <div class="form-group">
+                  <label for="get_dob">Tgl Lahir(tttt-bb-hh)*</label>
+
+                  <div class="input-group">
+                    <input type="text" name="dob" id="get_dob" class="form-control get_biodata" required
+                      placeholder="Tahun-Bulan-Hari">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_gender">Jenis Kelamin*</label>
+                  <select class="form-control  get_biodata" id="get_gender" name="gender">
+                    <option selected>Pilih...</option>
+                    <option value="true">Laki-laki</option>
+                    <option value="false">Perempuan</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <!-- Menampilkan nama Agama -->
+                  <label for="get_religion">Agama*</label>
+                  <select class="form-control  get_biodata" id="get_religion" name="religion" required>
+                    <!-- <option value="">- Pilih -</option> -->
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- row ketiga -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_hight">Tinggi(cm)*</label>
+                  <input min="0" type="text" name="hight" id="get_hight" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_weight">Berat Badan(Kg)*</label>
+                  <input min="0" type="text" name="weight" id="get_weight" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_nationality">Kewarganegaraan*</label>
+                  <input type="text" name="nationality" id="get_nationality" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_ethnic">Suku Bangsa</label>
+                  <input type="text" name="ethnic" id="get_ethnic" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke empat -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_hobby">Kegemaran/Hobi</label>
+                  <input type="text" name="hobby" id="get_hobby" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_type_identity">Jenis Identitas*</label>
+                      <!-- di isi dengan javascrip menggunakan ajax -->
+                      <select class="form-control  get_biodata" id="get_type_identity" name="identityType"></select>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_no_indentity">Nomor Identitas</label>
+                      <input type="text" name="identityNo" id="get_no_indentity" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- row kelima -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_email">Email*</label>
+                  <input type="email" name="email" id="get_email" class="form-control get_biodata x-email" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_no_hp1">No. HP*</label>
+                  <input type="text" min="0" name="phoneNumber1" id="get_no_hp1" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_no_hp2">No. HP Alternatif</label>
+                  <input type="text" min="0" name="phoneNumber2" id="get_no_hp2" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_parent_telphone">No. Tlp Orang Tua*</label>
+                  <input type="text" min="0" name="parentPhoneNumber" id="get_parent_telphone"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke enam -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_child_secuence">Anak ke*</label>
+                  <input min="0" type="text" name="childSequence" id="get_child_secuence"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_how_many_brother">Dari berapa saudara*</label>
+                  <input type="text" min="0" name="howManyBrothers" id="get_how_many_brother"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_marital_status">Status Pernikahan*</label>
+                  <!-- Bagian Status Pernikahan  -->
+                  <select class="form-control  get_biodata" id="get_marital_status" name="maritalStatus"></select>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_marriage_year">Tahun Pernikahan</label>
+                  <!-- Diisi dengan javascript -->
+                  <select class="form-control marr_sts year_marriage" id="get_marriage_year" name="marriageYear">
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke 7 -->
+            <div class="row mt-3">
+              <div class="col-sm col-md">
+                <h5><strong>Alamat Sesuai Kartu Indentitas</strong></h5>
+                <hr>
+              </div>
+              <div class="col-sm col-md">
+                <h5><strong>Alamat Sesuai Tempat Tinggal saat Ini</strong></h5>
+                <hr>
+              </div>
+            </div>
+
+            <!-- row ke 8 -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <input type="hidden" name="biodataId" id="get_bioId" class="form-control get_biodata" required>
+
+                <div class="form-group">
+                  <label for="get_address1">Alamat*</label>
+                  <input type="text" name="address1" id="get_address1" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_ddress2">Alamat*</label>
+                  <input type="text" name="address2" id="get_address2" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke 9 -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md-6">
+                    <div class="form-group">
+                      <label for="get_postal_code1">Kode Pos</label>
+                      <input min="0" type="text" name="postalCode1" id="get_postal_code1"
+                        class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rt1">RT*</label>
+                      <input min="0" type="text" name="rt1" id="get_rt1" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rw1">RW*</label>
+                      <input min="0" type="text" name="rw1" id="get_rw1" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md-6">
+                    <div class="form-group">
+                      <label for="get_postal_code2">Kode Pos</label>
+                      <input min="0" type="text" name="postalCode2" id="get_postal_code2"
+                        class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rt2">RT*</label>
+                      <input min="0" type="text" name="rt2" id="get_rt2" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rw2">RW*</label>
+                      <input min="0" type="text" name="rw2" id="get_rw2" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- row kesepuluh -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kelurahan1">Desa/Kelurahan*</label>
+                      <input min="0" type="text" name="kelurahan1" id="get_kelurahan1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kecamatan1">Kecamatan*</label>
+                      <input min="0" type="text" name="kecamatan1" id="get_kecamatan1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_region1">Kota*</label>
+                      <input min="0" type="text" name="region1" id="get_region1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kelurahan2">Desa/Kelurahan*</label>
+                      <input min="0" type="text" name="kelurahan2" id="get_kelurahan2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kecamatan2">Kecamatan*</label>
+                      <input min="0" type="text" name="kecamatan2" id="get_kecamatan2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_region2">Kota*</label>
+                      <input min="0" type="text" name="region2" id="get_region2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- </div>
+      </div>
+    </div> -->
+          <!-- </div> -->
+        </div> <!-- /.modal-body -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary get_biodata x-hide" id="save_button">Simpan
+          </button>
+        </div> <!-- /.modal-footer -->
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+
+  <!-- Form Add Pelatihan -->
+  <div class="modal fade" id="addDataPelatihan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Form Add Pelatihan</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy" id="closeBtn">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formaddDataPelatihan">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="biodataId3" name="biodataId" value="">
+                <label style="font-size: 10pt;" for="trainingName">Nama (Kursus, Penataran, Pelatihan, Workshop)
+                  *</label><br>
+                <input class="form-control" type="text" id="trainingName" name="trainingName" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="organizer">Penyelenggara *</label><br>
+                <input class="form-control" type="text" id="organizer" name="organizer" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="trainingMonth">Waktu Pelaksanaan</label>
+              </div>
+              <div class="col-md-3">
+
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="trainingDuration">Lama Durasi</label><br>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <select class="form-control" name="trainingMonth" id="trainingMonth">
+                  <option value="">-Pilih Bulan-</option>
+                  <option value="1">Jan</option>
+                  <option value="2">Feb</option>
+                  <option value="3">Mar</option>
+                  <option value="4">Apr</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Jun</option>
+                  <option value="7">Jul</option>
+                  <option value="8">Aug</option>
+                  <option value="9">Sep</option>
+                  <option value="10">Okt</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Des</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <select class="form-control get_training_year" name="trainingYear" id="trainingYear"></select>
+              </div>
+              <div class="col-md-3">
+
+                <input class="form-control" type="text" id="trainingDuration" name="trainingDuration" maxlength="50">
+              </div>
+              <div class="col-md-3">
+
+                <select class="form-control get_time_period" name="timePeriodId" id="timePeriodId"></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="city">kota</label><br>
+                <input class="form-control" type="text" id="city" name="city" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="country">Negara</label><br>
+                <input class="form-control" type="text" id="country" name="country">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="notes">Catatan</label>
+                <textarea class="form-control" type="text" id="notes" name="notes" maxlength="1000"></textarea>
+              </div>
+            </div>
+            <div class="form-row">
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <b>Note : Kolom Bertanda (*) Wajib Diisi</b>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy" id="closeBtnBawah">Close</button>
+          <button type="button" id="saveBtnPelatihan" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Add Pelatihan -->
+
+  <!-- Form Edit Pelatihan -->
+  <div class="modal fade" id="editDataPelatihan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Form Edit Pelatihan</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formeditDataPelatihan">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="eidPelatihan" name="id" value="">
+                <input class="form-control" type="hidden" id="eCreatedOn" name="createdOn" value="">
+                <input class="form-control" type="hidden" id="eCreatedBy" name="createdBy" value="">
+                <input class="form-control" type="hidden" id="eBiodataId" name="biodataId" value="">
+                <label style="font-size: 10pt;" for="trainingName">Nama (Kursus, Penataran, Pelatihan, Workshop)
+                  *</label><br>
+                <input class="form-control" type="text" id="etrainingName" name="trainingName" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="organizer">Penyelenggara *</label><br>
+                <input class="form-control" type="text" id="eorganizer" name="organizer" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="trainingMonth">Waktu Pelaksanaan</label>
+              </div>
+              <div class="col-md-3">
+
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="trainingDuration">Lama Durasi</label><br>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <select class="form-control" name="trainingMonth" id="etrainingMonth">
+                  <option value="">-Pilih Bulan-</option>
+                  <option value="1">Jan</option>
+                  <option value="2">Feb</option>
+                  <option value="3">Mar</option>
+                  <option value="4">Apr</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Jun</option>
+                  <option value="7">Jul</option>
+                  <option value="8">Aug</option>
+                  <option value="9">Sep</option>
+                  <option value="10">Okt</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Des</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <select class="form-control eget_training_year" name="trainingYear" id="etrainingYear"></select>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="text" id="etrainingDuration" name="trainingDuration" maxlength="50">
+              </div>
+              <div class="col-md-3">
+                <select class="form-control get_time_period" name="timePeriodId" id="etimePeriodId"></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="city">kota</label><br>
+                <input class="form-control" type="text" id="ecity" name="city" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="country">Negara</label><br>
+                <input class="form-control" type="text" id="ecountry" name="country">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="notes">Catatan</label>
+                <textarea class="form-control" type="text" id="enotes" name="notes" maxlength="1000"></textarea>
+              </div>
+            </div>
+            <div class="form-row">
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <b>Note : Kolom Bertanda (*) Wajib Diisi</b>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="editBtnPelatihan" class="btn btn-primary">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Edit Pelatihan -->
+
+  <!-- Form Add Document -->
+  <div class="modal fade" id="AddDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Dokumen (Max :500KB)</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalUpload">
+          <form method="POST" id="formAddDoc" th:action="@{upload/upload_disini}" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="bioId" name="biodataId" value="">
+                <label style="font-size: 10pt;" for="fileName">Nama File<span style="color:red;"> *</span></label><br>
+                <input class="form-control" type="text" id="fileName" name="fileName" maxlength="100" value="" required>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="docNotes">Keterangan</label><br>
+                <input class="form-control" type="text" id="docNotes" name="notesDoc" value="" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="btn btn-primary btn-file col-sm-6 btn-sm">
+                Unggah File <input id="file" name="file" type="file" class="form-control">
+              </div>
+              <div class="col-sm-3">
+                <input class="btn btn-warning btn-sm" id="edCancelAva" type="cancel" value="Cancel" data-dismiss='modal'
+                  data-toggle="modal" data-target="#detailVacancy">
+              </div>
+              <div class=" col-sm-3">
+                <input class="btn btn-primary btn-sm" type="submit" value="Simpan File" id="saveDoc" onclick="saving()"
+                  data-toggle="modal" data-target="#detailVacancy">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6 mt-2 align-middle text-center">
+                <img src="" id="photoPreview" width="200" height="150" style="border:2pt;">
+              </div>
+              <div class="col-md-6 mt-2">
+                <h6><span style="color:red;">*</span> Wajib Diisi</h6>
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="btn btn-primary btn-file col-md-6 btn-sm">
+                Unggah Foto <input class="form-control" type="file" id="unggahFoto" accept=".png,.jpg,.jpeg,.gif">
+              </div>
+              <div class="col-md-6">
+                <input type="hidden" name="filePath" id="filePath">
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="col-sm-3">
+                <input class="btn btn-warning btn-sm " id="edCancelAva" type="cancel" value="Cancel"
+                  data-dismiss='modal' data-toggle="modal" data-target="#detailVacancy">
+              </div>
+              <div class="col-md-3">
+                <input class="btn btn-primary btn-sm" id="saveAva" type="submit" value="Simpan" data-toggle="modal"
+                  data-target="#detailVacancy" onclick="saveAvatar()">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Add Document -->
+
+  <!-- Form Edit Document -->
+  <div class="modal fade" id="EditDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Edit Dokumen (Max :500KB)</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditDoc">
+            <!-- method="POST" th:action="@{/upload/upload_disini}" enctype="multipart/form-data"-->
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="ebioId" name="biodataId" value="">
+                <input class="form-control" type="hidden" id="edid" name="id" value="">
+                <label style="font-size: 10pt;" for="fileName">Nama File<span style="color:red;"> *</span></label><br>
+                <input class="form-control" type="text" id="efileName" name="fileName" maxlength="100" value=""
+                  required>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="docNotes">Keterangan</label><br>
+                <input class="form-control" type="text" id="edocNotes" name="notesDoc" value="" maxlength="50">
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="btn btn-primary btn-file col-sm-6 btn-sm">
+                Unggah File <input id="efile" name="efile" type="file" class="form-control text-center align-middle">
+              </div>
+              <div class="col-sm-3">
+                <button class="btn btn-warning" style="width:100%;" data-dismiss='modal' data-toggle="modal"
+                  data-target="#detailVacancy">Cancel</button>
+              </div>
+              <div class=" col-sm-3">
+                <button class="btn btn-primary " id="updateDoc" style="width:100%;" data-toggle="modal">Simpan
+                  File</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6 mt-2 align-middle text-center">
+                <img src="" id="ephotoPreview" width="200" height="150" style="border:2pt;">
+              </div>
+              <div class="col-md-6 mt-2">
+                <h6><span style="color:red;">*</span> Wajib Diisi</h6>
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="btn btn-primary btn-file col-md-6 btn-sm">
+                Unggah Foto <input class="form-control" type="file" id="eunggahFoto" accept=".png,.jpg,.jpeg,.gif">
+              </div>
+              <div class="col-md-6">
+                <input type="hidden" name="filePath" id="efilePath">
+              </div>
+            </div>
+            <div class="form-row mt-2">
+              <div class="col-sm-3">
+                <input class="btn btn-warning btn-sm " id="edCancelAva" type="cancel" value="Cancel"
+                  data-dismiss='modal' data-toggle="modal" data-target="#detailVacancy">
+              </div>
+              <div class="col-md-3" id="saveImg">
+                <input class="btn btn-primary btn-sm" id="edSaveAva" type="submit" value="Simpan" data-toggle="modal"
+                  data-target="#detailVacancy">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Edit Document -->
+
+  <!-- Form Add Organisasi -->
+  <div class="modal fade" id="AddOrg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Organisasi</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#AddOrg">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formAddOrg">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="biodataIdOrganisasi" name="biodataId" value="">
+                <label style="font-size: 10pt;" for="name">Nama Organisasi<span style="color:red;"> *</span></label><br>
+                <input class="form-control" type="text" id="name" name="name" maxlength="100" value="" required>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="position">Jabatan<span style="color:red;"> *</span></label><br>
+                <input class="form-control" type="text" id="position" name="position" value="" maxlength="50" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="entryYear">Tahun Masuk<span style="color:red;">
+                    *</span></label><br>
+                <select class="form-control get_entry_year_organisasi" name="entryYearOrganisasi"
+                  id="entryYearOrganisasi" required></select>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="exitYear">Tahun Keluar<span style="color:red;">
+                    *</span></label><br>
+                <select class="form-control get_exit_year_organisasi" name="exitYearOrganisasi" id="exitYearOrganisasi"
+                  required></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="responsibility">Tanggung Jawab</label><br>
+                <input class="form-control" type="text" id="responsibility" name="responsibility" maxlength="100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="notes">Catatan</label>
+                <textarea class="form-control" type="text" id="notes" name="notes" maxlength="1000"></textarea>
+                <h6><span style="color:red;">*</span> Wajib Diisi</h6>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="saveBtnOrganisasi" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Add Organisasi -->
+
+  <!-- Form Edit Organisasi -->
+  <div class="modal fade" id="editDataOrg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Detail Organisasi</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditOrg">
+            <div class="form-row">
+              <div class="col-md-6">
+                <input class="form-control" type="hidden" id="edbioId" name="biodataId">
+                <input class="form-control" type="hidden" id="eidor" name="id">
+                <label style="font-size: 10pt;" for="edOrgName">Nama Organisasi<span style="color:red;">
+                    *</span></label><br>
+                <input class="form-control" type="text" id="edOrgName" name="name" maxlength="100" required>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="edPosition">Jabatan<span style="color:red;"> *</span></label><br>
+                <input class="form-control" type="text" id="edPosition" name="position" maxlength="50" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="edentry_year">Tahun Masuk<span style="color:red;">
+                    *</span></label><br>
+                <select class="form-control edget_entry_year" name="entryYear" id="edentryYear"></select>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="edexit_year">Tahun Keluar<span style="color:red;">
+                    *</span></label><br>
+                <select class="form-control edget_exit_year" name="exitYear" id="edexitYear"></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="edresp">Responsibility</label><br>
+                <input class="form-control" type="text" id="edresp" name="responsibility" maxlength="100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="ednotes">Catatan</label>
+                <textarea class="form-control" type="text" id="ednotes" name="notes" maxlength="1000"></textarea>
+                <h6><span style="color:red;">*</span> Wajib Diisi</h6>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="editBtnOrganisasi" class="btn btn-primary">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form Edit Organisasi -->
+
+  <!-- Aktivasi Test -->
+  <div class="modal fade" id="EditTest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Pilihan Tes</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12 align-right text-right">
+              <button id="tambahinTes" type="button" class="btn btn-primary" data-toggle="modal">
+                Tambah Tes
+              </button>
+            </div>
+          </div>
+          <div class="card mt-2">
+            <div class="card-block">
+              <table class="table table-hover">
+                <thead>
+                  <tr class="text-center">
+                    <td>NO</td>
+                    <td>JENIS TES</td>
+                    <td>#</td>
+                  </tr>
+                </thead>
+                <tbody id="tbTambahTes">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="tesBalik" type="button" class="btn btn-warning" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Kembali</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ends of edit test -->
+
+  <!-- aktifasi test -->
+  <div class="modal fade" id="aktif" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Aktifkan Akun Tes</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-data">
+            <input type="hidden" id="namaorang">
+            <form id="aktifasiAkun">
+              <input type="hidden" name="periodeCode" id="periodeCode">
+              <input type="hidden" name="period" id="period">
+              <input type="hidden" id="biodId" name="biodataId">
+              <div class="form-row">
+                <div class="col-md-4 text-left align-left">
+                  <label for="tglTest">Tgl.Tes <span style="color: red;">*</span></label>
+                </div>
+                <div class="col-md-4 text-left align-left">
+                  <label for="endTest">Tgl. Berakhir Tes <span style="color: red;">*</span></label>
+                </div>
+                <div class="col-md-4 text-left align-left">
+                  <label for="akses">Akses User <span style="color: red;">*</span></label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <input type="text" name="testDate" id="timepick">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <input type="text" name="expiredTest" id="timepicker">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <select id="akses" name="userAccess" style="width: 250px; height: 30px;">
+                    <option value="" style="text-align: center;">--Pilih--</option>
+                    <option value="inside">INSIDE</option>
+                    <option value="outside">OUTSIDE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12 text-right align-right mt-2">
+                  <button class="btn btn-primary" id="nambahTest" data-toggle="modal" data-target="#addJenisTest"
+                    data-dismiss="modal">Tambah Tes</button>
+                </div>
+              </div>
+            </form>
+            <form id="addrBook">
+              <input type="hidden" name="abuid" id="abuid" value="">
+              <input type="hidden" name="abpwd" id="abpwd" value="">
+              <input type="hidden" name="email" id="email" value="">
+            </form>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr class="text-center">
+                <th>No</th>
+                <th>Jenis Tes</th>
+                <th style="display: none;">Id Test Type</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody id="detailTest">
+
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="kirim" class="btn btn-primary" data-toggle="modal">Simpan & Kirim</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ends of aktifasi test -->
+
+  <!-- tambah test -->
+  <div class="modal fade" id="addJenisTest" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Tes</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#aktif">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-data">
+            <form id="tambahJenisTest">
+              <input type="hidden" value="1" id="mantap2">
+              <div class="form-row">
+                <label for="type">Jenis Tes</label>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <select class="form-control get_jenis_test" name="name" id="pilihTest">
+
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#aktif">Batal</button>
+          <button type="button" id="addTestType" class="btn btn-primary" onclick="showTestType()"
+            data-toggle="modal">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end of tambah test  -->
+
+  <!-- edit tambah test -->
+  <div class="modal fade" id="addTest" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Tes</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#aktif">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-data">
+            <form id="editJenisTest">
+              <input type="hidden" value="1" id="mantap2">
+              <div class="form-row">
+                <label for="type">Jenis Tes</label>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <input class="form-control" id="idOnlineTest" type="hidden" name="onlineTestId">
+                  <input type="hidden" name="testOrder" id="lastOrder">
+                  <select class="form-control get_jenis_test_type" name="testTypeId" id="pilihTestType">
+
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+            data-target="#EditTest">Batal</button>
+          <button type="button" id="addEditTestType" class="btn btn-primary" data-toggle="modal">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Aktivasi Test -->
+
+  <!-- Send Token -->
+  <div class="modal fade" id="sendToken" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form id="formST">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: dodgerblue;">
+            <h3 class="modal-title" style="color: white;">Kirim Token</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input readonly class="form-control" type="hidden" id="bioidST" name="id">
+              <input readonly class="form-control" type="hidden" id="myEmail" name="email">
+              <label for="updateExpiredToken">
+                <h7>Atur Kadaluarsa Token</h7>
+              </label><br>
+              <input class="form-control" type="date" id="updateExpiredToken" name="expiredToken" placeholder=""
+                onchange="tokenDate()" required="">
+            </div>
+            <div class="form-group">
+              <label readonly for="updateToken">
+                <h7></h7>
+              </label><br>
+              <input class="form-control" type="hidden" id="updateToken" name="token" placeholder="">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" onclick="saveBtnToken()" class="btn btn-success" id="tokenSend">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Send Token -->
+
+  <!-- Add Catatan -->
+  <div class="modal fade" id="addDataCat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Catatan</h3>
+          <button type="button" class="close" data-dismiss="modal" data-target="#addDataCat" data-toggle="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formDataCat">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <input readonly class="form-control" type="hidden" id="bioidCat" name="biodataId">
+                  <label for="title">Judul Catatan*</label><br>
+                  <input class="form-control" type="text" id="title" name="title" placeholder="" required="">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="noteTypeId">Jenis Catatan*</label><br>
+                  <select class="custom-select get_addtipecatatan" id="noteTypeId" name="noteTypeId" required="">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="notes">Catatan</label><br>
+              <textarea class="form-control" type="text" id="notes" name="notes" placeholder="" cols="40"
+                rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalCat()">Close</button>
+          <button type="button" id="saveBtnCat" class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Catatan -->
+
+  <!-- Edit Catatan -->
+  <div class="modal fade" id="editModalCat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Edit Catatan</h3>
+          <button type="button" class="close" data-dismiss="modal" data-target="#editModalCat" data-toggle="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditCat">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <input readonly class="form-control" type="hidden" id="get_id_cat" name="id">
+                  <label for="editTitle">Judul Catatan*</label><br>
+                  <input class="form-control" type="text" id="editTitle" name="title" placeholder="" required="">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="editNoteTypeId">Jenis Catatan*</label><br>
+                  <select class="custom-select get_edittipecatatan" id="editNoteTypeId" name="noteTypeId" required="">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="editNotes">Catatan</label><br>
+              <textarea class="form-control" type="text" id="editNotes" name="notes" placeholder="" cols="40"
+                rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalCat()">Close</button>
+          <button type="button" id="editBtnCat" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Catatan -->
+
+  <!-- Add Keluarga -->
+  <div class="modal fade" id="addDataKel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Keluarga</h3>
+          <button type="button" class="close" onclick="closeModalKel()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formDataKel">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <input readonly class="form-control" type="hidden" id="bioidKel" name="biodataId">
+                  <label for="addFamilyTreeTypeId">Jenis Susunan Keluarga*</label><br>
+                  <select class="form-control" id="addFamilyTreeTypeId" name="familyTreeTypeId" placeholder="Choose..."
+                    required="" onchange="get_addhubungankeluarga(this)">
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="addName">Nama*</label><br>
+                  <input class="form-control" type="text" id="addName" name="name" placeholder="" required="">
+                </div>
+                <div class="form-group">
+                  <label for="addEducationLevelId">Pendidikan</label><br>
+                  <select class="custom-select" id="addEducationLevelId" name="educationLevelId">
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="addFamilyRelationId">Hubungan Keluarga*</label><br>
+                  <select class="custom-select" id="addFamilyRelationId" name="familyRelationId" placeholder="Choose..."
+                    required="">
+                  </select>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="addGender">Jenis Kelamin</label><br>
+                      <select class="custom-select" id="addGender" name="gender" required="">
+                        <option value="">Choose...</option>
+                        <option value="true">Pria</option>
+                        <option value="false">Wanita</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="addDob">Tanggal Lahir</label><br>
+                      <input class="form-control" type="date" id="addDob" name="dob" placeholder="yyyy-mm-dd">
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="addJob">Pekerjaan</label><br>
+                  <input class="form-control" type="text" id="addJob" name="job" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="addNotes">Catatan</label><br>
+              <textarea class="form-control" type="text" id="addNotes" name="notes" placeholder="" cols="40"
+                rows="5"> </textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalKel()">Close</button>
+          <button type="button" id="saveBtnKel" class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Keluarga -->
+
+  <!-- Edit Keluarga -->
+  <div class="modal fade" id="editModalKel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Edit Keluarga</h3>
+          <button type="button" class="close" onclick="closeModalKel()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditKel">
+            <input readonly class="form-control" type="hidden" id="get_idKel" name="id">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="editFamilyTreeTypeId">Jenis Susunan Keluarga*</label><br>
+                  <select class="form-control" id="editFamilyTreeTypeId" name="familyTreeTypeId" placeholder="Choose..."
+                    required="" onchange="get_edithubungankeluarga(this)"></select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="editFamilyRelationId">Hubungan Keluarga*</label><br>
+                  <select class="custom-select" id="editFamilyRelationId" name="familyRelationId"
+                    placeholder="Choose..." required=""></select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="editName">Nama*</label><br>
+                  <input class="form-control" type="text" id="editName" name="name" placeholder="" required="">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="editGender">Jenis Kelamin</label><br>
+                      <select class="custom-select" id="editGender" name="gender" required="">
+                        <option value="">Choose...</option>
+                        <option value="true">Pria</option>
+                        <option value="false">Wanita</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="editDob">Tanggal Lahir</label><br>
+                      <input class="form-control" type="date" id="editDob" name="dob" placeholder="yyyy-mm-dd">
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="editEducationLevelId">Pendidikan</label><br>
+                  <select class="custom-select" id="editEducationLevelId" name="educationLevelId">
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="editJob">Pekerjaan</label><br>
+                  <input class="form-control" type="text" id="editJob" name="job" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="row-lg-12">
+              <div class="form-group">
+                <label for="editNotes">Catatan</label><br>
+                <textarea class="form-control" type="text" id="editNotes" name="notes" placeholder="" cols="40"
+                  rows="5"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalKel()">Close</button>
+          <button type="button" id="editBtnKel" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Keluarga -->
+
+  <!-- Add Keahlian -->
+  <div class="modal fade" id="addDataKe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Keahlian</h3>
+          <button type="button" class="close" onclick="closeModalKe()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formDataKe">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <input readonly class="form-control" type="hidden" id="bioidKe" name="biodataId">
+                  <label for="skillName">Nama Keahlian</label><br>
+                  <input class="form-control" type="text" id="skillName" name="skillName" placeholder="">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="skillLevelId">Level Keahlian*</label><br>
+                  <select class="custom-select" id="skillLevelId" name="skillLevelId" required="">
+                  </select>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="NotesKe">Catatan</label><br>
+              <textarea class="form-control" type="text" id="NotesKe" name="notes" placeholder="" cols="40"
+                rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalKe()">Close</button>
+          <button type="button" id="saveBtnKe" class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Keahlian -->
+
+  <!-- Edit Keahlian -->
+  <div class="modal fade" id="editModalKe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Edit Keahlian</h3>
+          <button type="button" class="close" onclick="closeModalKe()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditKe">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <input readonly class="form-control" type="hidden" id="get_idKe" name="id">
+                  <label for="editSkillName">Nama Keahlian</label><br>
+                  <input class="form-control" type="text" id="editSkillName" name="skillName" placeholder="">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="editSkillLevelId">Level Keahlian*</label><br>
+                  <select class="custom-select" id="editSkillLevelId" name="skillLevelId" required="">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="editNotesKe">Catatan</label><br>
+              <textarea class="form-control" type="text" id="editNotesKe" name="notes" placeholder="" cols="40"
+                rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModalKe()">Close</button>
+          <button type="button" id="editBtnKe" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Keahlian -->
+
+  <!-- Add Sertifikasi -->
+  <div class="modal fade" id="addDataSertifikasi" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Tambah Sertifikasi</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="actionsertifikasi" value="">
+          <div id="formData">
+            <form>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <input type="hidden" id="id" class="get_certificate" name="id" value="">
+                  <input type="hidden" id="biodataId" class="form control get_certificate" name="biodataId" value="">
+                  <label style="font-size: 10pt;" for="certificateName">Nama Sertifikasi*</label><br>
+                  <input class="form-control get_certificate" type="text" id="certificateName" name="certificateName"
+                    placeholder="nama sertifikasi" maxlength="200">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="publisher">Penerbit*</label><br>
+                  <input class="form-control get_certificate" type="text" id="publisher" name="publisher"
+                    placeholder="penerbit" maxlength="100">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Berlaku Mulai</label><br>
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Berlaku Sampai</label><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-3">
+                  <select class="form-control get_certificate get_start_month_sertifikasi" name="validStartMonth"
+                    id="validStartMonth">
+                    <option value="">-Pilih Bulan-</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Aug</option>
+                    <option value="9">Sep</option>
+                    <option value="10">Okt</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Des</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-control get_certificate get_start_year_sertifikasi" for="validStartYear"
+                    name="validStartYear" id="validStartYear"></select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-control get_certificate get_until_month_sertifikasi" name="untilMonth"
+                    id="untilMonth" disabled="disabled">
+                    <option value="">-Pilih Bulan-</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Aug</option>
+                    <option value="9">Sep</option>
+                    <option value="10">Okt</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Des</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-control get_certificate get_until_year_sertifikasi" for="untilYear"
+                    name="untilYear" id="untilYear" disabled="disabled">
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label style="font-size: 10pt;" for="notes">Notes</label><br>
+                  <textarea class="form-control get_certificate" type="text" id="notes" name="notes"
+                    placeholder="notes"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="saveBtnSertifikasi" class="btn btn-primary get_certificate">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Sertifikasi -->
+
+  <!-- Add Referensi -->
+  <div class="modal fade" id="addRefe" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Referensi</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy" id="showAddRef">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="act" value="">
+          <div id="formDataRef">
+            <form>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <input type="hidden" id="id" class="get_referensi" name="id" value="">
+                  <input type="hidden" id="biodataId" class="form control get_referensi" name="biodataId" value="">
+                  <label style="font-size: 10pt;" for="name">Nama*</label><br>
+                  <input class="form-control get_referensi" type="text" id="nameref" name="name"
+                    placeholder="nama referensi" maxlength="100">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="addressPhone">Alamat & No.Hp</label><br>
+                  <input class="form-control get_referensi" type="text" id="addressPhone" name="addressPhone"
+                    placeholder="alamat dan nomor handphone" maxlength="1000">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="position">Jabatan</label><br>
+                  <input class="form-control get_referensi" type="text" id="position" name="position"
+                    placeholder="jabatan" maxlength="100">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="relation">Hubungan</label><br>
+                  <input class="form-control get_referensi" type="text" id="relation" name="relation"
+                    placeholder="hubungan" maxlength="100">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="saveBtnRef" class="btn btn-primary get_referensi">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Referensi -->
+
+  <!-- Edit Keterangan Tambahan -->
+  <div class="modal fade" id="EditKet" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"
+    style="overflow-y:auto;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Ubah Keterangan Tambahan</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy" id="showEditKet">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="actionket" value="">
+          <div id="formDataKet">
+            <form>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Kontak Darurat (Keluarga Tidak
+                    Serumah)*</label><br>
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Gaji yang Diharapkan (IDR)*</label><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <input type="hidden" id="id" class="get_keterangan" name="id" value="">
+                  <input type="hidden" id="biodataId" class="form control get_keterangan" name="biodataId" value="">
+                  <input class="form-control get_keterangan" type="text" id="emergencyContactName"
+                    name="emergencyContactName" maxlength="100">
+                </div>
+                <div class="col-md-3">
+                  <input class="form-control get_keterangan" type="text" id="expectedSalary" name="expectedSalary"
+                    maxlength="20">
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input checkbox_cek" id="isNegotiable" value="" type="checkbox"
+                    name="isNegotiable">
+                  <label class="form-check-label" for="isNegotiable" style="font-size: 10pt;">
+                    Negotiable </label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Nomor Telp. Darurat*</label><br>
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;">Kapan Siap Mulai Bekerja*</label><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <input class="form-control get_keterangan" type="text" id="emergencyContactPhone"
+                    name="emergencyContactPhone" maxlength="50">
+                </div>
+                <div class="col-md-3">
+                  <input class="form-control get_keterangan" type="text" id="startWorking" name="startWorking"
+                    maxlength="100">
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input checkbox_cek" id="isReadyToOutoftown" value="" type="checkbox"
+                    name="isReadyToOutoftown">
+                  <label class="form-check-label" for="isReadyToOutoftown" style="font-size: 10pt;">
+                    Bersedia Ditempatkan di Luar Kota</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-check">
+                  <input class="form-check-input checkbox_cek" id="isApplyOtherPlace" value="" type="checkbox"
+                    name="isApplyOtherPlace">
+                  <label class="form-check-label" for="isApplyOtherPlace" style="font-size: 10pt;">
+                    Sedang Melamar di Tempat Lain</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="applyPlace">Dimana (Tempat Melamar)?</label><br>
+                  <input class="form-control get_keterangan" type="text" id="applyPlace" name="applyPlace"
+                    maxlength="100" disabled="disabled">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="selectionPhase">Tahapan Seleksi Melamar</label><br>
+                  <input class="form-control get_keterangan" type="text" id="selectionPhase" name="selectionPhase"
+                    maxlength="100" disabled="disabled">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-check">
+                  <input class="form-check-input checkbox_cek" id="isEverBadlySick" value="" type="checkbox"
+                    name="isEverBadlySick">
+                  <label class="form-check-label" for="isEverBadlySick" style="font-size: 10pt;">
+                    Pernah Sakit Berat/Lama Sembuh</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="diseaseName">Nama Penyakit</label><br>
+                  <input class="form-control get_keterangan" type="text" id="diseaseName" name="diseaseName"
+                    maxlength="100" disabled="disabled">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="diseaseTime">Kapan (Waktu Sakit)?</label><br>
+                  <input class="form-control get_keterangan" type="text" id="diseaseTime" name="diseaseTime"
+                    maxlength="100" disabled="disabled">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-check">
+                  <input class="form-check-input checkbox_cek" id="isEverPsychotest" value="" type="checkbox"
+                    name="isEverPsychotest">
+                  <label class="form-check-label" for="isEverPsychotest" style="font-size: 10pt;">
+                    Pernah Mengikuti Psikotest</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="psychotestNeeds">Keperluan Psikotest</label><br>
+                  <input class="form-control get_keterangan" type="text" id="psychotestNeeds" name="psychotestNeeds"
+                    maxlength="100" disabled="disabled">
+                </div>
+                <div class="col-md-6">
+                  <label style="font-size: 10pt;" for="psychotestTime">Kapan (Waktu Psikotest)?</label><br>
+                  <input class="form-control get_keterangan" type="text" id="psychotestTime" name="psychotestTime"
+                    maxlength="100" disabled="disabled">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label style="font-size: 10pt;" for="requirementesRequired">Persyaratan yang Diperlukan untuk Jabatan
+                    yang Dilamar (menurut kandidat/karyawan)</label><br>
+                  <textarea class="form-control get_keterangan" type="text" id="requirementesRequired"
+                    name="requirementesRequired"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label style="font-size: 10pt;" for="otherNotes">Keterangan Lain yang Ingin Dikemukakan</label><br>
+                  <textarea class="form-control get_keterangan" type="text" id="otherNotes"
+                    name="otherNotes"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+          <button type="button" id="saveBtnKet" class="btn btn-primary get_keterangan">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Keterangan Tambahan -->
+
+  <!-- Keterangan Tambahan Detail -->
+  <div class="modal fade" id="DetailKet" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"
+    style="overflow-y:auto;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Keterangan Tambahan</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+            data-target="#detailVacancy" id="showDetailKet">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="actionket" value="">
+          <div id="formDetailKet">
+            <form>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Gaji Yang Diharapkan</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="expSalary" name="expectedSalary"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Negotiable</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="isNego" name="isNegotiable"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Kapan Siap Mulai Bekerja</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="startWork" name="startWorking"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Bersedia Ditempatkan Di Luar Kota</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="isReadyOutoftown" name="isReadyToOutoftown">
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Kontak Darurat (Keluarga Tidak Serumah)</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="emContactName" name="emergencyContactName">
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Nomor Telp.Darurat</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="emContactPhone" name="emergencyContactPhone">
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Sedang Melamar Di Tempat Lain</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="applyOtherPlace" name="isApplyOtherPlace">
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Dimana (Tempat Melamar)</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="applyPlc" name="applyPlace"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Tahapan Seleksi Melamar</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="selectionPhs" name="selectionPhase"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Pernah Sakit Berat/Lama Sembuh</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="isEverSick" name="isEverBadlySick"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Nama Penyakit</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="diseaseNm" name="diseaseName"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Kapan (Waktu Sakit)</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="diseaseTm" name="diseaseTime"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Pernah Mengikuti Psikotes</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="isEverPsychotst" name="isEverPsychotest"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Keperluan Psikotes</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left" scope="col" id="psychotestNds" name="psychotestNeeds"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Kapan (Waktu Psikotest)</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="psychotestTm" name="psychotestTime"></th>
+                  </tr>
+                  <tr>
+                    <th class="text-left get_detail_ket" scope="col">Keterangan Lain</th>
+                    <th class="text-left get_detail_ket" scope="col">:</th>
+                    <th class="text-left get_detail_ket" scope="col" id="otherNts" name="otherNotes"></th>
+                  </tr>
+                </thead>
+              </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal"
+            data-target="#detailVacancy">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Keterangan Tambahan Detail -->
+
+  <!-- Add/Edit Pengalaman Kerja -->
+  <div class="modal fade" id="modal-pengker" style="overflow-y:auto;" data-dismiss="modal">
+    <div class="modal-dialog modal-xl modal-scrollable">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title text-light" style="color: white;">Pengalaman Kerja</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="action" value="">
+          <form id="get_from_pengker">
+            <input class="form-control" type="hidden" id="biodataId" name="biodataId" value="">
+            <div class="row">
+              <div class="col-6">
+                <input type="hidden" id="get_pengker_id" name="id" class="get_pengker" value="">
+                <div class="form-group">
+                  <label for="get_pengker_nama">Nama perusahaan Instansi <span><i style="color:red">*</i> </span>
+                  </label>
+                  <input type="text" name="name" id="get_pengker_nama" class="form-control get_pengker" maxlength="100">
+                </div>
+                <div class="form-group">
+                  <label for="get_pengker_masuk">Waktu Masuk <span><i style="color:red">*</i> </span></label>
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <select id="get_pengker_bulanmas" class="form-control get_pengker_masuk">
+                        <option selected value="">- Pilih Bulan -</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">Mac</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <select id="get_pengker_tahunmas" class="form-control get_pengker_masuk">
+                        <option value="">- Pilih Tahun -</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="get_pengker_posisi">Posisi Terakhir <span><i style="color:red">*</i> </span></label>
+                  <input type="text" name="name" id="get_pengker_posisi" class="form-control get_pengker"
+                    maxlength="100">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="get_pengker_kota">Kota</label>
+                    <input type="text" class="form-control get_pengker" id="get_pengker_kota" maxlength="50">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="get_penker_negara">Negara</label>
+                    <input type="text" class="form-control get_pengker" id="get_penker_negara" maxlength="50">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="get_pengker_keluar">Waktu Keluar</label>
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <select id="get_pengker_bulankel" class="form-control get_pengker_keluar">
+                        <option selected value="">- Pilih Bulan -</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">Mac</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <select id="get_pengker_tahunkel" class="form-control get_pengker_keluar">
+                        <option value="">- Pilih Tahun -</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="get_pengker_penghas">Penghasilan terakhir</label>
+                  <input type="text" name="name" id="get_pengker_penghas" class="form-control get_pengker"
+                    maxlength="20" onkeypress="return event.charCode >= 48 && event.charCode <=57">
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input checkbox_cek" id="get_pengker_checkbox" value="" type="checkbox"
+                name="checkbox">
+              <label class="form-check-label" for="get_pengker_checkbox">
+                IT Related?
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="get_pengker_job">Keterangan singkat Mengenani Pekerjaan</label>
+              <div>
+                <textarea name="pesan" id="get_pengker_job" class="form-control get_pengker" maxlength="1000"
+                  style="width:100%"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="get_pengker_alasan">Alasan Keluar</label>
+              <input type="text" name="name" id="get_pengker_alasan" class="form-control get_pengker" maxlength="500">
+            </div>
+            <div class="form-group">
+              <label for="get_pengker_ket">Catatan</label>
+              <div>
+                <textarea name="catatan" id="get_pengker_ket" class="form-control get_pengker" style="width:100%"
+                  maxlength="5000"></textarea>
+              </div>
+            </div>
+            <p style="color: red; font-size: small;">kolom bertanda ( * ) merah wajib diisi</p>
+          </form>
+        </div> <!-- /.modal-body -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default closeButton" data-dismiss="modal" id="closeButton">Close</button>
+          <button type="button" class="btn btn-success get_category" id="save_button_pengker">Save</button>
+        </div> <!-- /.modal-footer -->
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- Add/Edit Pengalaman Kerja -->
+
+
+</th:block>
+<th:block layout:fragment="vacancy">
+  <script th:inline="javascript" th:src="@{/js/showvacancy.js}"></script>
+</th:block>
+
+</html>

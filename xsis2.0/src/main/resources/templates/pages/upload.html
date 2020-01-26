@@ -1,0 +1,138 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:with="http://www.thymeleaf.org/extras/with">
+
+    <form method="POST" id="formAddDoc" th:action="@{upload/upload_disini}" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="col-md-6">
+            <!-- <input class="form-control" type="hidden" id="bioId" name="biodataId" value=""> -->
+            <label style="font-size: 10pt;" for="fileName">Nama File<span style="color:red;"> *</span></label><br>
+            <input class="form-control" type="text" id="fileName" name="fileName" maxlength="100" value="" required>
+          </div>
+          <div class="col-md-6">
+            <label style="font-size: 10pt;" for="docNotes">Keterangan<span style="color:red;"> *</span></label><br>
+            <input class="form-control" type="text" id="docNotes" name="notes" value="" maxlength="50" required>
+          </div>
+        </div>
+        <div class="form-row mt-2">
+          <div class="btn btn-primary btn-file col-sm-6 btn-sm">
+            Unggah File <input id="file" name="file" type="file" class="form-control">
+          </div>
+         <div class="col-sm-3">
+            <input class="btn btn-warning btn-sm " type="cancel" value="Cancel" data-dismiss='modal' data-toggle="modal" data-target="#detailVacancy">
+         </div>
+         <div class=" col-sm-3">
+          <input class="btn btn-primary btn-sm" type="submit" value="Simpan File" id="saveDoc" data-toggle="modal" data-target="#detailVacancy">
+         </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-6 mt-2 align-middle text-center">
+            <img src="" id="photoPreview"  width="200" height="150" style="border:2pt;">
+          </div>
+          <div class="col-md-6 mt-2">
+            <h6><span style="color:red;">*</span> Wajib Diisi</h6>
+          </div>
+        </div>
+        <div class="form-row mt-2">
+          <div class="btn btn-primary btn-file col-md-6 btn-sm">
+            Unggah Foto <input class="form-control" type="file" id="unggahFoto" accept=".png,.jpg,.jpeg,.gif">
+          </div>
+        </div>
+        <div class="form-row mt-2">
+          <div class="col-sm-3">
+            <input class="btn btn-warning btn-sm " type="cancel" value="Cancel" data-dismiss='modal' data-toggle="modal" data-target="#detailVacancy">
+         </div>
+          <div class="col-md-3" id="saveImg" >
+            <input class="btn btn-primary btn-sm" type="submit" value="Simpan" data-toggle="modal" data-target="#detailVacancy">
+          </div>
+        </div>
+      </form>
+      
+ <script>
+    $(document).ready(function(){
+    document.getElementById("photoPreview").src = "../../images/field.png";
+    })
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#photoPreview').attr('src', e.target.result);
+            };
+        reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+  // view nama file
+  var uploadField = document.getElementById("file");
+  uploadField.onchange = function() {
+    var nama = document.getElementById('file').value;
+    var ext = nama.slice(nama.length-4,nama.length);
+    console.log(ext);
+    if(this.files[0].size > (500*1024)){
+      swal.fire("File Size!","Ukuran File Terlalu Besar Max 500KB","error")
+      this.value = "";
+    }
+    else if(ext != ".pdf"){
+      swal.fire("File Type!!","Type File Hanya Khusus PDF","error")
+    }
+    else{
+      var temp = nama.slice(12, nama.length-4);
+      document.getElementsByName('fileName')[0].value = temp;
+    }
+  };
+
+  // preview photo
+  var uploadFotoField = document.getElementById("unggahFoto");
+  uploadFotoField.onchange = function() {
+    var viewName = "";
+    var index,temp="";
+    var namaFoto = document.getElementById('unggahFoto').value;
+    for ( index = 0; index < namaFoto.length; index++) {
+      if (namaFoto.charAt(index)=='.'){
+        temp += namaFoto.slice(index,namaFoto.length);
+        console.log(temp);
+        viewName += namaFoto.slice(12,index);
+        document.getElementsByName('fileName')[0].value = viewName;
+      }
+    }
+    if(temp==".jpg"||temp==".jpeg"||temp==".png"||temp==".gif"){
+      if(this.files[0].size > (500*1024)){
+      swal.fire("File Size!","Ukuran Foto Terlalu Besar Max 500KB","error")
+      this.value = "";
+      }
+      else{
+      readURL(this);
+      }
+    }
+    else{
+      swal.fire("File Type!!","Type File Hanya Khusus JPG/JPEG/PNG/GIF","error")
+    }
+    
+  };
+
+  $('#saveDoc').click(() => {
+      var data = getFormData($('#formAddDoc'));
+      var id = $('#bioId').val();
+      console.log(JSON.stringify(data));
+        $.ajax({
+          url: '/api/dokumen/',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+          success: (res) => {
+            $('#AddDoc').modal('hide');
+            get_id_biodata(id);
+            console.log(data);
+            swal.fire("Data Berhasil Disimpan","","success");
+            $('#detailVacancy').modal('show');
+          },
+          error: () => {
+            $('#AddDoc').modal('hide');
+            swal.fire("Data Gagal Disimpan","","error")
+            $('#detailVacancy').modal('show');
+          }
+        })
+    })
+    
+ </script>
+</html>

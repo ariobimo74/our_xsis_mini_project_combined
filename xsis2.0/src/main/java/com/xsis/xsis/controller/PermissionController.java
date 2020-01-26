@@ -1,0 +1,25 @@
+package com.xsis.xsis.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * PermissionController
+ */
+@Controller
+@RequestMapping("/permission")
+public class PermissionController {
+
+    @GetMapping("/permissionhistory")
+    public String showPermissionHistory(Model model) {
+        return "pages/PermissionHistory";
+    }
+
+    @GetMapping("/permissionapproval")
+    public String showPermissionApproval(Model model) {
+        return "pages/PermissionApproval";
+    }
+
+}

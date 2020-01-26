@@ -1,0 +1,597 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+  <div class="bottom p-4">
+    <div class="col">
+      <div class="container">
+        <h1 id="header" class="h1">Role</h1>
+        <!-- Button trigger modal -->
+        <div>
+          <div style="float: left;">
+
+            <div class="input-group input-group-sm" style="width: 280px;">
+              <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                id="inputSearch">
+              <div class="input-group-append">
+                <button type="submit" id="btn-reset" class="btn btn-default">
+                  <i class="fa fa-times"></i>
+                </button>
+                <button type="submit" id="btn-search" class="btn btn-default">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="float: right; margin-right: 50px;">
+
+            <h4>
+              <a data-toggle="modal" data-target="#addData" href="#"><i class="fa fa-plus-circle"
+                  aria-hidden="true"></i></a>
+            </h4>
+
+          </div>
+          <!-- <div style="float: right; margin-right: 25px;">
+
+            <div class="input-group-prepend"></div>
+            <select id="maxRows" onchange="row_per_page(this.value)">
+              <option value="100">Show All</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+            </select>
+          </div> -->
+          <div style="float: right; margin-right: 25px;">
+            <h4>
+              <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href="" id="page_show"><i
+                  class="fa fa-align-justify" aria-hidden="true" aria-haspopup="true" aria-expanded="false"></i></a>
+              <div class="dropdown-menu dropdown-menu-lg-right">
+                <a class="dropdown-item"> Row Per Page </a>
+                <a id="data-show-10" class="dropdown-item" type="button">10</a>
+                <a id="data-show-20" class="dropdown-item" type="button">20</a>
+                <a id="data-show-30" class="dropdown-item" type="button">30</a>
+                <a id="data-show-40" class="dropdown-item" type="button">40</a>
+                <a id="data-show-50" class="dropdown-item" type="button">50</a>
+              </div>
+            </h4>
+          </div>
+
+          <!-- <div style="float: right; margin-right: 25px;">
+
+            <div class="input-group-prepend"></div>
+            <select id="sort" onchange="order(this.value)">
+              <option><i class="fa fa-plus-circle"></i></option>
+              <option value="Ascending">Ascending</option>
+              <option value="Descending">Descending</option>
+            </select>
+          </div> -->
+
+          <div style="float: right; margin-right: 25px;">
+
+            <h4>
+              <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href=""
+                id="page_sort_show"><i class="fa fa-sort-alpha-down" aria-hidden="true" aria-haspopup="true"
+                  aria-expanded="false"></i></a>
+              <div class="dropdown-menu dropdown-menu-lg-right">
+                <a class="dropdown-item"> Order </a>
+                <a onclick="dataShowAsc()" class="dropdown-item" type="button">Ascending</a>
+                <a onclick="dataShowDesc()" class="dropdown-item" type="button">Descending</a>
+              </div>
+            </h4>
+          </div>
+
+        </div>
+        <table class="table table-striped" id="tableRole">
+          <thead>
+            <tr class='text-center'>
+              <th class='text-center' scope="col">Role Code</th>
+              <th class='text-center' scope="col">Role Name</th>
+              <th scope="col">#</th>
+            </tr>
+          </thead>
+          <tbody id="tbRole">
+
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-md-8">
+          </div>
+          <div class="col-md-4 align-right text-left" id="show_pagination">
+            <div id="pager" class="paginationjs-big">
+              <ul id="pagination" class="pagination-sm"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal add -->
+  <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Form Add Role</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formData">
+            <div class="form-row">
+              <div class=col-md-6>
+                <label for="pengarang">Role Code* :</label><br>
+                <input class="form-control" type="text" id="code" name="code" required placeholder="Role Code">
+              </div>
+
+              <div class=col-md-6>
+                <label for="pengarang">Role Name* :</label><br>
+                <input class="form-control" type="text" id="name" name="name" required placeholder="Role Name">
+              </div>
+            </div>
+          </form>
+          <p>Kolom Bertanda (*) Wajib Diisi</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal edit -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formEdit">
+            <div class="form-group">
+              <input readonly class="form-control" type="hidden" id="editRoleId" name="id" placeholder="Role id">
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="title">Role Code* :</label><br>
+                <input class="form-control" type="text" id="editRoleCode" name="code" placeholder="Role Code">
+              </div>
+              <div class="col-md-6">
+                <label for="pengarang">Role Name* :</label><br>
+                <input class="form-control" type="text" id="editRoleName" name="name" placeholder="Role Name">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="editBtn" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</th:block>
+
+<th:block layout:fragment="role">
+  <script>
+    $(() => {
+      loadData();
+
+    });
+
+    loadData = () => {
+
+      var rowperpage = 100;
+      row_per_page("", rowperpage);
+
+    }
+
+    function row_per_page(role, rowperpage) {
+      var $pagination = $('#pagination');
+      if (role == "") {
+        $.ajax({
+          url: "api/role/getAllRolePaging",
+          async: true,
+          dataType: 'json',
+          success: function (data) {
+            $pagination.pagination({
+              dataSource: data,
+              pageSize: rowperpage,
+              showPageNumbers: false,
+              showNavigator: true,
+              callback: function (displayRecords, pagination) {
+                $('#tbRole').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                  tr = $('<tr class="text-center">');
+                  tr.append("<td>" + displayRecords[i].code + "</td>");
+                  tr.append("<td>" + displayRecords[i].name + "</td>");
+                  tr.append('<td>\n' +
+                    '<div class="input-group-btn">\n' +
+                    '             <div class="dropdown show">\n' +
+                    '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More </a>\n' +
+                    '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                 <a class="dropdown-item" onclick="editAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#editModal">Edit</a>\n' +
+                    '                 <a class="dropdown-item" onclick="deleteAction(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].code + '\')">Delete</a>\n' +
+                    '            </div>\n' +
+                    '             </div>\n' +
+                    '        </div>\n' +
+                    '</td>\n' +
+                    '</tr>')
+                  $('#tbRole').append(tr);
+                }
+              }
+            });
+          }
+        });
+      } else if (role != "") {
+        $.ajax({
+          url: 'api/role/searchLikeCodeOrName?code=' + role + '&name=' + role,
+          async: true,
+          dataType: 'json',
+          success: function (data) {
+            $pagination.pagination({
+              dataSource: data,
+              pageSize: rowperpage,
+              callback: function (displayRecords, pagination) {
+                $('#tbRole').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                  tr = $('<tr class="text-center">');
+                  tr.append("<td>" + displayRecords[i].code + "</td>");
+                  tr.append("<td>" + displayRecords[i].name + "</td>");
+                  tr.append('<td>\n' +
+                    '<div class="input-group-btn">\n' +
+                    '             <div class="dropdown show">\n' +
+                    '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                    '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                 <a class="dropdown-item" onclick="editAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#editModal">Edit</a>\n' +
+                    '                 <a class="dropdown-item" onclick="deleteAction(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].code + '\')">Delete</a>\n' +
+                    '            </div>\n' +
+                    '             </div>\n' +
+                    '        </div>\n' +
+                    '</td>\n' +
+                    '</tr>')
+                  $('#tbRole').append(tr);
+                }
+              }
+            });
+          }
+        });
+      }
+    }
+
+    $('#btn-search').click(() => {
+      var x = document.getElementById("show_pagination");
+      x.style.display = "block";
+      if ($('#inputSearch').val() == "") {
+        swal.fire("Data Search Empty!", "Set Role Code Keyword", "Warning");
+      } else if ($('#inputSearch').val() != "") {
+        var search_code = $('#inputSearch').val();
+        row_per_page(search_code, 100);
+      }
+    })
+
+    $('#btn-reset').click(() => {
+      var x = document.getElementById("show_pagination");
+      x.style.display = "block";
+      $('#inputSearch').val("");
+      var search_code = $('#inputSearch').val();
+      row_per_page(search_code, 100);
+    })
+
+    $("#inputSearch").on("keydown", function (e) {
+      var x = document.getElementById("show_pagination");
+      x.style.display = "block";
+      var search_code = $('#inputSearch').val();
+      if (e.which == 13) {
+        row_per_page(search_code, 100);
+      }
+    });
+
+    function dataShowAsc() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("tableRole");
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+    function dataShowDesc() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("tableRole");
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.rows
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+
+
+
+
+    $('#saveBtn').click(() => {
+      var data = getFormData($('#formData'));
+      console.log(JSON.stringify(data));
+
+      if ($('#code').val() == "") {
+        swal.fire("Kode Role Tidak Boleh Kosong", "", "error");
+      } else if ($('#name').val() == "") {
+        swal.fire("Nama Role Tidak Boleh Kosong", "", "error");
+      } else {
+        var code = $("#code").val();
+        var codeA = code.toLowerCase();
+        $.ajax({
+          url: "/api/role",
+          type: "get",
+          contentType: "application/json",
+          success: function (cek) {
+            var codedb = "";
+            if (cek.length > 0) {
+              var result = false;
+              for (let i = 0; i < cek.length; i++) {
+                codedb = cek[i].code.toLowerCase();
+                console.log(codeA + "-" + codedb)
+                if (codeA == codedb) {
+                  result = true;
+
+                }
+
+
+              }
+              if (result == false) {
+                $.ajax({
+                  url: 'api/role/',
+                  type: 'post',
+                  contentType: 'application/json',
+                  data: JSON.stringify(data),
+                  success: (res) => {
+
+                    $('#addData').modal('hide');
+                    swal.fire("Data Berhasil Disimpan ", "", "success");
+                    $('#formData input[type=text]').val("");
+                    loadData();
+                  },
+                  error: () => {
+                    swal.fire("Data Gagal Disimpan, Kode Role Sudah Tersedia / Pernah Dipakai", "", "error")
+                  }
+                })
+              } else {
+                swal.fire(
+                  "Code telah digunakan",
+                  "warning"
+                );
+              }
+            } else {
+              $.ajax({
+                url: 'api/role/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: (res) => {
+
+                  $('#addData').modal('hide');
+                  swal.fire("Data Berhasil Disimpan ", "", "success");
+                  $('#formData input[type=text]').val("");
+                  loadData();
+                },
+                error: () => {
+                  swal.fire("Data Gagal Disimpan, Kode Role Sudah Tersedia / Pernah Dipakai", "", "error")
+                }
+              })
+            }
+          }
+        });
+      }
+    })
+    function editAction(id) {
+      $.ajax({
+        url: 'api/role/' + id,
+        type: 'get',
+        contentType: 'application/json',
+        success: (res) => {
+          $('#editRoleId').val(res.id)
+          $('#editRoleCode').val(res.code)
+          $('#editRoleName').val(res.name)
+        },
+        error: () => {
+          console.log("error fetch data")
+        }
+      })
+    }
+    $('#editBtn').click(() => {
+      var data = getFormData($('#formEdit'));
+      var id = $('#editRoleId').val();
+      if ($('#editRoleCode').val() == "") {
+        swal.fire("Kode Role Tidak Boleh Kosong", "", "error");
+      } else if ($('#editRoleName').val() == "") {
+        swal.fire("Nama Role Tidak Boleh Kosong", "", "error");
+      } else {
+        var code = $("#editRoleCode").val();
+        var codeA = code.toLowerCase();
+        var id = $("#editRoleId").val();
+        $.ajax({
+          url: "/api/role",
+          type: "get",
+          contentType: "application/json",
+          success: function (cek) {
+            var codedb = "";
+            if (cek.length > 0) {
+              var result = false;
+              for (let i = 0; i < cek.length; i++) {
+                codedb = cek[i].code.toLowerCase();
+                console.log(codeA + "-" + codedb)
+                if (codeA == codedb) {
+                  result = true;
+                }
+                if (id == cek[i].id && codeA == codedb) {
+                  result = false;
+                }
+
+
+              }
+              if (result == false) {
+                $.ajax({
+                  url: 'api/role/' + id,
+                  type: 'put',
+                  contentType: 'application/json',
+                  data: JSON.stringify(data),
+                  success: (res) => {
+                    $('#editModal').modal('hide');
+                    swal.fire("Data Berhasil Diubah ", "", "success");
+                    $('#formEdit input[type=text]').val("")
+                    loadData();
+                  },
+                  error: () => {
+                    swal.fire("Data Gagal Di Ubah", "", "error")
+                  }
+                })
+              } else {
+                swal.fire("", "Code telah digunakan", "warning");
+              }
+            }
+          }
+        });
+      }
+    });
+    function deleteAction(id, name) {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-danger',
+          cancelButton: 'btn btn-warning'
+        },
+        buttonsStyling: false
+      })
+
+      swalWithBootstrapButtons.fire({
+        title: 'Hapus Role ?',
+        text: "Anda yakin ingin menghapus role " + name + " ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: 'api/role/' + id,
+            type: 'delete',
+            contentType: 'application/json',
+            success: () => {
+              loadData();
+              swal.fire("Role Berhasil Dihapus ", "", "success");
+            },
+          })
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelled',
+            'Your data file is safe :)',
+            'error'
+          )
+          loadData();
+        }
+      })
+
+    }
+
+    function getFormData($form) {
+      var unindexed_array = $form.serializeArray();
+      var indexed_array = {};
+      $.map(unindexed_array, function (n, i) {
+        indexed_array[n['name']] = n['value'];
+      });
+      return indexed_array;
+    }
+
+    $('#data-show-10').on('click', function () {
+      var result_code = $('#inputSearch').val();
+      row_per_page(result_code, 1);
+
+    });
+
+    $('#data-show-20').on('click', function () {
+      var result_code = $('#inputSearch').val();
+      row_per_page(result_code, 2);
+    });
+
+    $('#data-show-30').on('click', function () {
+      var result_code = $('#inputSearch').val();
+      row_per_page(result_code, 3);
+    });
+
+    $('#data-show-40').on('click', function () {
+      var result_code = $('#inputSearch').val();
+      row_per_page(result_code, 4);
+    });
+
+    $('#data-show-50').on('click', function () {
+      var result_code = $('#inputSearch').val();
+      row_per_page(result_code, 5);
+    });
+
+    $("#inputSearch").keyup(function () {
+      var input = $(this);
+      if (input.val() == "") {
+        var x = document.getElementById("show_pagination");
+        x.style.display = "none";
+        row_per_page("", 100);
+      }
+    });
+
+
+    // $('#data-show-asc').on('click', function () {
+    //   order('Ascending');
+    // });
+
+    // $('#data-show-desc').on('click', function () {
+    //   order('Descending');
+    // });
+
+  </script>
+
+</th:block>

@@ -1,0 +1,653 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+    <div class="container">
+        <h2 class="modal-title">Timesheet Approval</h2>
+        <div id="formData">
+            <form>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label style="font-size: 10pt;" for="timesheetDateYear">Tahun*</label><br>
+                        <select class="form-control get_tsapproval get_year" for="timesheetDateYear"
+                            name="timesheetDate" id="timesheetDateYear"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size: 10pt;" for="timesheetDateMonth">Bulan*</label><br>
+                        <select class="form-control get_tsapproval get_month" for="timesheetDateMonth"
+                            name="timesheetDate" id="timesheetDateMonth">
+                            <option value="">-Pilih Bulan-</option>
+                            <option value="01">Jan</option>
+                            <option value="02">Feb</option>
+                            <option value="03">Mar</option>
+                            <option value="04">Apr</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Jun</option>
+                            <option value="07">Jul</option>
+                            <option value="08">Aug</option>
+                            <option value="09">Sep</option>
+                            <option value="10">Okt</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Des</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <div>
+                <table class="table table-striped">
+                    <tbody id="tbTsApproval">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 align-right text-right">
+                <button type="button" id="batalBtn" class="btn btn-warning get_tsapproval"
+                    disabled="disabled">Batal</button>
+                <button type="button" id="tolakBtn" class="btn btn-danger get_tsapproval"
+                    disabled="disabled">Tolak</button>
+                <button type="button" id="saveBtn" class="btn btn-primary get_tsapproval"
+                    disabled="disabled">Setujui</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Detail Timesheet Approval -->
+    <div class="modal fade" id="DetailTA" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"
+        style="overflow-y:auto;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detail</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="formDetailTA">
+                        <form>
+                            <div class="row">
+                                <input type="hidden" id="id" name="id" value="">
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Status</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Klien</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="status" name="status" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="name" name="name" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Tanggal</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Jam Kerja</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="timesheetDateDet" name="timesheetDate" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="startAndEnd" name="startAndEnd" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Overtime</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p style="font-size: small;margin: 0px;">Jam Overtime</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="overtime" name="overtime" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                                <div class="col-md-4">
+                                    <b>
+                                        <p id="startAndEndOt" name="startAndEndOt" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <p style="font-size: small;margin: 0px;">Kegiatan</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <b>
+                                        <p id="activity" name="activity" style="font-size: large;"></p>
+                                    </b>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Timesheet Assessment -->
+    <div class="modal fade" id="tsAssessment" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Penilaian Resource</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="formData">
+                        <form>
+                            <div class="form-row">
+                                <input type="hidden" id="id" name="id" value="">
+                                <div class="col">
+                                    <p style="font-size: small;margin: 0px;">Pernyataan Pegawai : </p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <b>
+                                        <p style="font-size: medium; margin: 0px;">Time report ini saya buat dengan
+                                            sungguh-sungguh
+                                            dan sebenarnya sesuai dengan nilai-nilai etika dan profesionalisme
+                                            perusahaan.</p>
+                                    </b>
+                                    <hr style="height: 2px;background-color: black;">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label style="font-size: 10pt;">Sasaran & Hasil Kerja *</label><br>
+                                </div>
+                                <div class="col-md-4">
+                                    <label style="font-size: 10pt;">Kompetensi Pendukung *</label><br>
+                                </div>
+                                <div class="col-md-4">
+                                    <label style="font-size: 10pt;">Kedisiplinan *</label><br>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <select class="form-control" name="targetResult" id="targetResult">
+                                        <option value="">- Pilih -</option>
+                                        <option value="4">(4) Sangat Memuaskan</option>
+                                        <option value="3">(3) Memuaskan</option>
+                                        <option value="2">(2) Tidak Memuaskan</option>
+                                        <option value="1">(1) Sangat Tidak Memuaskan</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" name="competencyCompetency" id="competencyCompetency">
+                                        <option value="">- Pilih -</option>
+                                        <option value="4">(4) Sangat Memuaskan</option>
+                                        <option value="3">(3) Memuaskan</option>
+                                        <option value="2">(2) Tidak Memuaskan</option>
+                                        <option value="1">(1) Sangat Tidak Memuaskan</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" name="discipline" id="discipline">
+                                        <option value="">- Pilih -</option>
+                                        <option value="4">(4) Sangat Memuaskan</option>
+                                        <option value="3">(3) Memuaskan</option>
+                                        <option value="2">(2) Tidak Memuaskan</option>
+                                        <option value="1">(1) Sangat Tidak Memuaskan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="parameterList">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btlBtn" class="btn btn-warning">Batal</button>
+                    <button type="button" id="prosesBtn" class="btn btn-primary">Proses</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="tsapproval">
+    <script>
+        $(() => {
+            get_year();
+        });
+        get_year = () => {
+            var current_year = new Date();
+            var year = current_year.getFullYear();
+            var value_year = "";
+            value_year += '<option value="">- Pilih Tahun -</option>';
+            var i = 2009;
+            while (i <= year) {
+                value_year += `<option value="` + i + `">` + i + `</option>`;
+                i++;
+            }
+            $("#timesheetDateYear").html(value_year);
+        }
+
+        $(document).ready(function () {
+            var k = 0; var l = 0;
+            $('#timesheetDateYear').on('change', function () {
+                k = 1;
+                $('#timesheetDateMonth').on('change', function () {
+                    l = 1;
+                    if (k == 1 && l == 1) {
+                        var year = $("#timesheetDateYear").val();
+                        var month = $("#timesheetDateMonth").val();
+                        var yearmonth = year + "-" + month;
+                        get_data(yearmonth);
+                        $('#batalBtn').prop("disabled", false);
+                        $('#tolakBtn').prop("disabled", false);
+                        $('#saveBtn').prop("disabled", false);
+                    }
+                })
+            })
+            $('#timesheetDateMonth').on('change', function () {
+                var k = 1;
+                $('#timesheetDateYear').on('change', function () {
+                    var l = 1;
+                    if (k == 1 && l == 1) {
+                        var year = $("#timesheetDateYear").val();
+                        var month = $("#timesheetDateMonth").val();
+                        var yearmonth = year + "-" + month;
+                        get_data(yearmonth);
+                        $('#batalBtn').prop("disabled", false);
+                        $('#tolakBtn').prop("disabled", false);
+                        $('#saveBtn').prop("disabled", false);
+                        $("#checkedAll").change(function () {
+                            if ($(this).is(':checked')) {
+                                $("input:checkbox[class=ischecked]").each(function () {
+                                    $(this).prop("checked", true);
+                                });
+                            } else {
+                                $("input:checkbox[class=ischecked]").each(function () {
+                                    $(this).prop("checked", false);
+                                });
+                            }
+                        });
+                    }
+                })
+            })
+        })
+        var ilength = "";
+
+        function get_data(yearmonth) {
+            var number = 0;
+
+            $.ajax({
+                url: 'api/alfia/timesheet/search?yearmonth=' + yearmonth,
+                type: 'get',
+                contentType: "application/json",
+                success: function (result) {
+                    $("#tbTsApproval").html("");
+                    ilength = result.length;
+                    if (result.length > 0) {
+                        var date = result[0].timesheetDate;
+                        var bln = date.slice(date.length - 5, date.length - 3);
+                        var tahun = date.slice(0, 4);
+                        $("#tbTsApproval").append(
+                            "<tr>" +
+                            "<th class=\"form-check\">" +
+                            "<input onclick=\"ischechedAll()\"  class=\"form - check - input checkbox_cek\" id=\"checkedAll\" value=\"\" type=\"checkbox\" name = \"ischeckedAll\" >" +
+                            "</th>" +
+                            "<th class=\"text-left\" scope=\"col\">NAMA</th>" +
+                            "<th class=\"text-left\" scope=\"col\">STATUS</th>" +
+                            "<th class=\"text-left\" scope=\"col\">TANGGAL</th>" +
+                            "<th class=\"text-left\" scope=\"col\">CLIENT</th>" +
+                            "<th><input type=\"text\" style=\"display:none;\" id=\"year\" name=\"year\" value=" + tahun + "></th>" +
+                            "<th><input type=\"text\" style=\"display:none;\" id=\"month\" name=\"month\" value=" + bln + "></th>" +
+                            "<th></th>" +
+                            "</tr>");
+                        for (var i = 0; i < result.length; i++) {
+                            var date = result[i].timesheetDate;
+                            var hari = date.slice(date.length - 2, date.length);
+                            var bln = date.slice(date.length - 5, date.length - 3);
+                            var tahun = date.slice(0, 4);
+                            if (bln == 01) {
+                                var bulan = "Januari";
+                            } else if (bln == 02) {
+                                var bulan = "Februari";
+                            } else if (bln == 03) {
+                                var bulan = "Maret";
+                            } else if (bln == 04) {
+                                var bulan = "April";
+                            } else if (bln == 05) {
+                                var bulan = "Mei";
+                            } else if (bln == 06) {
+                                var bulan = "Juni";
+                            } else if (bln == 07) {
+                                var bulan = "Juli";
+                            } else if (bln == 08) {
+                                var bulan = "Agustus";
+                            } else if (bln == 09) {
+                                var bulan = "September";
+                            } else if (bln == 10) {
+                                var bulan = "Oktober";
+                            } else if (bln == 11) {
+                                var bulan = "November";
+                            } else if (bln == 12) {
+                                var bulan = "Desember";
+                            }
+                            var tanggal = bulan + " " + hari + ", " + tahun;
+                            console.log(result[i].id);
+                            $("#tbTsApproval").append(
+                                "<tr>" +
+                                "<td class=\"form-check\">" +
+                                "<input type=\"hidden\" id=\"id\" name=\"id\" value=" + result[i].id + ">" +
+                                "<input  onclick=\"ischeckAll()\" class=\"ischecked\" id=\"checked" + i + "\" value=" + result[i].id + " type=\"checkbox\" >" +
+                                "</td>" +
+                                "<td class=\"text-left\" scope=\"col\">" + result[i].fullname + "</td>" +
+                                "<td class=\"text-left\" scope=\"col\">" + result[i].status + "</td>" +
+                                "<td class=\"text-left\" scope=\"col\">" + tanggal + "</td>" +
+                                "<td class=\"text-left\" scope=\"col\">" + result[i].name + "</td>" +
+                                "<td colspan=\"3\">" +
+                                "<a onclick=\"get_detailTS_by_id(" + result[i].id + ")\" data-toggle=\"modal\" data-target=\"#DetailTA\" href=\"#\" ><i class=\"fas fa-search\" aria-hidden=\"true\" ></i></a>" +
+                                "</td>" +
+                                "</tr>");
+                        }
+                    }
+                }
+            })
+        }
+        function ischeckAll() {
+            var cobaya = [];
+            $('.ischecked:checked').each(function () {
+                cobaya.push($(this).val());
+            });
+            if (ilength == cobaya.length) {
+                $("#checkedAll").prop("checked", true);
+            } else {
+                $("#checkedAll").prop("checked", false);
+            }
+        }
+
+        function ischechedAll() {
+            if ($("#checkedAll").is(':checked')) {
+                $("input:checkbox[class=ischecked]").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input:checkbox[class=ischecked]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        }
+        $('#batalBtn').click(() => {
+            $("#tbTsApproval").html("");
+            $('#batalBtn').prop("disabled", true);
+            $('#tolakBtn').prop("disabled", true);
+            $('#saveBtn').prop("disabled", true);
+            $("#timesheetDateYear").html("");
+            $("#timesheetDateMonth").html("");
+        })
+
+        $('#btlBtn').click(() => {
+            $("#parameterList").html("");
+            $("#tsAssessment").modal("hide");
+        })
+
+        $('#tolakBtn').click(function () {
+            var checkArray = [];
+            $('.ischecked:checked').each(function () {
+                checkArray.push($(this).val());
+            });
+            if (checkArray.length > 0) {
+                for (var i = 0; i < checkArray.length; i++) {
+                    var id = checkArray[i];
+                    $.ajax({
+                        url: 'api/alfia/timesheet/' + id,
+                        type: 'delete',
+                        contentType: "application/json",
+                        success: function (result) {
+                            swal.fire({
+                                title: "Success", text: "Your Data Was Successfully Rejected!", confirmButtonText: "OK!"
+                            }).then(function () {
+                                location.reload();
+                            });
+                            $('#timesheetDateYear').val("");
+                            $('#timesheetDateMonth').val("");
+                            $("#tbTsApproval").html("");
+                            $('#batalBtn').prop("disabled", true);
+                            $('#tolakBtn').prop("disabled", true);
+                            $('#saveBtn').prop("disabled", true);
+                            // location.reload();
+                        },
+                        error: function () {
+                            swal.fire({
+                                title: "Failed", text: "Your Data Wasn't Successfully Rejected!", confirmButtonText: "OK!"
+                            }).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+                }
+            } else {
+                swal.fire("Pilih Data Untuk Ditolak", "", "error");
+            }
+        })
+
+        $('#saveBtn').click(() => {
+            $("#parameterList").html("");
+            $("#targetResult").val("");
+            $("#competencyCompetency").val("");
+            $("#discipline").val("");
+            var checkArray = [];
+            $('.ischecked:checked').each(function () {
+                checkArray.push($(this).val());
+            });
+            if (checkArray.length > 0) {
+                var thn = $("#year").val();
+                var bln = $("#month").val();
+                var lagi =
+                    ' <div><input type="hidden" value="' + thn + '" id="yearAsses"></div>' +
+                    ' <div><input type="hidden" value="' + bln + '" id="monthAsses"></div>'
+                $('#parameterList').append(lagi);
+                for (var i = 0; i < checkArray.length; i++) {
+                    $.ajax({
+                        url: 'api/alfia/timesheet/getbyid/' + checkArray[i],
+                        type: 'get',
+                        contentType: "application/json",
+                        success: function (result) {
+                            var markup =
+                                ' <div><input type="hidden" value="' + result.id + '" id="idtimesheet" name="idtimesheet"></div>' +
+                                ' <div><input type="hidden" value="' + result.placementId + '" id="idplacement" name="idplacement"></div>'
+                            $('#parameterList').append(markup);
+                        }
+                    })
+                }
+                $("#tsAssessment").modal("show");
+            } else {
+                swal.fire("Pilih Data Untuk Disetujui", "", "error");
+            }
+        })
+
+        $('#prosesBtn').click(() => {
+            var idts = [];
+            $.each($("input[name='idtimesheet']"), function () {
+                idts.push($(this).val());
+            });
+            var idplace = [];
+            $.each($("input[name='idplacement']"), function () {
+                idplace.push($(this).val());
+            });
+            var placeid = getUnique(idplace);
+
+            for (var i = 0; i < idts.length; i++) {
+                var idt = idts[i];
+                $.ajax({
+                    url: 'api/alfia/timesheet/approved/' + idt,
+                    type: 'delete',
+                    contentType: "application/json",
+                    success: function (result) {
+                        console.log("berhasil!!");
+                    },
+                    error: function () {
+                        console.log("GAGAL!!");
+                    }
+                })
+            }
+
+            for (var i = 0; i < placeid.length; i++) {
+                var idpl = placeid[i];
+                var data = {
+                    id: $("#id").val(),
+                    year: $("#year").val(),
+                    month: $("#month").val(),
+                    placementId: idpl,
+                    targetResult: $("#targetResult").val(),
+                    competencyCompetency: $("#competencyCompetency").val(),
+                    discipline: $("#discipline").val(),
+                }
+                $.ajax({
+                    url: 'api/alfia/tsassessment',
+                    type: 'post',
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log("berhasil buat ts assessment!!");
+                        swal.fire({
+                            title: "Success", text: "Your Data Was Successfully Approved!", confirmButtonText: "OK!"
+                        }).then(function () {
+                            location.reload();
+                        });
+                        $('#timesheetDateYear').val("");
+                        $('#timesheetDateMonth').val("");
+                        $("#tbTsApproval").html("");
+                        $('#batalBtn').prop("disabled", true);
+                        $('#tolakBtn').prop("disabled", true);
+                        $('#saveBtn').prop("disabled", true);
+                        $("#timesheetDateYear").val("");
+                        $("#timesheetDateMonth").val("");
+                        $("#tsAssessment").modal("hide");
+                    },
+                    error: function () {
+                        console.log("GAGAL buat ts assessment!!");
+                    }
+                })
+            }
+        })
+
+        function getUnique(array) {
+            var uniqueArray = [];
+            for (i = 0; i < array.length; i++) {
+                if (uniqueArray.indexOf(array[i]) === -1) {
+                    uniqueArray.push(array[i]);
+                }
+            }
+            return uniqueArray;
+        }
+
+        function get_detailTS_by_id(id) {
+            $.ajax({
+                url: 'api/alfia/timesheet/' + id,
+                type: 'get',
+                contentType: "application/json",
+                success: function (result) {
+                    console.log(result);
+                    var date = result.timesheetDate;
+                    var hari = date.slice(date.length - 2, date.length);
+                    var bln = date.slice(date.length - 5, date.length - 3);
+                    var tahun = date.slice(0, 4);
+                    if (bln == 01) {
+                        var bulan = "Januari";
+                    } else if (bln == 02) {
+                        var bulan = "Februari";
+                    } else if (bln == 03) {
+                        var bulan = "Maret";
+                    } else if (bln == 04) {
+                        var bulan = "April";
+                    } else if (bln == 05) {
+                        var bulan = "Mei";
+                    } else if (bln == 06) {
+                        var bulan = "Juni";
+                    } else if (bln == 07) {
+                        var bulan = "Juli";
+                    } else if (bln == 08) {
+                        var bulan = "Agustus";
+                    } else if (bln == 09) {
+                        var bulan = "September";
+                    } else if (bln == 10) {
+                        var bulan = "Oktober";
+                    } else if (bln == 11) {
+                        var bulan = "November";
+                    } else if (bln == 12) {
+                        var bulan = "Desember";
+                    }
+                    var tanggal = bulan + " " + hari + ", " + tahun;
+                    var mulai = result.start;
+                    var selesai = result.end;
+                    if (result.status == "masuk") {
+                        var jamkerja = mulai + "-" + selesai;
+                    }
+                    else if (result.status != "masuk") {
+                        var jamkerja = "-";
+                    }
+                    var ot = result.overtime;
+                    if (ot == true) {
+                        var isot = "Ya"
+                    } else if (ot == false && result.status == "masuk") {
+                        var isot = "Tidak"
+                    } else if (ot == "" || result.status != "masuk") {
+                        var isot = "-"
+                    }
+                    var mulaiot = result.startOt;
+                    var selesaiot = result.endOt;
+                    if (isot == "Tidak" || isot == "-") {
+                        var jamkerjaot = "-";
+                    } else { var jamkerjaot = mulai + "-" + selesai; }
+                    var kegiatan = result.activity;
+                    if (kegiatan == "") {
+                        var keg = "-";
+                    } else {
+                        var keg = kegiatan;
+                    }
+                    $("#id").html("");
+                    $("#status").html("");
+                    $("#name").html("");
+                    $("#timesheetDateDet").html("");
+                    $("#startAndEnd").html("");
+                    $("#overtime").html("");
+                    $("#startAndEndOt").html("");
+                    $("#activity").html("");
+
+                    $("#id").append(result.id);
+                    $("#status").append(result.status);
+                    $("#name").append(result.name);
+                    $("#timesheetDateDet").append(tanggal);
+                    $("#startAndEnd").append(jamkerja);
+                    $("#overtime").append(isot);
+                    $("#startAndEndOt").append(jamkerjaot);
+                    $("#activity").append(keg);
+                    $("#DetailTA").modal("show");
+                },
+                error: function () {
+                    alert("Failed to Fetch the data");
+                }
+            });
+        }
+    </script>
+</th:block>
+
+</html>

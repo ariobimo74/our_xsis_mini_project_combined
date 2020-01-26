@@ -1,0 +1,827 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+    <div class="bottom p-4">
+        <div class="col">
+            <div class="container">
+                <h1 id="header" class="h1">Permission History</h1>
+
+                <!-- Button trigger modal -->
+
+                <div>
+                    <div style="float: left;">
+
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="text" name="searchStartDate" id="searchStartDate"
+                                placeholder="From" size="11" style="margin-left: 10px;" autocomplete="off">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </div>
+                            <input class="form-control" type="text" name="searchEndDate" id="searchEndDate"
+                                placeholder="To" size="11" style="margin-left: 10px;" autocomplete="off">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </div>
+
+                            <div class="input-group-append">
+                                <button type="submit" id="btn-reset" class="btn btn-default">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" id="btn-search" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="float: right; margin-right: 50px;">
+
+                        <h4>
+                            <a data-toggle="modal" data-target="#addData" href="#" id="showAddData"><i
+                                    class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                        </h4>
+
+                    </div>
+
+                    <div style="float: right; margin-right: 25px;">
+                        <h4>
+                            <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href=""
+                                id="page_show"><i class="fa fa-align-justify" aria-hidden="true" aria-haspopup="true"
+                                    aria-expanded="false"></i></a>
+                            <div class="dropdown-menu dropdown-menu-lg-right">
+                                <a class="dropdown-item"> Row Per Page </a>
+                                <a id="data-show-10" class="dropdown-item" type="button">10</a>
+                                <a id="data-show-20" class="dropdown-item" type="button">20</a>
+                                <a id="data-show-30" class="dropdown-item" type="button">30</a>
+                                <a id="data-show-40" class="dropdown-item" type="button">40</a>
+                                <a id="data-show-50" class="dropdown-item" type="button">50</a>
+                            </div>
+                        </h4>
+                    </div>
+
+                    <div style="float: right; margin-right: 25px;">
+
+                        <h4>
+                            <a class="mr-2" data-toggle="dropdown" data-target="" data-display="dynamic" href=""
+                                id="page_sort_show"><i class="fa fa-sort-alpha-down" aria-hidden="true"
+                                    aria-haspopup="true" aria-expanded="false"></i></a>
+                            <div class="dropdown-menu dropdown-menu-lg-right">
+                                <a class="dropdown-item"> Order </a>
+                                <a id="asc" class="dropdown-item" type="button">Ascending</a>
+                                <a id="desc" class="dropdown-item" type="button">Descending</a>
+                            </div>
+                        </h4>
+                    </div>
+
+                </div>
+                <table class="table table-striped" id="tablePermission">
+                    <thead>
+                        <tr>
+                            <th class='text-center' scope="col">Tanggal</th>
+                            <th class='text-center' scope="col">Jenis Izin</th>
+                            <th class='text-center' scope="col">Status</th>
+                            <th class='text-center' scope="col">#</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbRole" class="products">
+
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-4 align-right text-left" id="show_pagination">
+                        <div id="pager" class="paginationjs-big">
+                            <ul id="pagination" class="pagination-sm"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal add -->
+    <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Permission Form</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formData">
+                        <div class="row">
+                            <div class=col-md-8>
+                                <div class="form-row">
+                                    <label for="employeeName">Nama * :</label><br>
+                                    <input class="form-control" type="text" id="employeeName" name="employeeName">
+                                </div>
+                                <div class="form-row">
+                                    <label for="department">Departemen / Divisi :</label><br>
+                                    <input class="form-control" type="text" id="department" name="department">
+                                </div>
+                                <div class="form-row">
+                                    <label for="position">Jabatan :</label><br>
+                                    <input class="form-control" type="text" id="position" name="position">
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <label for="date">Tanggal *</label><br>
+                                        <input class="form-control" type="date" id="datePermission"
+                                            name="datePermission">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="time">Pukul </label><br>
+                                        <input class="form-control" type="time" id="timePermission"
+                                            name="timePermission">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label for="notes">Catatan * :</label><br>
+                                    <textarea class="form-control" type="text" id="notes" name="notes"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class=col-md-4>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input get_checkbox" id="isAbsent" value=""
+                                        type="checkbox" name="isAbsent">
+                                    <label class="custom-control-label" for="isAbsent">
+                                        Tidak Masuk *</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input get_checkbox" id="isSick" value=""
+                                        type="checkbox" name="isSick">
+                                    <label class="custom-control-label" for="isSick" style="font-size: 10pt;">
+                                        Sakit</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input get_checkbox" id="isComingLate" value=""
+                                        type="checkbox" name="isComingLate">
+                                    <label class="custom-control-label" for="isComingLate" style="font-size: 10pt;">
+                                        Datang Terlambat</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input get_checkbox" id="isEarlyLeave" value=""
+                                        type="checkbox" name="isEarlyLeave">
+                                    <label class="custom-control-label" for="isEarlyLeave" style="font-size: 10pt;">
+                                        Pulang Awal</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input get_checkbox" id="others" value=""
+                                        type="checkbox" name="others">
+                                    <label class="custom-control-label" for="others" style="font-size: 10pt;">
+                                        Lainnya</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <p>Kolom Bertanda (*) Wajib Diisi</p>
+                </div>
+                <div class="modal-footer" style="float: left;">
+                    <button type="button" id="resetBtn" class="btn btn-secondary" data-dismiss="modal">Reset</button>
+                    <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detail Permission</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formDetail">
+                        <div class="row">
+                            <input class="form-control" type="hidden" id="permissionHistoryId" name="id">
+                        </div>
+                        <div class="row">
+                            <div class=col-md-8>
+                                <div class="row">
+                                    <p style="font-size: small;margin: 0px;">Nama </p>
+                                </div>
+                                <div class="row">
+                                    <p id="dEmployeeName" name="employeeName" style="font-size: large;"></p>
+                                </div>
+                                <div class="row">
+                                    <p style="font-size: small;margin: 0px;">Departemen / Divisi </p>
+                                </div>
+                                <div class="row">
+                                    <p id="dDepartment" name="department" style="font-size: large;"></p>
+                                </div>
+                                <div class="row">
+                                    <p style="font-size: small;margin: 0px;">Jabatan</p>
+                                </div>
+                                <div class="row">
+                                    <p id="dPosition" name="position" style="font-size: large;"></p>
+                                </div>
+                                <div class="row">
+                                    <p style="font-size: small;margin: 0px;">Tanggal - Pukul</p>
+                                </div>
+                                <div class="row">
+                                    <p id="dDate" name="dDate" style="font-size: large;"></p>
+                                    <p style="font-size: large;"> &nbsp; - &nbsp;</p>
+                                    <p id="dTime" name="dTime" style="font-size: large;"></p>
+                                </div>
+                                <div class="row">
+                                    <p style="font-size: small;margin: 0px;">Catatan</p>
+                                </div>
+                                <div class="row">
+                                    <p id="dNotes" name="notes" style="font-size: large;"></p>
+                                </div>
+                            </div>
+
+                            <div class=col-md-4>
+                                <div class="custom-control custom-checkbox">
+                                    <input readonly class="custom-control-input" id="dIsAbsent" value="" type="checkbox"
+                                        name="isAbsent">
+                                    <label class="custom-control-label" for="isAbsent">
+                                        Tidak Masuk *</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input readonly class="custom-control-input" id="dIsSick" value="" type="checkbox"
+                                        name="isSick">
+                                    <label class="custom-control-label" for="isSick" style="font-size: 10pt;">
+                                        Sakit</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input readonly class="custom-control-input" id="dIsComingLate" value=""
+                                        type="checkbox" name="isComingLate">
+                                    <label class="custom-control-label" for="isComingLate" style="font-size: 10pt;">
+                                        Datang Terlambat</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input readonly class="custom-control-input" id="dIsEarlyLeave" value=""
+                                        type="checkbox" name="isEarlyLeave">
+                                    <label class="custom-control-label" for="isEarlyLeave" style="font-size: 10pt;">
+                                        Pulang Awal</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input readonly class="custom-control-input" id="dOthers" value="" type="checkbox"
+                                        name="others">
+                                    <label class="custom-control-label" for="others" style="font-size: 10pt;">
+                                        Lainnya</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="permissionHistory">
+    <script>
+        $(() => {
+            var rowperpage = 30;
+            row_per_page("", "", rowperpage);
+
+        });
+        function row_per_page(start_date, end_date, rowperpage) {
+            var $pagination = $('#pagination');
+            if (start_date == "" && end_date == "") {
+                $.ajax({
+                    url: "api/permission/permissionHistory",
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('searchStartDate').value = "";
+                        document.getElementById('searchEndDate').value = "";
+                        $pagination.pagination({
+                            dataSource: data,
+                            pageSize: rowperpage,
+                            showPageNumbers: false,
+                            showNavigator: true,
+                            callback: function (displayRecords, pagination) {
+                                $('#tbRole').html('');
+                                for (var i = 0; i < displayRecords.length; i++) {
+                                    var izin = "";
+                                    if (displayRecords[i].isSick == true) {
+                                        izin += "Sakit, ";
+                                    }
+                                    if (displayRecords[i].isAbsent == true) {
+                                        izin += "Tidak Masuk, ";
+                                    }
+                                    if (displayRecords[i].isComingLate == true) {
+                                        izin += "Datang Terlambat, ";
+                                    }
+                                    if (displayRecords[i].isEarlyLeave == true) {
+                                        izin += "Pulang Awal, ";
+                                    }
+                                    if (displayRecords[i].others == true) {
+                                        izin += "Lainnya, ";
+                                    }
+
+                                    var ji = izin.slice(0, izin.length - 2);
+
+                                    tr = $('<tr class="product text-center">');
+                                    tr.append("<td id='sortDate' style='display:none;'>" + displayRecords[i].permissionTime + "</td>");
+                                    tr.append("<td>" + convertionDate(displayRecords[i].permissionTime) + "</td>");
+                                    tr.append("<td>" + ji + "</td>");
+                                    tr.append("<td>" + displayRecords[i].status + "</td>");
+                                    tr.append('<td>\n' +
+                                        '<a onclick="detailAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#detailModal" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>\n' +
+                                        '</td>\n' +
+                                        '</tr>')
+                                    $('#tbRole').append(tr);
+                                }
+                            }
+                        });
+                    }
+                });
+            } else if (start_date != "" && end_date != "") {
+                $.ajax({
+                    url: 'api/permission/searchDate?sd=' + start_date + '%2000:00&ed=' + end_date + '%2023:59',
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        $pagination.pagination({
+                            dataSource: data,
+                            pageSize: rowperpage,
+                            showPageNumbers: false,
+                            showNavigator: true,
+                            callback: function (displayRecords, pagination) {
+                                $('#tbRole').html('');
+                                for (var i = 0; i < displayRecords.length; i++) {
+                                    var izin = "";
+                                    if (displayRecords[i].isSick == true) {
+                                        izin = "Sakit";
+                                    } else if (displayRecords[i].isAbsent == true) {
+                                        izin = "Tidak Masuk";
+                                    } else if (displayRecords[i].isComingLate == true) {
+                                        izin = "Datang Terlambat";
+                                    } else if (displayRecords[i].isEarlyLeave == true) {
+                                        izin = "Pulang Awal";
+                                    } else if (displayRecords[i].others == true) {
+                                        izin = "Lainnya";
+                                    }
+                                    tr = $('<tr class="product text-center">');
+                                    tr.append("<td id='sortDate' style='display:none;'>" + displayRecords[i].permissionTime + "</td>");
+                                    tr.append("<td>" + convertionDate(displayRecords[i].permissionTime) + "</td>");
+                                    tr.append("<td>" + izin + "</td>");
+                                    tr.append("<td>" + displayRecords[i].status + "</td>");
+                                    tr.append('<td>\n' +
+                                        '<a onclick="detailAction(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#detailModal" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>\n' +
+                                        '</td>\n' +
+                                        '</tr>')
+                                    $('#tbRole').append(tr);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+
+
+        $('#saveBtn').click(() => {
+            if ($("#isAbsent").is(':checked')) {
+                $("#isAbsent").val(true);
+            } else {
+                $("#isAbsent").val(false);
+            }
+            if ($("#isSick").is(':checked')) {
+                $("#isSick").val(true);
+            } else {
+                $("#isSick").val(false);
+            }
+            if ($("#isComingLate").is(':checked')) {
+                $("#isComingLate").val(true);
+            } else {
+                $("#isComingLate").val(false);
+            }
+            if ($("#isEarlyLeave").is(':checked')) {
+                $("#isEarlyLeave").val(true);
+            } else {
+                $("#isEarlyLeave").val(false);
+            }
+            if ($("#others").is(':checked')) {
+                $("#others").val(true);
+            } else {
+                $("#others").val(false);
+            }
+            var date_permission = $('#datePermission').val();
+            var time_permission = "";
+            if ($('#timePermission').val() == "") {
+                time_permission = "00:00";
+            } else {
+                time_permission = $('#timePermission').val();
+            }
+            var dt = date_permission + " " + time_permission;
+            var data = {
+                employeeName: $('#employeeName').val(),
+                department: $('#department').val(),
+                position: $('#position').val(),
+                permissionTime: dt,
+                notes: $('#notes').val(),
+                isAbsent: $('#isAbsent').val(),
+                isSick: $('#isSick').val(),
+                isComingLate: $('#isComingLate').val(),
+                isEarlyLeave: $('#isEarlyLeave').val(),
+                others: $('#others').val()
+            };
+
+            var absent = document.getElementById('isAbsent');
+            var sick = document.getElementById('isSick');
+            var late = document.getElementById('isComingLate');
+            var early = document.getElementById('isEarlyLeave');
+            var other = document.getElementById('others');
+            console.log(JSON.stringify(data));
+            if ($('#employeeName').val() == "") {
+                swal.fire("Nama Pegawai Tidak Boleh Kosong", "", "error");
+            } else if ($('#notes').val() == "") {
+                swal.fire("Keterangan Tidak Boleh Kosong", "", "error");
+            } else if ($('#datePermission').val() == "") {
+                swal.fire("Tanggal Izin Tidak Boleh Kosong", "", "error");
+            } else if (absent.checked == false && sick.checked == false && late.checked == false && early.checked == false && other.checked == false) {
+                swal.fire("Jenis Izin Tidak Boleh Kosong", "", "error");
+            } else {
+                $.ajax({
+                    url: 'api/permission/',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: (res) => {
+                        $('#addData').modal('hide');
+                        swal.fire("Data Berhasil Disimpan ", "", "success");
+                        $('#formData input[type=text]').val("");
+                        $('#formData input[type=date]').val("");
+                        $('#formData input[type=time]').val("");
+                        $('#formData textarea[type=text]').val("");
+                        row_per_page("", "", 50);
+                    },
+                    error: () => {
+                        swal.fire("Data Gagal Disimpan", "", "error")
+                    }
+                })
+            }
+        })
+
+        $('#showAddData').click(() => {
+            $('#formData')[0].reset();
+        })
+
+        $('#resetBtn').click(() => {
+            $('#formData')[0].reset();
+            $('#addData').modal('hide');
+        })
+
+        function detailAction(id) {
+            console.log(id)
+            $.ajax({
+                url: 'api/permission/' + id,
+                type: 'get',
+                contentType: 'application/json',
+                success: (res) => {
+                    console.log(res)
+
+                    var jabatan = "";
+                    var depart = "";
+                    if (res.department == "") {
+                        depart = "-";
+                    } else {
+                        depart = res.department;
+                    }
+                    if (res.position == "") {
+                        jabatan = "-";
+                    } else {
+                        jabatan = res.position;
+                    }
+
+                    var day = new Date(res.permissionTime);
+                    var years = day.getFullYear();
+                    var month = day.getMonth() + 1;
+                    var date = day.getDate();
+                    var hour = day.getHours();
+                    var minute = day.getMinutes();
+                    var bulan = "";
+                    if (month == 01) {
+                        bulan = "January";
+                    } else if (month == 02) {
+                        bulan = "February";
+                    } else if (month == 03) {
+                        bulan = "March";
+                    } else if (month == 04) {
+                        bulan = "April";
+                    } else if (month == 05) {
+                        bulan = "May";
+                    } else if (month == 06) {
+                        bulan = "June";
+                    } else if (month == 07) {
+                        bulan = "July";
+                    } else if (month == 08) {
+                        bulan = "August";
+                    } else if (month == 09) {
+                        bulan = "September";
+                    } else if (month == 10) {
+                        bulan = "October";
+                    } else if (month == 11) {
+                        bulan = "November";
+                    } else if (month == 12) {
+                        bulan = "December";
+                    }
+
+                    var tanggal = bulan + ' ' + years + ', ' + date;
+                    var jam = "";
+
+                    if (hour == 0 && minute == 0) {
+                        jam = "";
+                    } else if (minute == "0") {
+                        jam = hour + ':' + minute + '0';
+                    } else if (hour < 10 && minute < 10) {
+                        jam = '0' + hour + ':' + '0' + minute;
+                    } else if (minute < 10) {
+                        jam = hour + ':' + '0' + minute;
+                    } else if (hour < 10) {
+                        jam = '0' + hour + ':' + minute;
+                    } else {
+                        jam = hour + ':' + minute;
+                    }
+
+                    if (res.isAbsent == true) {
+                        $("#dIsAbsent").prop('checked', true);
+                    } else {
+                        $("#dIsAbsent").prop('checked', false);
+                    }
+                    if (res.isSick == true) {
+                        $("#dIsSick").prop('checked', true);
+                    } else {
+                        $("#dIsSick").prop('checked', false);
+                    }
+                    if (res.isComingLate == true) {
+                        $("#dIsComingLate").prop('checked', true);
+                    } else {
+                        $("#dIsComingLate").prop('checked', false);
+                    }
+                    if (res.isEarlyLeave == true) {
+                        $("#dIsEarlyLeave").prop('checked', true);
+                    } else {
+                        $("#dIsEarlyLeave").prop('checked', false);
+                    }
+                    if (res.others == true) {
+                        $("#dOthers").prop('checked', true);
+                    } else {
+                        $("#dOthers").prop('checked', false);
+                    }
+
+                    $("#permissionHistoryId").html("");
+                    $("#dEmployeeName").html("");
+                    $("#dDepartment").html("");
+                    $("#dPosition").html("");
+                    $("#dNotes").html("");
+                    $("#dDate").html("");
+                    $("#dTime").html("");
+
+                    $("#permissionHistoryId").append(res.id);
+                    $("#dEmployeeName").append(res.employeeName);
+                    $("#dDepartment").append(depart);
+                    $("#dPosition").append(jabatan);
+                    $("#dNotes").append(res.notes);
+                    $("#dDate").append(tanggal);
+                    $("#dTime").append(jam);
+                },
+                error: () => {
+                    console.log("error fetch data")
+                }
+            })
+        }
+
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+            return indexed_array;
+        }
+
+        $(function () {
+            $("#searchStartDate").daterangepicker({
+                autoUpdateInput: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1980,
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
+            });
+        });
+
+        $("#searchStartDate").on("change", function () {
+            var mindts = $("#searchStartDate").val();
+            setmindate_kapan2(mindts);
+        });
+
+        function setmindate_kapan2(min) {
+            $("#searchEndDate").daterangepicker({
+                autoUpdateInput: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                minDate: min,
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
+            });
+        }
+
+        function convertionDate(get_date) {
+            var tahun = get_date.toString().substr(0, 4);
+            var bulan = get_date.toString().substr(5, 2);
+            var tanggal = get_date.toString().substr(8, 2);
+
+            if (bulan == "01") {
+                bulan = "January";
+            } else if (bulan == "02") {
+                bulan = "February";
+            } else if (bulan == "03") {
+                bulan = "March";
+            } else if (bulan == "04") {
+                bulan = "April";
+            } else if (bulan == "05") {
+                bulan = "Mei";
+            } else if (bulan == "06") {
+                bulan = "June";
+            } else if (bulan == "07") {
+                bulan = "July";
+            } else if (bulan == "08") {
+                bulan = "August";
+            } else if (bulan == "09") {
+                bulan = "September";
+            } else if (bulan == "10") {
+                bulan = "October";
+            } else if (bulan == "11") {
+                bulan = "November";
+            } else {
+                bulan = "December";
+            }
+            var show = "";
+            show = bulan + " " + tanggal + ", " + tahun;
+
+            return show;
+
+        }
+
+
+        // function dataShowAsc() {
+        //     var table, rows, switching, i, x, y, shouldSwitch;
+        //     table = document.getElementById("tablePermission");
+        //     switching = true;
+        //     while (switching) {
+        //         switching = false;
+        //         rows = table.rows;
+        //         for (i = 1; i < (rows.length - 1); i++) {
+        //             shouldSwitch = false;
+        //             x = rows[i].getElementsByTagName("TD")[0];
+        //             y = rows[i + 1].getElementsByTagName("TD")[0];
+        //             if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //                 shouldSwitch = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (shouldSwitch) {
+        //             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        //             switching = true;
+        //         }
+        //     }
+        // }
+
+        // function dataShowDesc() {
+        //     var table, rows, switching, i, x, y, shouldSwitch;
+        //     table = document.getElementById("tablePermission");
+        //     switching = true;
+        //     while (switching) {
+        //         switching = false;
+        //         rows = table.rows
+        //         for (i = 1; i < (rows.length - 1); i++) {
+        //             shouldSwitch = false;
+        //             x = rows[i].getElementsByTagName("TD")[1];
+        //             y = rows[i + 1].getElementsByTagName("TD")[1];
+        //             if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        //                 shouldSwitch = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (shouldSwitch) {
+        //             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        //             switching = true;
+        //         }
+        //     }
+        // }
+
+        //Start Sorting
+        function sortList(dir) {
+            var $products = $('.products .product');
+            var sorted = _.sortBy($products, function (product) {
+                return $(product).find('#sortDate').html();
+            });
+            if (dir == "desc") {
+                sorted.reverse();
+            }
+            $('.products').append($(sorted));
+        }
+
+        $('#asc').click(function () {
+            sortList('asc');
+        });
+
+
+        $('#desc').click(function () {
+            sortList('desc');
+        });
+        //End Sorting
+
+
+
+
+        $('#btn-search').click(() => {
+            if ($('#searchStartDate').val() == "" && $('#searchEndDate').val() == "") {
+                swal.fire("", "Masukkan Tanggal Search", "warning");
+
+            } else {
+                var startDate = $("#searchStartDate").val();
+                var endDate = $("#searchEndDate").val();
+
+                row_per_page(startDate, endDate, 97);
+
+            }
+
+        })
+
+        $('#btn-reset').click(() => {
+            var x = document.getElementById("show_pagination");
+            x.style.display = "block";
+            $('#searchStartDate').val("");
+            $('#searchEndDate').val("");
+            var a = $('#searchStartDate').val();
+            var b = $('#searchEndDate').val();
+            row_per_page(a, b, 100);
+        })
+
+        $('#data-show-10').on('click', function () {
+            var startDate = $("#searchStartDate").val();
+            var endDate = $("#searchEndDate").val();
+
+            row_per_page(startDate, endDate, 1);
+
+        });
+
+        $('#data-show-20').on('click', function () {
+            var startDate = $("#searchStartDate").val();
+            var endDate = $("#searchEndDate").val();
+
+            row_per_page(startDate, endDate, 2);
+        });
+
+        $('#data-show-30').on('click', function () {
+            var startDate = $("#searchStartDate").val();
+            var endDate = $("#searchEndDate").val();
+
+            row_per_page(startDate, endDate, 3);
+        });
+
+        $('#data-show-40').on('click', function () {
+            var startDate = $("#searchStartDate").val();
+            var endDate = $("#searchEndDate").val();
+
+            row_per_page(startDate, endDate, 4);
+        });
+
+        $('#data-show-50').on('click', function () {
+            var startDate = $("#searchStartDate").val();
+            var endDate = $("#searchEndDate").val();
+
+            row_per_page(startDate, endDate, 5);
+        });
+
+        // $('.get_checkbox').on('change', function () {
+        //     $('.get_checkbox').not(this).prop('checked', false);
+        // });
+
+
+    </script>
+
+</th:block>

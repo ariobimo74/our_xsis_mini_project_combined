@@ -1,0 +1,277 @@
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:with="http://www.thymeleaf.org/extras/with"
+        layout:decorate="~{layout}"
+        with:title="'B210'">
+<th:block layout:fragment="content">
+<!--    <div class="bottom">-->
+<!--        <div class="col">-->
+<!--            <div class="container">-->
+<!--                <input type="search" class="form-control" id="input-search" placeholder="Search..." >-->
+<!--                <div class="card">-->
+<!--                    <div class="card-block">-->
+<!--                        <div id="showList">-->
+<!--                            &lt;!&ndash; Show List Vacancy &ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="col-lg-12" style="background-color: #FFFFFF;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#FFFFFFFF;">
+                <h4 class="modal-title">Send Timesheet</h4>
+                    <input type="hidden">
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="aksi" value="">
+                <form id="get_form_get_timesheet" data-parsley-validate="">
+                    <input type="hidden" id="get_id" name="id" class="get_timesheet" value="">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="tahun">Tahun *</label>
+                                <select class="form-control" id="tahun" onchange="get_data_timesheet(this)" required>
+                                    <option value="">-- Pilih Tahun --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="bulan">Bulan *</label>
+                                <select class="form-control" id="bulan" onchange="get_data_timesheet(this)" required>
+                                    <option value="">-- Pilih Bulan --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-hover" id="tbl_timesheet">
+                        <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th>Client</th>
+                        </tr>
+                        </thead>
+                        <tbody id ="data_rows"></tbody>
+                    </table>
+                    <div class="modal-footer">
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-warning" onclick="btn_reset_ts()" id="btn_reset" disabled>Reset</button>
+                            <button type="button" class="btn btn-primary" id="btn_submit" disabled>Send</button>
+                        </div>
+                    </div> <!-- /.modal-footer -->
+                </form>
+            </div> <!-- /.modal-body -->
+
+        </div>
+    </div> <!-- /.col -->
+
+    <div class="modal fade" id="detailVacancy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="overflow-y:auto;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detail Pelamar</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="sidebar-nav">
+                                <div class="navbar navbar-default" role="navigation">
+                                    <div class="navbar-collapse sidebar-navbar-collapse">
+                                        <input type="hidden" id="bioid">
+                                        <div class="list-group" id="list-tab" role="tablist">
+                                            <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+                                            <a class="list-group-item list-group-item-action" id="list-biodata-list" data-toggle="list" href="#list-biodata" role="tab" aria-controls="biodata">Biodata</a>
+                                            <a class="list-group-item list-group-item-action" id="list-pengalaman-kerja-list" data-toggle="list" href="#list-pengalaman-kerja" role="tab" aria-controls="pengalaman-kerja">Pengalamann Kerja</a>
+                                            <a class="list-group-item list-group-item-action" id="list-pendidikan-list" data-toggle="list" href="#list-pendidikan" role="tab" aria-controls="pendidikan">Pendidikan</a>
+                                            <a class="list-group-item list-group-item-action" id="list-pelatihan-list" data-toggle="list" href="#list-pelatihan" role="tab" aria-controls="pelatihan">Pelatihan</a>
+                                            <a class="list-group-item list-group-item-action" id="list-sertifikasi-list" data-toggle="list" href="#list-sertifikasi" role="tab" aria-controls="sertifikasi">Sertifikasi</a>
+                                            <a class="list-group-item list-group-item-action" id="list-sumber-lowongan-kerja-list" data-toggle="list" href="#list-sumber-lowongan-kerja" role="tab" aria-controls="sumber-lowongan-kerja">Sumber Lowongan Kerja</a>
+                                            <a class="list-group-item list-group-item-action" id="list-organisasi-list" data-toggle="list" href="#list-organisasi" role="tab" aria-controls="organisasi">Organisasi</a>
+                                            <a class="list-group-item list-group-item-action" id="list-keluarga-list" data-toggle="list" href="#list-keluarga" role="tab" aria-controls="keluarga">Keluarga</a>
+                                            <a class="list-group-item list-group-item-action" id="list-keahlian-list" data-toggle="list" href="#list-keahlian" role="tab" aria-controls="keahlian" onclick="keahlian()">Keahlian</a>
+                                            <a class="list-group-item list-group-item-action" id="list-lain-lain-list" data-toggle="list" href="#list-lain-lain" role="tab" aria-controls="lain-lain">Lain - Lain</a>
+                                            <a class="list-group-item list-group-item-action" id="list-dokumen-list" data-toggle="list" href="#list-dokumen" role="tab" aria-controls="dokumen">Dokumen</a>
+                                            <a class="list-group-item list-group-item-action" id="list-catatan-list" data-toggle="list" href="#list-catatan" role="tab" aria-controls="catatan" onclick="catatan()">Catatan</a>
+                                            <a class="list-group-item list-group-item-action" id="list-aktivasi-akun-list" data-toggle="list" href="#list-aktivasi-akun" role="tab" aria-controls="aktivasi-akun">Aktivasi Akun</a>
+                                            <a class="list-group-item list-group-item-action" id="list-lihat-tes-list" data-toggle="list" href="#list-lihat-tes" role="tab" aria-controls="lihat-tes">Lihat Tes</a>
+                                            <a class="list-group-item list-group-item-action" id="list-hasil-tes-list" data-toggle="list" href="#list-hasil-tes" role="tab" aria-controls="hasil-tes">Hasil Tes</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+<th:block layout:fragment="vacancy">
+
+    <link rel="stylesheet" href="assets/Parsley.js-2.8.1/dist/parsley.css">
+    <script src="Parsley.js-2.8.1/dist/parsley.min.js"></script>
+    <script src="Parsley.js-2.8.1/dist/i18n/id.js"></script>
+    <script src="Parsley.js-2.8.1/dist/i18n/id.extra.js"></script>
+    <script>
+        $(function () {
+            var start_year = new Date().getFullYear();
+            var optTahun = '<option value="">-- Pilih Tahun --</option>';
+            for (var i = start_year; i > start_year - 30; i--) {
+                optTahun += '<option value="' + i + '">' + i + '</option>';
+            }
+            $("#tahun").html(optTahun);
+        });
+
+        $(function () {
+            var month = ["January", "February", "March", "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"];
+            var optBulan = '<option value="">-- Pilih Bulan --</option>';
+            for (var i = 0; i < month.length; ++i) {
+                optBulan += `<option value="${i+1}">${month[i]}</option>`;
+            }
+            $("#bulan").html(optBulan)
+        });
+
+        let timesheetLength = "";
+        function get_data_timesheet(){
+            var tahun = $("#tahun").val();
+            var bulan = $("#bulan").val();
+            if($("#get_form_get_timesheet").parsley().validate()){
+                $("#tbl_timesheet").show();
+                $("#data_rows").html("<tr><td colspan='3' style='text-align:center'><i>loading...</i></td></tr>");
+                $("#btn_submit").attr("disabled",true);
+                $.ajax({
+                    url: `rest/timesheet/searchdate/${tahun}/${bulan}`,
+                    type : 'get',
+                    contentType: "application/json",
+                    success : function(result) {
+                        timesheetLength = result.length;
+                        $("#data_rows").html("");
+                        if (result.length > 0) {
+                            for (var i = 0; i < result.length; i++) {
+                                $("#data_rows").append(`
+                                    <tr>
+                                       <td>
+                                            <input type="hidden" name="id[]" value="${result[i].id}">
+                                            ${result[i].status}
+                                        </td>
+                                        <td>${result[i].date} </td>
+                                        <td>${result[i].client}</td>
+                                    </tr>
+                                `);
+                            }
+                            $("#btn_submit").attr("disabled",false);
+                        }else{
+                            $("#data_rows").html(`<tr><td colspan="3" style="text-align:center"><i>Data tidak ditemukan</i></td></tr>`);
+                        }
+                        $("#btn_reset").attr("disabled",false);
+                    },
+                    error : function() {
+                        swal("", "Gagal mengambil data", "error");
+                    }
+                });
+            }
+        }
+
+        $("#btn_submit").click(function(){
+            $("#btn_submit").attr("disabled",true);
+            var tahun = $("#tahun").val();
+            var bulan = $("#bulan").val();
+            // var timesheet = $("input[name='id[]']").map(u fnction(){return $(this).val();} ).get();
+            // var data = {
+            //     id: timesheet,
+            //
+            // }
+            $("#loading").show();
+            $.ajax({
+                url: `rest/timesheet/searchdate/${tahun}/${bulan}`,
+                type : 'get',
+                contentType: "application/json",
+                success : function(result) {
+                    timesheetLength = result.length;
+                    $("#data_rows").html("");
+                        for (var i = 0; i < result.length; i++) {
+                            console.log(result[i].id);
+                            var data = {
+                                id:result[i].id
+                            }
+                            $.ajax({
+                                url: `rest/timesheet`,
+                                type : 'put',
+                                contentType: "application/json",
+                                data: JSON.stringify(data),
+                                success : function(res) {
+                                },
+                                error : function() {
+                                    swal("", "Gagal mengambil data", "error");
+                                }
+                            });
+                        }
+                    send_email();
+                    $("#loading").hide();
+                    swal.fire("Success!","timesheet has been sent","success");
+                    $("#get_form_get_timesheet").parsley().reset();
+                    $("#get_form_get_timesheet")[0].reset();
+                    $("#tbl_timesheet").hide();
+                    $("#data_rows").html("");
+                    $("#btn_reset").attr("disabled",true);
+                    $("#btn_submit").attr("disabled",false);
+                },
+                error : function() {
+                    swal.fire("Error!","Failed!","error");
+                }
+            });
+        });
+
+        $("#btn_reset").click(function(){
+            get_employee();
+            $("#get_form_get_timesheet").parsley().reset();
+            $("#get_form_get_timesheet")[0].reset();
+            $("#tbl_timesheet").hide();
+            $("#data_rows").html("");
+            $("#btn_reset").attr("disabled",true);
+            $("#btn_submit").attr("disabled",true);
+        });
+
+        function send_email()
+        {
+            $.ajax({
+                url: 'rest/timesheet',
+                type: 'patch',
+                contentType: 'application/json',
+                success: function (data)
+                {
+
+                }
+            })
+        }
+
+        function btn_reset_ts() {
+            console.log('closeModalKel');
+            $('#tahun').val("");
+            $('#bulan').val("");
+            $("#get_form_get_timesheet").parsley().reset();
+            $("#get_form_get_timesheet")[0].reset();
+            $("#tbl_timesheet").hide();
+            $("#data_rows").html("");
+            $("#btn_reset").attr("disabled",true);
+            $("#btn_submit").attr("disabled",true);
+        }
+
+    </script>
+</th:block>
+</html>

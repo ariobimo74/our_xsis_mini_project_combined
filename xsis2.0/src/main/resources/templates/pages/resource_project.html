@@ -1,0 +1,1108 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+  <div class="bottom">
+    <div class="col">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2 mt-2">
+            <input type="text" placeholder="Client" name="searchClient" id="searchClient">
+          </div>
+          <div class="col-md-7 mt-2">
+            <div class="input-group">
+              <input type="text" name="searchStartDate" id="searchStartDate" placeholder="From" size="11">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="far fa-calendar-alt"></i>
+                </span>
+              </div>
+              <input type="text" name="searchEndDate" id="searchEndDate" placeholder="To" size="11"
+                style="margin-left: 10px;">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="far fa-calendar-alt"></i>
+                </span>
+              </div>
+              <button class="btn btn-primary" id="searchResourceProject" style="margin-left: 10px;"><i
+                  class="fa fa-search"></i></button>
+            </div>
+          </div>
+          <div class="col-md-1 align-right text-right mt-2">
+            <button class="btn" data-toggle="dropdown" style="color:dodgerblue;"><i class="fa fa-sort-alpha-up"
+                style="margin-left: 50px;"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" style="color: blue; text-align: left; font-size: 10;">Order</a>
+              <a class="dropdown-item" onclick="sortAscTable()" style="color: blue">Ascending</a>
+              <a class="dropdown-item" onclick="sortDesTable()" style="color: blue">Descending</a>
+            </div>
+          </div>
+          <div class="col-md-2 align-left text-left mt-2">
+            <button class="btn" data-toggle="dropdown" style="color: dodgerblue;"><i class="fa fa-bars"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" style="color: blue; text-align: left; font-size: 10;">Row Per Page</a>
+              <a class="dropdown-item" id="rowperpage_1" style="color: blue">1</a>
+              <a class="dropdown-item" id="rowperpage_2" style="color: blue">2</a>
+              <a class="dropdown-item" id="rowperpage_3" style="color: blue">3</a>
+              <a class="dropdown-item" id="rowperpage_4" style="color: blue">4</a>
+              <a class="dropdown-item" id="rowperpage_5" style="color: blue">5</a>
+            </div>
+            <button class="btn" data-toggle="modal" data-target="#addData" style="color: dodgerblue;"
+              id="showAddData"><i class="fa fa-plus-circle"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card mt-2">
+          <div class="card-block">
+            <table class="table table-hover" id="myTable">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">CLIENT</th>
+                  <th scope="col">START</th>
+                  <th scope="col">END</th>
+                  <th scope="col">#</th>
+                </tr>
+              </thead>
+              <tbody id="tbResourceProjct">
+              </tbody>
+            </table>
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+          </div>
+          <div class="col-md-4 align-right text-left" id="show_pagination">
+            <div id="pager" class="paginationjs-big">
+              <ul id="pagination" class="pagination-sm"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Resource Project -->
+  <div class="modal fade" id="detailData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Detail Resource Project</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <i class="fa fa-times" aria-hidden="true" style="color: white;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" onclick="showProjectInformation()"
+                class="btn btn-primary btn-main-style col-md-12">PROJECT INFORMATION (<i
+                  class="fa fa-arrow-down"></i>)</button>
+              <div class="card" id="showProjectInformation" style="display:none">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <input type="hidden" class="form-control" name="d_id" id="d_id">
+                    <label style="font-size: 9pt;" for="d_client">Client*</label>
+                    <div id="d_client">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label style="font-size: 9pt;" for="location">Location</label>
+                    <div id="d_location">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <label style="font-size: 9pt;" for="department">Department</label>
+                    <div id="d_department">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label style="font-size: 9pt;" for="userorpic_name">User/PIC Name</label>
+                    <div id="d_userPicName">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <label style="font-size: 9pt;" for="project_name">Project Name*</label>
+                    <div id="d_projectName">
+                      <p>
+                        <strong>
+                        </strong>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label style="font-size: 9pt;" for="start">Start*</label>
+                    <div id="d_startProject">
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label style="font-size: 9pt;" for="end">End*</label>
+                    <div id="d_endProject">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <label style="font-size: 9pt;" for="project_role">Project Role*</label>
+                    <div id="d_projectRole">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label style="font-size: 10pt;" for="project_phase">Project Phase*</label>
+                    <div id="d_projectPhase">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" onclick="showProjectDescription()"
+                class="btn btn-primary btn-main-style col-md-12 mt-3">PROJECT DESCRIPTION (<i
+                  class="fa fa-arrow-down"></i>)</button>
+              <div class="card" id="showProjectDescription" style="display:none">
+                <div class="form-row">
+                  <div class="col-md-12">
+                    <div id="d_projectDescription">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" onclick="showProjectTechnology()"
+                class="btn btn-primary btn-main-style col-md-12 mt-3">PROJECT TECHNOLOGY (<i
+                  class="fa fa-arrow-down"></i>)</button>
+              <div class="card" id="showProjectTechnology" style="display:none">
+                <div class="form-row">
+                  <div class="col-md-12">
+                    <div id="d_projectTechnology">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" onclick="showMainTask()" class="btn btn-primary btn-main-style col-md-12 mt-3">MAIN
+                TASK (<i class="fa fa-arrow-down"></i>)</button>
+              <div class="card" id="showMainTask" style="display:none">
+                <div class="form-row">
+                  <div class="col-md-12">
+                    <div id="d_mainTask">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form ADD/EDIT Data -->
+  <div class="modal fade" id="addData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: dodgerblue;">
+          <h3 class="modal-title" style="color: white;">Resource Project Form</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <i class="fa fa-times" aria-hidden="true" style="color: white;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="formAddEditData" class="needs-validation" novalidate>
+            <div class="form-row">
+              <div class="col-md-6">
+                <input type="hidden" class="form-control" name="id" id="id">
+                <label style="font-size: 10pt;" for="client">Client*</label>
+                <select class="form-control get_client" name="clientId" id="clientId" required></select>
+                <div class="invalid-feedback">
+                  Choose Your Client
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="location">Location</label>
+                <input type="text" class="custom-form-control" name="location" id="location" maxlength="100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="department">Department</label>
+                <input type="text" class="custom-form-control" name="department" id="department" maxlength="100">
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="userorpic_name">User/PIC Name</label>
+                <input type="text" class="custom-form-control" name="picName" id="picName" maxlength="100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="project_name">Project Name*</label>
+                <input type="text" class="form-control" name="projectName" id="projectName" maxlength="100" required>
+                <div class="invalid-feedback">
+                  Please enter a Project Name
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="start">Start*</label>
+                <input type="text" name="startProject" id="startProject" class="form-control" required>
+                <div class="invalid-feedback">
+                  Please enter a Start Project
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label style="font-size: 10pt;" for="end">End*</label>
+                <input type="text" name="endProject" id="endProject" class="form-control" required>
+                <div class="invalid-feedback">
+                  Please enter a End Project
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="project_role">Project Role*</label>
+                <input type="text" class="form-control" name="projectRole" id="projectRole" maxlength="255" required>
+                <div class="invalid-feedback">
+                  Please enter a Project Role
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label style="font-size: 10pt;" for="project_phase">Project Phase*</label>
+                <input type="text" class="form-control" name="projectPhase" id="projectPhase" maxlength="255" required>
+                <div class="invalid-feedback">
+                  Please enter a Project Phase
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="projectDescription">Project Description*</label>
+                <textarea type="text" class="form-control" name="projectDescription" id="projectDescription"
+                  maxlength="255" required></textarea>
+                <div class="invalid-feedback">
+                  Please enter a Project Description
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="projectTechnology">Project Technology*</label>
+                <textarea type="text" class="form-control" name="projectTechnology" id="projectTechnology"
+                  maxlength="255" required></textarea>
+                <div class="invalid-feedback">
+                  Please enter a Project Technology
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label style="font-size: 10pt;" for="mainTask">Main Task*</label>
+                <textarea type="text" class="form-control" name="mainTask" id="mainTask" maxlength="255"
+                  required></textarea>
+                <div class="invalid-feedback">
+                  Please enter a Main Task
+                </div>
+              </div>
+            </div>
+            <div class="form-row mt-3">
+              <div class="col-md-10 text-right align-right">
+                <button type="button" class="btn btn-warning" id="resetBtn">Reset</button>
+              </div>
+              <div class="col-md-2 text-left align-left">
+                <button class="btn btn-primary" type="submit" id="saveBtn" style="display:none">Save</button>
+                <button class="btn btn-primary" type="submit" id="updateBtn" style="display:none">Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<th:block layout:fragment="resource_project">
+  <script>
+
+    $(() => {
+      var rowperpage = 100;
+      row_per_page("", "", "", rowperpage);
+    });
+
+    function row_per_page(start_date, end_date, res_pro, rowperpage) {
+      var $pagination = $('#pagination');
+      if (res_pro == "" && start_date == "" && end_date == "") {
+        $.ajax({
+          url: "api/resource-project/client-employee",
+          async: true,
+          dataType: 'json',
+          success: function (data) {
+            document.getElementById('searchStartDate').value = "";
+            document.getElementById('searchEndDate').value = "";
+            $pagination.pagination({
+              dataSource: data,
+              pageSize: rowperpage,
+              showPageNumbers: false,
+              showNavigator: true,
+              callback: function (displayRecords, pagination) {
+                $('#tbResourceProjct').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                  tr = $('<tr class="text-center">');
+                  tr.append("<td>" + displayRecords[i].name + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].startProject) + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].endProject) + "</td>");
+                  tr.append('<td>\n' +
+                    '<div class="input-group-btn">\n' +
+                    '             <div class="dropdown show">\n' +
+                    '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                    '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_detail(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')" data-toggle="modal" data-target="#detailData" id="detailResourceProject">Detail</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_edit(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#addData">Edit</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_delete(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')">Delete</a>\n' +
+                    '            </div>\n' +
+                    '             </div>\n' +
+                    '        </div>\n' +
+                    '</td>\n' +
+                    '</tr>')
+                  $('#tbResourceProjct').append(tr);
+                }
+              }
+            });
+          }
+        });
+      } else if (res_pro != "" && start_date == "" && end_date == "") {
+        $.ajax({
+          url: 'api/resource-project/search1?name_client=' + res_pro,
+          async: true,
+          dataType: 'json',
+          success: function (data) {
+            document.getElementById('searchStartDate').value = "";
+            document.getElementById('searchEndDate').value = "";
+            $pagination.pagination({
+              dataSource: data,
+              pageSize: rowperpage,
+              showPageNumbers: false,
+              showNavigator: true,
+              callback: function (displayRecords, pagination) {
+                $('#tbResourceProjct').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                  tr = $('<tr class="text-center">');
+                  tr.append("<td>" + displayRecords[i].name + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].startProject) + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].endProject) + "</td>");
+                  tr.append('<td>\n' +
+                    '<div class="input-group-btn">\n' +
+                    '             <div class="dropdown show">\n' +
+                    '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                    '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_detail(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')" data-toggle="modal" data-target="#detailData" id="detailResourceProject">Detail</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_edit(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#addData">Edit</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_delete(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')">Delete</a>\n' +
+                    '            </div>\n' +
+                    '             </div>\n' +
+                    '        </div>\n' +
+                    '</td>\n' +
+                    '</tr>')
+                  $('#tbResourceProjct').append(tr);
+                }
+              }
+            });
+          }
+        });
+      } else {
+        $.ajax({
+          url: 'api/resource-project/search2?sp=' + start_date + '&ep=' + end_date,
+          async: true,
+          dataType: 'json',
+          success: function (data) {
+            $pagination.pagination({
+              dataSource: data,
+              pageSize: rowperpage,
+              showPageNumbers: false,
+              showNavigator: true,
+              callback: function (displayRecords, pagination) {
+                $('#tbResourceProjct').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                  tr = $('<tr class="text-center">');
+                  tr.append("<td>" + displayRecords[i].name + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].startProject) + "</td>");
+                  tr.append("<td>" + convertionDate(displayRecords[i].endProject) + "</td>");
+                  tr.append('<td>\n' +
+                    '<div class="input-group-btn">\n' +
+                    '             <div class="dropdown show">\n' +
+                    '                 <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action </a>\n' +
+                    '            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_detail(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')" data-toggle="modal" data-target="#detailData" id="detailResourceProject">Detail</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_edit(' + displayRecords[i].id + ')" data-toggle="modal" data-target="#addData">Edit</a>\n' +
+                    '                 <a class="dropdown-item" onclick="get_id_resource_project_delete(\'' + displayRecords[i].id + '\',\'' + displayRecords[i].name + '\')">Delete</a>\n' +
+                    '            </div>\n' +
+                    '             </div>\n' +
+                    '        </div>\n' +
+                    '</td>\n' +
+                    '</tr>')
+                  $('#tbResourceProjct').append(tr);
+                }
+              }
+            });
+          }
+        });
+      }
+    }
+
+    //Validation
+    (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    // End Validation
+
+    $('#searchResourceProject').click(() => {
+      var x = document.getElementById("show_pagination");
+      x.style.display = "block";
+      if ($('#searchStartDate').val() == "" && $('#searchEndDate').val() == "") {
+        swal.fire("Data Search Empty!", "Set From/to Date", "error");
+      } else if ($('#searchClient').val() != "" && $('#searchStartDate').val() != "" && $('#searchEndDate').val() != "") {
+        swal.fire("Choice Only 1 Type Search", "Searching Name of Client OR Range Date", "error");
+      } else if ($('#searchClient').val() != "" && ($('#searchStartDate').val() == "" && $('#searchEndDate').val() == "")) {
+        var result_name_client = $('#searchClient').val();
+        row_per_page("", "", result_name_client, 100);
+      } else if ($('#searchClient').val() == "" && ($('#searchStartDate').val() != "" && $('#searchEndDate').val() != "")) {
+        var result_start_date = $('#searchStartDate').val();
+        var result_end_date = $('#searchEndDate').val();
+        row_per_page(result_start_date, result_end_date, "", 100);
+      }
+    })
+
+    $("#searchClient").on("keydown", function (e) {
+      var x = document.getElementById("show_pagination");
+      x.style.display = "block";
+      var result_name_client = $('#searchClient').val();
+      if (e.which == 13) {
+        row_per_page("", "", result_name_client, 100);
+      }
+    });
+
+    //Start Row Per Page
+    $('#rowperpage_1').click(function () {
+      var result_name_client = $('#searchClient').val();
+      var result_start_date = $('#searchStartDate').val();
+      var result_end_date = $('#searchEndDate').val();
+      row_per_page(result_start_date, result_end_date, result_name_client, 1);
+    });
+
+    $('#rowperpage_2').click(function () {
+      var result_name_client = $('#searchClient').val();
+      var result_start_date = $('#searchStartDate').val();
+      var result_end_date = $('#searchEndDate').val();
+      row_per_page(result_start_date, result_end_date, result_name_client, 2);
+    });
+
+    $('#rowperpage_3').click(function () {
+      var result_name_client = $('#searchClient').val();
+      var result_start_date = $('#searchStartDate').val();
+      var result_end_date = $('#searchEndDate').val();
+      row_per_page(result_start_date, result_end_date, result_name_client, 3);
+    });
+
+    $('#rowperpage_4').click(function () {
+      var result_name_client = $('#searchClient').val();
+      var result_start_date = $('#searchStartDate').val();
+      var result_end_date = $('#searchEndDate').val();
+      row_per_page(result_start_date, result_end_date, result_name_client, 4);
+    });
+
+    $('#rowperpage_5').click(function () {
+      var result_name_client = $('#searchClient').val();
+      var result_start_date = $('#searchStartDate').val();
+      var result_end_date = $('#searchEndDate').val();
+      row_per_page(result_start_date, result_end_date, result_name_client, 5);
+    });
+    //End Row Per Page
+
+    //Start Reset Search Pelamar
+    $("#searchClient").keyup(function () {
+      var input = $(this);
+      if (input.val() == "") {
+        var x = document.getElementById("show_pagination");
+        x.style.display = "block";
+        row_per_page("", "", "", 100);
+      }
+    });
+
+    $("#searchEndDate").keyup(function () {
+      var input = $(this);
+      if (input.val() == "") {
+        var x = document.getElementById("show_pagination");
+        x.style.display = "none";
+        row_per_page("", "", "", 100);
+      }
+    });
+
+    $("#searchStartDate").keyup(function () {
+      var input = $(this);
+      if (input.val() == "") {
+        var x = document.getElementById("show_pagination");
+        x.style.display = "none";
+        row_per_page("", "", "", 100);
+      }
+    });
+    //End Reset Search Pelamar
+
+
+    function sortAscTable() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("myTable");
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+    function sortDesTable() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("myTable");
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.rows
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+    function convertionDate(get_date) {
+      var a_year = get_date.toString().substr(0, 4);
+      var a_month = get_date.toString().substr(5, 2);
+      var a_date = get_date.toString().substr(8, 2);
+
+      if (a_month == "01") {
+        a_month = "January";
+      } else if (a_month == "02") {
+        a_month = "February";
+      } else if (a_month == "03") {
+        a_month = "March";
+      } else if (a_month == "04") {
+        a_month = "April";
+      } else if (a_month == "05") {
+        a_month = "Mei";
+      } else if (a_month == "06") {
+        a_month = "June";
+      } else if (a_month == "07") {
+        a_month = "July";
+      } else if (a_month == "08") {
+        a_month = "August";
+      } else if (a_month == "09") {
+        a_month = "September";
+      } else if (a_month == "10") {
+        a_month = "October";
+      } else if (a_month == "11") {
+        a_month = "November";
+      } else {
+        a_month = "December";
+      }
+      var show = "";
+      show = a_month + " " + a_date + ", " + a_year;
+
+      return show;
+    }
+
+    function get_id_resource_project_detail(id) {
+      var x1 = document.getElementById("showProjectInformation");
+      x1.style.display = "none";
+      var x2 = document.getElementById("showProjectDescription");
+      x2.style.display = "none";
+      var x3 = document.getElementById("showProjectTechnology");
+      x3.style.display = "none";
+      var x4 = document.getElementById("showMainTask");
+      x4.style.display = "none";
+    }
+
+    function showProjectInformation() {
+      var x = document.getElementById("showProjectInformation");
+      // x.style.display = "block";
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        var x2 = document.getElementById("showProjectDescription");
+        x2.style.display = "none";
+        var x3 = document.getElementById("showProjectTechnology");
+        x3.style.display = "none";
+        var x4 = document.getElementById("showMainTask");
+        x4.style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function showProjectDescription() {
+      var x = document.getElementById("showProjectDescription");
+      // x.style.display = "block";
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        var x1 = document.getElementById("showProjectInformation");
+        x1.style.display = "none";
+        var x3 = document.getElementById("showProjectTechnology");
+        x3.style.display = "none";
+        var x4 = document.getElementById("showMainTask");
+        x4.style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function showProjectTechnology() {
+      var x = document.getElementById("showProjectTechnology");
+      // x.style.display = "block";
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        var x1 = document.getElementById("showProjectInformation");
+        x1.style.display = "none";
+        var x2 = document.getElementById("showProjectDescription");
+        x2.style.display = "none";
+        var x4 = document.getElementById("showMainTask");
+        x4.style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function showMainTask() {
+      var x = document.getElementById("showMainTask");
+      // x.style.display = "block";
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        var x1 = document.getElementById("showProjectInformation");
+        x1.style.display = "none";
+        var x2 = document.getElementById("showProjectDescription");
+        x2.style.display = "none";
+        var x3 = document.getElementById("showProjectTechnology");
+        x3.style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function convertionDate2(date) {
+      var now = new Date(date);
+      var month = ("0" + (now.getMonth() + 1)).slice(-2);
+      var day = ("0" + now.getDate()).slice(-2);
+      var today = now.getFullYear() + "-" + (month) + "-" + (day);
+      return today;
+    }
+
+    function get_id_resource_project_detail(id_resource_project, name_client) {
+      $.ajax({
+        url: 'api/resource-project/' + id_resource_project,
+        type: 'get',
+        contentType: 'application/json',
+        success: (res) => {
+          $('#d_id').val(res.id),
+
+            $('#d_client').html("");
+          var put_client =
+            '<p>' + name_client + '</p>'
+          $('#d_client').append(put_client);
+
+          $('#d_location').html("");
+          var put_location =
+            '<p>' + res.location + '</p>'
+          $('#d_location').append(put_location);
+
+          $('#d_department').html("");
+          var put_department =
+            '<p>' + res.department + '</p>'
+          $('#d_department').append(put_department);
+
+          $('#d_userPicName').html("");
+          var put_user_or_pic_name =
+            '<p>' + res.picName + '</p>'
+          $('#d_userPicName').append(put_user_or_pic_name);
+
+          $('#d_projectName').html("");
+          var put_project_name =
+            '<p>' + res.projectName + '</p>'
+          $('#d_projectName').append(put_project_name);
+
+          $('#d_startProject').html("");
+          var put_start_project =
+            '<p>' + convertionDate(res.startProject) + '</p>'
+          $('#d_startProject').append(put_start_project);
+
+          $('#d_endProject').html("");
+          var put_end_project =
+            '<p>' + convertionDate(res.endProject) + '</p>'
+          $('#d_endProject').append(put_end_project);
+
+          $('#d_projectRole').html("");
+          var put_project_role =
+            '<p>' + res.projectRole + '</p>'
+          $('#d_projectRole').append(put_project_role);
+
+          $('#d_projectPhase').html("");
+          var put_project_phase =
+            '<p>' + res.projectPhase + '</p>'
+          $('#d_projectPhase').append(put_project_phase);
+
+          $('#d_projectDescription').html("");
+          var put_project_description =
+            '<p>' + res.projectDescription + '</p>'
+          $('#d_projectDescription').append(put_project_description);
+
+          $('#d_projectTechnology').html("");
+          var put_project_technology =
+            '<p>' + res.projectTechnology + '</p>'
+          $('#d_projectTechnology').append(put_project_technology);
+
+          $('#d_mainTask').html("");
+          var put_main_task =
+            '<p>' + res.mainTask + '</p>'
+          $('#d_mainTask').append(put_main_task);
+        },
+        error: () => {
+          swal.fire("Error!", "Fetch Data Resource Project Detail Failed", "error");
+        }
+      })
+    }
+
+
+    function get_id_resource_project_edit(id_resource_project) {
+      var y = document.getElementById("saveBtn");
+      y.style.display = "none";
+      var x = document.getElementById("updateBtn");
+      x.style.display = "block"
+      $.ajax({
+        url: 'api/resource-project/' + id_resource_project,
+        type: 'get',
+        contentType: 'application/json',
+        success: (res) => {
+          $('#formAddEditData')[0].reset();
+          $('#location').val(res.location),
+            $('#id').val(res.id),
+            $('#department').val(res.department),
+            $('#picName').val(res.picName),
+            $('#projectName').val(res.projectName),
+            $('#startProject').val(convertionDate2(res.startProject)),
+            $('#endProject').val(convertionDate2(res.endProject)),
+            $('#projectRole').val(res.projectRole),
+            $('#projectPhase').val(res.projectPhase),
+            $('#projectDescription').val(res.projectDescription),
+            $('#projectTechnology').val(res.projectTechnology),
+            $('#mainTask').val(res.mainTask);
+          $.ajax({
+            url: 'api/client/employee',
+            type: 'get',
+            contentType: "application/json",
+            success: function (result) {
+              var optValue = "";
+              optValue += '<option value="">- Pilih Client -</option>';
+              for (var i = 0; i < result.length; i++) {
+                if (res.clientId == result[i].id) {
+                  optValue += `<option value="${result[i].id}" selected="selected">${result[i].name}</option>`;
+                } else {
+                  optValue += `<option value="${result[i].id}">${result[i].name}</option>`;
+                }
+              }
+              $("#clientId").html(optValue);
+            },
+            error: function () {
+              swal.fire("Error!", "Fetch Education Detail Failed", "error");
+            }
+          })
+        },
+        error: () => {
+          swal.fire("Error!", "Fetch Data Resource Project Detail Failed", "error");
+        }
+      })
+    }
+
+    $('#detailData').on('hidden.bs.modal', function () {
+      var x1 = document.getElementById("showProjectInformation");
+      x1.style.display = "none";
+      var x2 = document.getElementById("showProjectDescription");
+      x2.style.display = "none";
+      var x3 = document.getElementById("showProjectTechnology");
+      x3.style.display = "none";
+      var x4 = document.getElementById("showMainTask");
+      x4.style.display = "none";
+    })
+
+    function get_id_resource_project_delete(id, name) {
+      $('#addData').modal('hide');
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-danger',
+          cancelButton: 'btn btn-warning'
+        },
+        buttonsStyling: false
+      })
+
+      swalWithBootstrapButtons.fire({
+        title: 'Hapus ?',
+        text: "Anda yakin ingin menghapus project di " + name + " ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: 'api/resource-project/' + id,
+            type: 'delete',
+            contentType: 'application/json',
+            success: () => {
+              row_per_page(100);
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your data has been deleted.',
+                'success'
+              )
+            },
+          })
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelled',
+            'Your data file is safe :)',
+            'error'
+          )
+          $('#detailVacancy').modal('show');
+        }
+      })
+    }
+
+    $('#showAddData').click(() => {
+      var y = document.getElementById("saveBtn");
+      y.style.display = "block";
+      var x = document.getElementById("updateBtn");
+      x.style.display = "none"
+      $('#formAddEditData input[type=text]').val("");
+      $('#formAddEditData input[type=number]').val("");
+      $('#formAddEditData textarea[type=text]').val("");
+      var temp = "";
+      $("#clientId").val(temp);
+    })
+
+    $(function () {
+      $("#searchStartDate").daterangepicker({
+        autoUpdateInput: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 1980,
+        locale: {
+          format: "YYYY-MM-DD"
+        }
+      });
+    });
+
+    $("#searchStartDate").on("change", function () {
+      var mindts = $("#searchStartDate").val();
+      setmindate_kapan2(mindts);
+    });
+
+    function setmindate_kapan2(min) {
+      $("#searchEndDate").daterangepicker({
+        autoUpdateInput: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate: min,
+        locale: {
+          format: "YYYY-MM-DD"
+        }
+      });
+    }
+
+    $(function () {
+      $("#startProject").daterangepicker({
+        autoUpdateInput: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 1980,
+        maxYear: parseInt(moment().format("YYYY"), 10),
+        locale: {
+          format: "YYYY-MM-DD"
+        }
+      });
+    });
+
+    $("#startProject").on("change", function () {
+      var mindts = $("#startProject").val();
+      setmindate_kapan(mindts);
+    });
+
+    function setmindate_kapan(min) {
+      $("#endProject").daterangepicker({
+        autoUpdateInput: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate: min,
+        maxYear: parseInt(moment().format("YYYY"), 10),
+        locale: {
+          format: "YYYY-MM-DD"
+        }
+      });
+    }
+
+    // function search_key_client() {
+    //   var x = document.getElementById("searchClient");
+    //   if (x.value == "") {
+    //     row_per_page(100);
+    //   }
+    // }
+
+    $('#resetBtn').click(() => {
+      $('#formAddEditData input[type=text]').val("");
+      $('#formAddEditData input[type=number]').val("");
+      $('#formAddEditData textarea[type=text]').val("");
+      $('#addData').modal('hide');
+      var temp = "";
+      $("#clientId").val(temp);
+    })
+
+
+    $('#saveBtn').click(() => {
+      if ($('#clientId').val() == "" || $("#projectName").val() == "" || $("#startProject").val() == "" || $("#endProject").val() == "" ||
+        $("#projectRole").val() == "" || $("#projectPhase").val() == "" || $("#projectDescription").val() == "" || $("#projectTechnology").val() == "" ||
+        $("#mainTask").val() == "") {
+        swal.fire("Data empty!", "Please Check That Error", "error");
+      } else {
+        var data = getFormData($('#formAddEditData'));
+        $('#saveBtn').hasClass('disabled');
+        $.ajax({
+          url: 'api/resource-project/',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+          success: (res) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Add Data Success',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            $('#addData').modal('hide');
+            row_per_page(100);
+          },
+          error: () => {
+            swal.fire("Error!", "Add data error", "error");
+          }
+        })
+      }
+    })
+
+    $('#updateBtn').click(() => {
+      if ($('#clientId').val() == "" || $("#projectName").val() == "" || $("#startProject").val() == "" || $("#endProject").val() == "" ||
+        $("#projectRole").val() == "" || $("#projectPhase").val() == "" || $("#projectDescription").val() == "" || $("#projectTechnology").val() == "" ||
+        $("#mainTask").val() == "") {
+        swal.fire("Data empty!", "Please Check That Error", "error");
+      } else {
+        var id = $('#id').val();
+        var data = getFormData($('#formAddEditData'));
+        $('#updateBtn').hasClass('disabled');
+        $.ajax({
+          url: 'api/resource-project/' + id,
+          type: 'put',
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+          success: (res) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Add Data Success',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            $('#addData').modal('hide');
+            row_per_page(100);
+          },
+          error: () => {
+            swal.fire("Error!", "Add data error", "error");
+          }
+        })
+      }
+    })
+
+    $(() => {
+      get_client();
+    });
+    get_client = () => {
+      $.ajax({
+        url: 'api/client/employee',
+        type: 'get',
+        contentType: "application/json",
+        success: function (result) {
+          var optValue = "";
+          optValue += '<option value="">- Pilih -</option>';
+          for (var i = 0; i < result.length; i++) {
+            optValue += `<option value="${result[i].id}">${result[i].name}</option>`;
+          }
+          $("#clientId").html(optValue);
+
+        },
+        error: function () {
+          swal.fire("Error!", "Fetch Education Level Failed", "error");
+        }
+      })
+    }
+
+    function getFormData($form) {
+      var unindexed_array = $form.serializeArray();
+      var indexed_array = {};
+      $.map(unindexed_array, function (n, i) {
+        indexed_array[n['name']] = n['value'];
+      });
+      return indexed_array;
+    }
+
+  </script>
+</th:block>

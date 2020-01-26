@@ -1,0 +1,2161 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+
+<th:block layout:fragment="content">
+
+
+	<div class="bottom">
+		<div class="col">
+			<div class="container width:100%;">
+				<div class="card ">
+					<div class="row">
+						<h2 class="m-3 col-lg-7"><strong>Rencana Jadwal</strong> </h2>
+						<div class="col-md-4 align-right text-right mt-4">
+							<select id="select_graphtype" onchange="order(this.value)"><i
+									class="fas fa-sort-alpha-down"></i>
+								<option>Order</option>
+								<option value="asc">Ascending</option>
+								<option value="des">Descending</option>
+							</select>
+							<select id="select_graphtype" onchange="row_per_page(this.value)"><i></i>
+								<option>Row Per Page</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<a data-toggle="modal" data-target="#addData" href="#" id="showAddData"><i
+									class="fa fa-plus-circle" aria-hidden="true"></i></a>
+						</div>
+					</div>
+					<hr class="m-3" size="5" color="black">
+
+
+					<div class="input-group ml-3 mb-3">
+						<div class="col-3 inner-addon left-addon">
+							<input class="p-1 form-control datepicker" type="text" name="searchStartDate" id="tgl_mulai"
+								placeholder="From">
+						</div>
+
+						<div class="col-5 align-left mr-3">
+							<div class="input-group">
+								<input class="p-1 datepicker" type="text" name="searchEndDate" id="tgl_sampai"
+									placeholder="To">
+								<div class="input-group-append">
+									<button class="btn btn-primary" id="startSearch">Search</button>
+								</div>
+								<button class="btn btn-primary ml-2" id="resetSearch">Reset</button>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="card">
+					<div class="card-block">
+						<table class="table table-hover">
+
+							<tbody id="rencana_jadwal_data">
+							</tbody>
+						</table>
+						<hr />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- MODAL RENCANA JADWAL -->
+	<div class="modal fade" id="modal-rencana_jadwal" style="overflow-y:auto;" data-dismiss="modal">
+		<div class="modal-dialog modal-xl modal-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title text-light">Pelamar Terjadwal</h4>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+				</div>
+
+
+				<div class="modal-body">
+					<input type="hidden" id="action" value="">
+					<form id="get_from_rencana_jadwal">
+						<table class="table table-borderless">
+
+							<tbody id="pelamar_terjadwal">
+							</tbody>
+						</table>
+
+					</form>
+				</div> <!-- /.modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success get_category" id="save_button_all">Undang Semua
+					</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="close">Tutup</button>
+
+
+				</div> <!-- /.modal-footer -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+
+	<!-- MODAL KIRIM UNDANGAN -->
+	<div class="modal fade" id="modal-kirim_undangan" style="overflow-y:auto;" data-dismiss="modal">
+		<div class="modal-dialog modal-xl modal-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 id="modal_title_invite" class="modal-title text-light">Kirim Undangan kepada </h4>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+				</div>
+
+
+				<div class="modal-body">
+					<input type="hidden" id="action" value="">
+					<form id="get_from_kirim_undangan">
+						<input type="hidden" id="get_rencana_id" name="id" class="get_kirim_undangan_id" value="">
+						<input type="hidden" id="get_rencana_email" name="Email" class="get_kirim_undangan_id" value="">
+						<input type="hidden" id="get_nama" name="nama" class="get_kirim_undangan_id" value="">
+						<input type="hidden" id="get_time" name="nama" class="get_kirim_undangan_id" value="">
+
+						<div class="row">
+							<div class="col-md-4">
+								<label>Jadwal : </label>
+								<label id="get_jadwal_invite"></label>
+							</div>
+
+							<div class="col-md-4">
+								<label>RO : </label>
+								<label id="get_ro_invite"></label>
+
+							</div>
+
+							<div class="col-md-4">
+								<label>Lokasi : </label>
+								<label id="get_lokasi_invite"></label>
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								<label>Tanggal : </label>
+								<label id="get_tanggal_invite"></label>
+							</div>
+
+							<div class="col-md-4">
+								<label>TRO : </label>
+								<label id="get_tro_invite"></label>
+
+							</div>
+						</div>
+
+						<div class="row">
+
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<label>RO / TRO Lain : </label>
+								<label id="get_tro_invite"></label>
+
+							</div>
+						</div>
+						<textarea readonly id="get_catatan_invite" class="form-control mt-2 h-25" rows="5"></textarea>
+
+
+					</form>
+				</div> <!-- /.modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success get_kirim_undangan_id" id="save_button">Kirim
+					</button>
+
+				</div> <!-- /.modal-footer -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+
+	<!-- MODAL UBAH RENCANA JADWAL -->
+	<div class="modal fade" id="modal-ubah_rencana_jadwal" style="overflow-y:auto;" data-dismiss="modal">
+		<div class="modal-dialog modal-xl modal-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title text-light">Ubah Rencana Jadwal</h4>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+				</div>
+
+				<div class="modal-body">
+					<input type="hidden" id="action" value="">
+					<form id="get_from_kirim_undangan">
+						<input type="hidden" id="get_rencana_id" name="id" class="ubah_rencana" value="">
+						<input type="hidden" id="get_schedule_code" name="scheduleCode" class="ubah_rencana" value="">
+						<input type="hidden" id="get_id_rencana" name="rencanaId" class="ubah_rencana" value="">
+						<input type="hidden" id="get_id_biodata" name="biodataId" class="ubah_rencana" value="">
+
+
+
+						<div class="row">
+							<div class="input-group col-md-6">
+								<input type="text" name="scheduleDate" id="get_ubah_tanggal"
+									class="form-control datepicker ubah_rencana" placeholder="Tgl. Rencana Jadwal *">
+								<div class="input-group-prepend">
+									<button type="button" id="toggle5" class="input-group-text toggle">
+										<i class="far fa-calendar-alt"></i>
+									</button>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<select name="time" id="get_ubah_jam" class="form-control ubah_rencana"
+									placeholder="Jam">
+									<option disabled selected hidden>Jam *</option>
+									<option value="08:00">08:00</option>
+									<option value="09:00">09:00</option>
+									<option value="10:00">10:00</option>
+									<option value="11:00">11:00</option>
+									<option value="12:00">12:00</option>
+									<option value="13:00">13:00</option>
+									<option value="14:00">14:00</option>
+									<option value="15:00">15:00</option>
+									<option value="16:00">16:00</option>
+									<option value="17:00">17:00</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-md-6">
+								<select name="ro" id="get_ubah_ro" class="form-control ubah_rencana1"
+									placeholder="RO"></select>
+							</div>
+
+							<div class="col-md-6">
+								<select name="tro" id="get_ubah_tro" class="form-control ubah_rencana1"
+									placeholder="TRO"></select>
+							</div>
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-md-6">
+								<select name="scheduleTypeId" id="get_ubah_scheduler" class="form-control ubah_rencana"
+									placeholder="Jenis Jadwal"></select>
+							</div>
+
+							<div class="col-md-6">
+								<input type="text" name="location" id="get_ubah_lokasi"
+									class="form-control ubah_rencana" placeholder="Lokasi">
+							</div>
+						</div>
+
+						<input type="text" name="otherRoTro" id="get_ubah_other" class="form-control ubah_rencana mt-3"
+							placeholder="RO / TRO Lain">
+
+						<textarea id="get_ubah_catatan" class="form-control mt-2 h-25 mt-3 ubah_rencana" rows="5"
+							placeholder="catatan"></textarea>
+
+						<div class="form-check mt-3">
+							<input class="form-check-input checkbox_cek " id="get_checkbox" value="" type="checkbox"
+								name="checkbox">
+							<label class="form-check-label" for="get_chechbox">
+								Kirim Undangan Otomatis
+							</label>
+						</div>
+
+						<input type="text" name="sentDate" id="get_ubah_sentdate"
+							class="form-control mt-3 ubah_rencana datepicker" style="width:50%;"
+							placeholder="Tgl. Dikirim">
+
+
+
+					</form>
+				</div> <!-- /.modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="close">Batal</button>
+					<button type="button" class="btn btn-success get_category" id="save_button_ubah">Simpan
+					</button>
+
+				</div> <!-- /.modal-footer -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+
+
+
+
+
+
+	</div> <!-- /.container -->
+	</div>
+
+</th:block>
+<th:block layout:fragment="cat">
+
+	<script>
+
+
+		$(() => {
+			loadData();
+		});
+		loadData = () => {
+			$.ajax({
+				url: 'api/rencana-jadwal-ku/',
+				type: 'get',
+				contentType: 'application/json',
+				success: (result) => {
+					$('#rencana_jadwal_data').html("");
+
+					if (result.length > 0) {
+						for (var i = 0; i < result.length; i++) {
+							// console.log(ro.biodataId.nickName);
+							$("#rencana_jadwal_data").append
+								(
+									"<tr>" +
+									"<td>" + result[i].scheduleCode + "</td>" +
+									"<td>" + result[i].scheduleDate + "," + result[i].time + "</td>" +
+									"<td>" + result[i].ro.biodataId.nickName + "<br>" +
+									result[i].tro.biodataId.nickName + "<br>" +
+									result[i].location + "<br>" +
+									result[i].isAutomaticMail + "<br>" +
+									result[i].scheduleTypeId.name + "</td>" +
+									'<td class="align-middle text-center" >' +
+									'<a onclick="get_pelamarterjadwal(' + result[i].id + ')" data-toggle="modal" data-target="#modal-rencana_jadwal" href="#" ><i class="fas fa-search fa-lg " style="color:grey" aria-hidden="true"></i></a>' +
+									'<a onclick="" data-toggle="modal" data-target="#" href="#"  ><i class="far fa-edit ml-3 fa-lg" style="color:grey" aria-hidden="true"></i></a>' +
+									'<a onclick="" data-toggle="modal" data-target="#" href="#"  ><i class="far fa-trash-alt ml-3 fa-lg" style="color:grey" aria-hidden="true"></i></a>' +
+
+									"</td>" +
+									"</tr>"
+								);
+						}
+					}
+					else {
+						$("#rencana_jadwal_data").html("<tr><td colspan='3' style='text-align:center'><i>Data tidak ditemukan</i></td></tr>")
+					}
+				},
+
+
+				error: () => {
+
+				}
+			})
+		}
+
+		function get_pelamarterjadwal(rencanaId) {
+			$("#pelamar_terjadwal").html("")
+
+
+			$.ajax({
+				url: 'api/rencana-detail-ku/get/' + rencanaId,
+				type: 'get',
+				contentType: 'application/json',
+				success: (res) => {
+					// console.log(res)
+					if (res.length == 0) {
+						var a = 0;
+						var no_data = "<tr><td colspan='3' style='text-align:center'><i>Data Tidak Ada</i></td></tr>";
+						$("#pelamar_terjadwal").html(no_data)
+					} else {
+						a = 1
+					}
+
+
+					res.map((data) => {
+
+						$.ajax({
+							url: 'api/education-ku/name-last/' + data.biodataId.id,
+							type: 'get',
+							contentType: "application/json",
+							success: function (result) {
+
+								result.map((data2) => {
+
+
+									if (a != 0) {
+										var markup =
+											"<tr>" +
+											"<td>" + data.biodataId.fullName + "</td>" +
+											"<td>" + data2.major + ', ' + data2.schoolName + "</td>" +
+											"<td ><input id=\"get_modal_rencana\" type=\"hidden\" value=\"" + rencanaId + "\"></td>" +
+
+
+											"<td>" +
+											"<div class=\"btn-group\">" +
+											"<button type=\"button\" class=\"btn btn-info\">Pilihan</button>" +
+											"<button type=\"button\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">" +
+											"<span class=\"caret\"></span>" +
+											"<span class=\"sr-only\">Toggle Dropdown</span>" +
+											"</button>" +
+											"<ul class=\"dropdown-menu\" role=\"menu\">" +
+											"<li><a onclick=\"kirim_undangan('" + rencanaId + "','undang','" + data.biodataId.fullName + "','" + data.biodataId.email + "')\" >Undang</a></li>" +
+											"<li><a onclick=\"ubah_rencana_jadwal('" + rencanaId + "','" + data.biodataId.id + "')\" >Ubah Jadwal</a></li>" +
+											"</ul>" +
+											"</div>" +
+											"</td>" +
+											"</tr>"
+										$("#pelamar_terjadwal").append(markup)
+									}
+								})
+							},
+							error: function () {
+								swal.fire("Opps..", "Fetch Last Education Failed", "error");
+							}
+						})
+					})
+				},
+				error: () => {
+
+					swal.fire("Opps..", "Fetch Biodata Failed", "error");
+				}
+			})
+		}
+
+		function kirim_undangan(rencanaId, action, nama, email) {
+
+			$('#modal-kirim_undangan').modal('show');
+			$('#modal-rencana_jadwal').modal('hide');
+
+			$.ajax({
+				url: 'api/rencana-jadwal-ku/' + rencanaId,
+				type: 'get',
+				contentType: 'application/json',
+				success: (result) => {
+					$("#modal_title_invite").html("");
+
+					$("#get_jadwal_invite").html("");
+					$("#get_ro_invite").html("");
+					$("#get_lokasi_invite").html("");
+					$("#get_tanggal_invite").html("");
+					$("#get_tro_invite").html("");
+					$("#get_other_invite").html("");
+
+
+
+					$("#modal_title_invite").append("Kirim Undangan kepada ", nama);
+					$("#get_jadwal_invite").append(result.scheduleTypeId.name);
+					$("#get_ro_invite").append(result.ro.biodataId.nickName);
+					$("#get_lokasi_invite").append(result.location);
+					$("#get_tanggal_invite").append(result.scheduleDate);
+					$("#get_tro_invite").append(result.tro.biodataId.nickName);
+					$("#get_other_invite").append(result.otherRoTro);
+
+
+					//get Value
+					$("#get_rencana_id").val(result.id);
+					$("#get_rencana_email").val(email);
+					$("#get_nama").val(nama);
+					$("#get_time").val(result.time);
+
+					$("#get_jadwal_invite").val(result.scheduleTypeId.name);
+					$("#get_ro_invite").val(result.ro.biodataId.nickName);
+					$("#get_lokasi_invite").val(result.location);
+					$("#get_tanggal_invite").val(result.scheduleDate);
+					$("#get_tro_invite").val(result.tro.biodataId.nickName);
+					$("#get_other_invite").val(result.otherRoTro);
+					$("#get_catatan_invite").val(result.notes);
+
+
+				}
+			})
+		}
+
+		$(() => {
+			get_disabled();
+		});
+		get_disabled = () => {
+			$(document).ready(function () {
+				$("input.checkbox_cek").on('change', function () {
+					if ($('input.checkbox_cek').is(':checked')) {
+						$('#get_ubah_sentdate').attr("disabled", false);
+						$('#save_button_ubah').html("Simpan");
+
+
+					} else {
+
+						$('#get_ubah_sentdate').attr("disabled", true);
+						$('#get_ubah_sentdate').val("");
+						$('#save_button_ubah').html("Simpan & Kirim")
+
+
+
+
+					}
+				})
+			})
+		}
+
+
+		function ubah_rencana_jadwal(rencanaId, biodataId) {
+
+			$('#modal-ubah_rencana_jadwal').modal('show');
+			$('#modal-rencana_jadwal').modal('hide');
+			get_all_jenis();
+
+			$.ajax({
+				url: 'api/rencana-jadwal-ku/' + rencanaId,
+				type: 'get',
+				contentType: 'application/json',
+				success: (result) => {
+					var a = result.ro.biodataId.id;
+					var b = result.tro.biodataId.id;
+
+					// console.log(a)
+					// console.log(b)
+
+					get_ro(a);
+					get_tro(b);
+
+					$("#get_schedule_code").val(result.scheduleCode),
+
+
+						$("#get_id_rencana").val(rencanaId),
+						$("#get_id_biodata").val(biodataId),
+						$("#get_rencana_id").val(result.id);
+					$("#get_ubah_tanggal").val(result.scheduleDate);
+					$("#get_ubah_jam").val(result.time);
+					$("#get_ubah_ro").val(result.ro.biodataId.id);
+					$("#get_ubah_tro").val(result.tro.biodataId.id);
+
+					$("#get_ubah_scheduler").val(result.scheduleTypeId.id);
+					$("#get_checkbox").val(result.isAutomaticMail);
+					$("#get_ubah_lokasi").val(result.location);
+					$("#get_ubah_other").val(result.otherRoTro);
+					$("#get_ubah_sentdate").val(result.sentDate);
+					$("#get_ubah_catatan").val(result.notes);
+
+					if ($("#get_checkbox").val() == "true") {
+						$('#get_checkbox').prop('checked', true);
+						$('#save_button_ubah').html("Simpan");
+
+					} else {
+						$('#get_checkbox').prop('checked', false);
+						$('#save_button_ubah').val("Simpan");
+						$('#save_button_ubah').html("Simpan & Kirim");
+					}
+
+					if ($('input.checkbox_cek').is(':checked')) {
+						$('#get_ubah_sentdate').prop("disabled", false);
+
+
+					} else {
+
+
+						$('#get_ubah_sentdate').prop("disabled", true);
+						$('#get_ubah_sentdate').val("");
+					}
+				}
+
+			})
+
+		}
+
+		$(".datepicker").datetimepicker({
+			timepicker: false,
+			datepicker: true,
+			format: 'Y-m-d'
+		})
+
+
+		function get_tro(roIdtro) {
+
+			$.ajax({
+
+				url: 'api/employee-ku/',
+				type: 'get',
+				contentType: "application/json",
+				success: function (result) {
+					var optValue2 = "";
+					optValue2 += '<option value="" disabled selected hidden>TRO</option>';
+					for (var i = 0; i < result.length; i++) {
+						if (roIdtro == result[i].id) {
+							optValue2 += `<option value="${result[i].id}" selected="selected">${result[i].biodataId.nickName}</option>`;
+						}
+						else {
+							optValue2 += `<option value="${result[i].id}">${result[i].biodataId.nickName}</option>`;
+						}
+					}
+					$("#get_ubah_tro").html(optValue2);
+				},
+				error: function () {
+					swal.fire("Opps..", "Gagal Mengambil Data", "error");
+				}
+
+			})
+		}
+
+
+		function get_ro(roIdro) {
+
+			$.ajax({
+
+				url: 'api/employee-ku/',
+				type: 'get',
+				contentType: "application/json",
+				success: function (result) {
+					var optValue1 = "";
+
+					optValue1 += '<option value="" disabled selected hidden>RO</option>';
+
+					for (var i = 0; i < result.length; i++) {
+
+						if (roIdro == result[i].id) {
+
+							optValue1 += `<option value="${result[i].id}" selected="selected" >${result[i].biodataId.nickName}</option>`;
+						}
+						else {
+							optValue1 += `<option value="${result[i].id}">${result[i].biodataId.nickName}</option>`;
+
+						}
+					}
+					$("#get_ubah_ro").html(optValue1);
+				},
+				error: function () {
+					swal.fire("Opps..", "Gagal Mengambil Data", "error");
+				}
+			})
+		}
+		function get_all_jenis() {
+
+			$.ajax({
+
+				url: 'api/schedule-type-ku/',
+				type: 'get',
+				contentType: "application/json",
+				success: function (result) {
+					var optValue1 = "";
+
+					optValue1 += '<option value="" disabled selected hidden>Jenis Jadwal *</option>';
+
+					for (var i = 0; i < result.length; i++) {
+						optValue1 += `<option value="${result[i].id}">${result[i].name}</option>`
+
+					}
+					$("#get_ubah_scheduler").html(optValue1);
+
+				},
+				error: function () {
+					swal.fire("Opps..", "Gagal Mengambil Data", "error");
+				}
+			})
+		}
+
+
+
+		$('#save_button_ubah').click(function () {
+
+
+			var rencanaId = $("#get_id_rencana").val();
+			var biodataId = $("#get_id_biodata").val();
+			var i = 0;
+
+
+
+			if ($("#get_ubah_scheduler") == "" && $("#get_ubah_jam") == "" && $("#get_ubah_tanggal") == "") {
+				swal.fire("Opps..", "Semua Mandatory Harus di Isi..!!", "error")
+			} else {
+				if ($('input.checkbox_cek').is(':checked')) {
+					$("#get_checkbox").val(true)
+
+				} else {
+					$("#get_checkbox").val(false)
+				}
+
+				if ($("#get_ubah_ro").val() == $("#get_ubah_tro").val()) {
+					swal.fire("Opps", "Data RO & TRO tidak boleh sama", "error");
+				} else if ($("#get_ubah_tanggal").val() == "") {
+					swal.fire("Opps", "Tanggal tidak boleh Kosong", "error");
+				} else if ($("#get_ubah_scheduler").val() == "") {
+					swal.fire("Opps", "Jenis Jadwal tidak Boleh Kosong", "error");
+				} else {
+					//isi	
+
+
+
+
+					$.ajax({
+						url: 'api/rencana-detail-ku/get/' + rencanaId + '/' + biodataId,
+						type: 'get',
+						contentType: 'application/json',
+						success: (res) => {
+							// swal.fire({
+							// 	title: 'Please Wait..!',
+							// 	text: 'Sending Email..',
+							// 	icon: 'info',
+							// 	allowOutsideClick: false,
+							// 	allowEscapeKey: false,
+							// 	allowEnterKey: false,
+							// 	onOpen: () => {
+							// 		swal.showLoading()
+							// 	}
+							// })
+
+							var nama = res.biodataId.fullName;
+							var jadwal = $("#get_ubah_scheduler").val();
+
+
+
+							if (jadwal == res.rencanaJadwalId.scheduleTypeId.id) {
+								var jadwal1 = res.rencanaJadwalId.scheduleTypeId.name;
+
+							}
+
+
+							var ro = $("#get_ubah_ro").val();
+
+							if (ro == res.rencanaJadwalId.ro.biodataId.id) {
+								var ro1 = res.rencanaJadwalId.ro.biodataId.fullName;
+
+							}
+
+
+
+							var lokasi = $("#get_ubah_lokasi").val();
+							var tanggal_wawancara = $("#get_ubah_tanggal").val();
+							var notes = $("#get_ubah_catatan").val();
+							var email = res.biodataId.email;
+							var waktu = $("#get_ubah_jam").val();
+
+
+							if (nama == "" || nama == null) {
+								nama = "-"
+							} if (lokasi == "" || lokasi == null) {
+
+								lokasi = "Coming Soon"
+							} if (tanggal_wawancara == "" || tanggal_wawancara == null) {
+								tanggal_wawancara = "Coming Soon"
+							}
+							if (notes == "" || notes == null) {
+								notes = "-"
+							}
+							if (waktu == "" || waktu == null) {
+								waktu == "-"
+							}
+
+
+
+							var sub =
+								"Undangan Untuk " + jadwal + " di PT.Xsis Mitra Utama"
+							var email_body = `
+    <!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
+	xmlns:v="urn:schemas-microsoft-com:vml">
+
+<head>
+	<!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="width=device-width" name="viewport" />
+	<!--[if !mso]><!-->
+	<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+	<!--<![endif]-->
+	<title></title>
+	<!--[if !mso]><!-->
+	
+	<!--<![endif]-->
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		table,
+		td,
+		tr {
+			vertical-align: top;
+			border-collapse: collapse;
+		}
+
+		* {
+			line-height: inherit;
+		}
+
+		a[x-apple-data-detectors=true] {
+			color: inherit !important;
+			text-decoration: none !important;
+		}
+	</style>
+	<style id="media-query" type="text/css">
+		@media (max-width: 660px) {
+
+			.block-grid,
+			.col {
+				min-width: 320px !important;
+				max-width: 100% !important;
+				display: block !important;
+			}
+
+			.block-grid {
+				width: 100% !important;
+			}
+
+			.col {
+				width: 100% !important;
+			}
+
+			.col>div {
+				margin: 0 auto;
+			}
+
+			img.fullwidth,
+			img.fullwidthOnMobile {
+				max-width: 100% !important;
+			}
+
+			.no-stack .col {
+				min-width: 0 !important;
+				display: table-cell !important;
+			}
+
+			.no-stack.two-up .col {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num8 {
+				width: 66% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num3 {
+				width: 25% !important;
+			}
+
+			.no-stack .col.num6 {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num9 {
+				width: 75% !important;
+			}
+
+			.video-block {
+				max-width: none !important;
+			}
+
+			.mobile_hide {
+				min-height: 0px;
+				max-height: 0px;
+				max-width: 0px;
+				display: none;
+				overflow: hidden;
+				font-size: 0px;
+			}
+
+			.desktop_hide {
+				display: block !important;
+				max-height: none !important;
+			}
+		}
+	</style>
+</head>
+
+<body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #FFFFFF;">
+	<!--[if IE]><div class="ie-browser"><![endif]-->
+	<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
+		style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;"
+		valign="top" width="100%">
+		<tbody>
+			<tr style="vertical-align: top;" valign="top">
+				<td style="word-break: break-word; vertical-align: top;" valign="top">
+					<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color:#FFFFFF"><![endif]-->
+					<div style="background-color:transparent;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:transparent;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:20px; padding-bottom:15px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:20px; padding-bottom:15px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#E7ECEF;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E7ECEF;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="30" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 30px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="30"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 10px; padding-bottom: 10px; font-family: Georgia, serif"><![endif]-->
+											<div
+												style="color:#555555;font-family:Bitter, Georgia, Times, Times New Roman, serif;line-height:1.2;padding-top:10px;padding-right:20px;padding-bottom:10px;padding-left:20px;">
+												
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:20px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Dear, `+ nama + `</span></p>
+                                                        <br>
+                                                        
+                                                    <p
+														style="font-size: 16px; line-height: 1.5;  font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Kami dari <strong>PT. Xsis Mitra Utama</strong> mengundang anda dalam <strong>`+ jadwal1 + `</strong> yang akan diadakan pada tanggal :
+                                                            <br><br><strong>Tanggal :</strong> `+ tanggal_wawancara + `
+                                                            <br><strong>Lokasi</strong> : `+ lokasi + ` 
+                                                            <br><strong>Waktu</strong> : `+ waktu + ` WIB
+
+                                                            <br><br>Demikian Pemanggilan Wawancara ini Kami harap saudara/i datang 15 menit lebih awal dari jadwal yang sudah di tetapkan
+                                                            </span></p>
+                                                            <br>
+                                                    <p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;"><strong>*Notes : </strong>`+ notes + `</span></p>
+                                                        <br>
+                                                        
+														
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="35" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 35px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="35"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#0F7173;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: #0F7173;">
+							<div
+								style="border-collapse: collapse;display: table;width: 100%;background-color:#0F7173;background-image:url('images/footer-bg.png');background-position:top center;background-repeat:no-repeat">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0F7173;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:#0F7173"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:#0F7173;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="15" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 15px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="15"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 15px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:15px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #b9d6d6;">Terimakasih Atas Perhatiannya.
+                                                            <br>Salam,
+                                                            <br>`+ ro1 + `
+                                                            <br>PT. Xsis Mitra Utama</span></p>
+
+                                                    <p
+                                                    
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+														<span style="font-size: 16px; color: #b9d6d6;">
+                                                    <br>
+                                                    <br>© Xsis Mitra Utama
+															Copyright 2020</span></p>
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="10" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 10px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="10"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--[if (IE)]></div><![endif]-->
+</body>
+
+</html>`;
+
+
+							var data = {
+								to: email,
+								subject: sub,
+								text: email_body,
+
+							}
+							$.ajax({
+								url: 'api/rencana-jadwal-ku/send',
+								type: 'post',
+								contentType: 'application/json',
+								data: JSON.stringify(data),
+								success: function (result) {
+
+								}, error: function (e) {
+									if (e.responseText == "Email sent Successfully") {
+										swal.hideLoading()
+										swal.fire({
+											title: 'Success',
+											text: 'Edit and Sending Email Success',
+											icon: 'success',
+										})
+										loadData();
+
+
+										var data = {
+											id: $("#get_rencana_id").val(),
+											scheduleCode: $("#get_schedule_code").val(),
+											scheduleDate: $("#get_ubah_tanggal").val(),
+											time: $("#get_ubah_jam").val(),
+											ro: {
+												id: $("#get_ubah_ro").val(),
+											},
+											tro: {
+												id: $("#get_ubah_tro").val(),
+											},
+											scheduleTypeId: {
+												id: $("#get_ubah_scheduler").val(),
+											},
+											location: $("#get_ubah_lokasi").val(),
+											otherRoTro: $("#get_ubah_other").val(),
+											notes: $("#get_ubah_catatan").val(),
+											isAutomaticMail: $("#get_checkbox").val(),
+											sentDate: $("#get_ubah_sentdate").val(),
+										}
+
+
+
+										$.ajax({
+											url: 'api/rencana-jadwal-ku/',
+											type: 'put',
+											contentType: 'application/json',
+											data: JSON.stringify(data),
+											success: function (result) {
+												// swal.fire("","Berhasil Mengubah data", "success");										
+												$('#modal-ubah_rencana_jadwal').modal('hide');
+												$('#modal-rencana_jadwal').modal('show');
+												$('#modal-kirim_undangan').modal('hide');
+												// loadData();
+												if ($("#get_checkbox").val() == "false") {
+
+
+												}
+											}, error: function () {
+												swal.fire("Opps..", "Gagal ubah Data", "error")
+											}
+
+										})
+
+
+									} else {
+										swal.fire({
+											title: 'Opps...',
+											text: e.responseText + ', Try Again',
+											icon: 'error',
+										});
+										$('#modal-ubah_rencana_jadwal').modal('hide');
+										$('#modal-rencana_jadwal').modal('show');
+										$('#modal-kirim_undangan').modal('hide');
+									}
+								}
+
+							})
+
+
+						},
+						error: () => {
+
+							swal.fire("Opps..", "Fetch Biodata Failed", "error");
+						}
+					});
+				}
+
+
+			}
+		})
+
+
+		$('#save_button_all').click(function () {
+			var rencanaId = $("#get_modal_rencana").val();
+			var i = 1;
+
+			if (rencanaId == undefined) {
+				swal.fire("Opps..", "Isi data terlebih dahulu", "error")
+			} else {
+				$.ajax({
+					url: 'api/rencana-detail-ku/get/' + rencanaId,
+					type: 'get',
+					contentType: 'application/json',
+					success: (res) => {
+						res.map((data) => {
+							swal.fire({
+								title: 'Please Wait..!',
+								text: 'Sending All Email..',
+								icon: 'info',
+								allowOutsideClick: false,
+								allowEscapeKey: false,
+								allowEnterKey: false,
+								onOpen: () => {
+									swal.showLoading()
+								}
+							})
+
+							var nama = data.biodataId.fullName;
+							var jadwal = data.rencanaJadwalId.scheduleTypeId.name;
+							var ro = data.rencanaJadwalId.ro.biodataId.fullName;
+							var lokasi = data.rencanaJadwalId.location;
+							var tanggal_wawancara = data.rencanaJadwalId.scheduleDate;
+							var notes = data.rencanaJadwalId.notes;
+							var email = data.biodataId.email;
+							var waktu = data.rencanaJadwalId.time;
+
+							if (nama == "" || nama == null) {
+								nama = "-"
+							} if (lokasi == "" || lokasi == null) {
+								lokasi = "Coming Soon"
+							} if (tanggal_wawancara == "" || tanggal_wawancara == null) {
+								tanggal_wawancara = "Coming Soon"
+							}
+							if (notes == "" || notes == null) {
+								notes = "-"
+							}
+							if (waktu == "" || waktu == null) {
+								waktu == "-"
+							}
+
+
+
+							var sub =
+								"Undangan Untuk " + jadwal + " di PT.Xsis Mitra Utama"
+							var email_body =
+								`
+    <!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
+	xmlns:v="urn:schemas-microsoft-com:vml">
+
+<head>
+	<!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="width=device-width" name="viewport" />
+	<!--[if !mso]><!-->
+	<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+	<!--<![endif]-->
+	<title></title>
+	<!--[if !mso]><!-->
+	
+	<!--<![endif]-->
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		table,
+		td,
+		tr {
+			vertical-align: top;
+			border-collapse: collapse;
+		}
+
+		* {
+			line-height: inherit;
+		}
+
+		a[x-apple-data-detectors=true] {
+			color: inherit !important;
+			text-decoration: none !important;
+		}
+	</style>
+	<style id="media-query" type="text/css">
+		@media (max-width: 660px) {
+
+			.block-grid,
+			.col {
+				min-width: 320px !important;
+				max-width: 100% !important;
+				display: block !important;
+			}
+
+			.block-grid {
+				width: 100% !important;
+			}
+
+			.col {
+				width: 100% !important;
+			}
+
+			.col>div {
+				margin: 0 auto;
+			}
+
+			img.fullwidth,
+			img.fullwidthOnMobile {
+				max-width: 100% !important;
+			}
+
+			.no-stack .col {
+				min-width: 0 !important;
+				display: table-cell !important;
+			}
+
+			.no-stack.two-up .col {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num8 {
+				width: 66% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num3 {
+				width: 25% !important;
+			}
+
+			.no-stack .col.num6 {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num9 {
+				width: 75% !important;
+			}
+
+			.video-block {
+				max-width: none !important;
+			}
+
+			.mobile_hide {
+				min-height: 0px;
+				max-height: 0px;
+				max-width: 0px;
+				display: none;
+				overflow: hidden;
+				font-size: 0px;
+			}
+
+			.desktop_hide {
+				display: block !important;
+				max-height: none !important;
+			}
+		}
+	</style>
+</head>
+
+<body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #FFFFFF;">
+	<!--[if IE]><div class="ie-browser"><![endif]-->
+	<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
+		style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;"
+		valign="top" width="100%">
+		<tbody>
+			<tr style="vertical-align: top;" valign="top">
+				<td style="word-break: break-word; vertical-align: top;" valign="top">
+					<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color:#FFFFFF"><![endif]-->
+					<div style="background-color:transparent;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:transparent;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:20px; padding-bottom:15px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:20px; padding-bottom:15px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#E7ECEF;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E7ECEF;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="30" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 30px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="30"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 10px; padding-bottom: 10px; font-family: Georgia, serif"><![endif]-->
+											<div
+												style="color:#555555;font-family:Bitter, Georgia, Times, Times New Roman, serif;line-height:1.2;padding-top:10px;padding-right:20px;padding-bottom:10px;padding-left:20px;">
+												
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:20px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Dear, `+ nama + `</span></p>
+                                                        <br>
+                                                        
+                                                    <p
+														style="font-size: 16px; line-height: 1.5;  font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Kami dari <strong>PT. Xsis Mitra Utama</strong> mengundang anda dalam <strong>`+ jadwal + `</strong> yang akan diadakan pada tanggal :
+                                                            <br><br><strong>Tanggal :</strong> `+ tanggal_wawancara + `
+                                                            <br><strong>Lokasi</strong> : `+ lokasi + ` 
+                                                            <br><strong>Waktu</strong> : `+ waktu + ` WIB
+
+                                                            <br><br>Demikian Pemanggilan Wawancara ini Kami harap saudara/i datang 15 menit lebih awal dari jadwal yang sudah di tetapkan
+                                                            </span></p>
+                                                            <br>
+                                                    <p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;"><strong>*Notes : </strong>`+ notes + `</span></p>
+                                                        <br>
+                                                        
+														
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="35" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 35px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="35"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#0F7173;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: #0F7173;">
+							<div
+								style="border-collapse: collapse;display: table;width: 100%;background-color:#0F7173;background-image:url('images/footer-bg.png');background-position:top center;background-repeat:no-repeat">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0F7173;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:#0F7173"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:#0F7173;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="15" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 15px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="15"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 15px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:15px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #b9d6d6;">Terimakasih Atas Perhatiannya.
+                                                            <br>Salam,
+                                                            <br>`+ ro + `
+                                                            <br>PT. Xsis Mitra Utama</span></p>
+
+                                                    <p
+                                                    
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+														<span style="font-size: 16px; color: #b9d6d6;">
+                                                    <br>
+                                                    <br>© Xsis Mitra Utama
+															Copyright 2020</span></p>
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="10" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 10px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="10"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--[if (IE)]></div><![endif]-->
+</body>
+
+</html>`;
+
+							var data = {
+								to: email,
+								subject: sub,
+								text: email_body,
+
+							}
+
+
+							$.ajax({
+								url: 'api/rencana-jadwal-ku/send',
+								type: 'post',
+								contentType: 'application/json',
+								data: JSON.stringify(data),
+								success: function (result) {
+								}, error: function (e) {
+									console.log(e.responseText)
+									if (e.responseText == "Email sent Successfully") {
+										if (i == res.length) {
+											swal.hideLoading()
+											swal.fire({
+												title: 'Success',
+												text: 'All Email has been Sended',
+												icon: 'success',
+
+											})
+
+											$('#modal-rencana_jadwal').modal('show');
+											$('#modal-kirim_undangan').modal('hide');
+										}
+										i = i + 1;
+
+									} else {
+										swal.hideLoading()
+										swal.fire({
+											title: 'Opps...',
+											text: e.responseText + 'Try Again',
+											icon: 'error',
+										});
+
+									}
+
+
+								}
+
+							})
+
+						})
+					},
+					error: () => {
+
+						swal.fire("Opps..", "Send Email Failed", "error");
+					}
+
+				})
+
+			}
+
+		})
+
+
+		$('#save_button').click(function () {
+
+
+			var nama = $("#get_nama").val();
+			var jadwal = $("#get_jadwal_invite").val();
+			var ro = $("#get_ro_invite").val();
+			var lokasi = $("#get_lokasi_invite").val();
+			var tanggal_wawancara = $("#get_tanggal_invite").val();
+			var notes = $("#get_catatan_invite").val();
+			var email = $("#get_rencana_email").val();
+			var waktu = $("#get_time").val();
+
+
+
+			if (nama == "" || nama == null) {
+				nama = "-"
+			} if (lokasi == "" || lokasi == null) {
+
+				lokasi = "Coming Soon"
+			} if (tanggal_wawancara == "" || tanggal_wawancara == null) {
+				tanggal_wawancara = "Coming Soon"
+
+			}
+			if (notes == "" || notes == null) {
+				notes = ""
+			} if (waktu == "" || waktu == null) {
+				waktu == "-"
+			}
+
+			swal.fire({
+				title: 'Please Wait..!',
+				text: 'Sending Email..',
+				icon: 'info',
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				onOpen: () => {
+					swal.showLoading()
+				}
+			})
+
+
+			var sub =
+				"Undangan Untuk " + jadwal + " di PT.Xsis Mitra Utama"
+			var email_body =
+				`
+    <!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
+	xmlns:v="urn:schemas-microsoft-com:vml">
+
+<head>
+	<!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="width=device-width" name="viewport" />
+	<!--[if !mso]><!-->
+	<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+	<!--<![endif]-->
+	<title></title>
+	<!--[if !mso]><!-->
+	
+	<!--<![endif]-->
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		table,
+		td,
+		tr {
+			vertical-align: top;
+			border-collapse: collapse;
+		}
+
+		* {
+			line-height: inherit;
+		}
+
+		a[x-apple-data-detectors=true] {
+			color: inherit !important;
+			text-decoration: none !important;
+		}
+	</style>
+	<style id="media-query" type="text/css">
+		@media (max-width: 660px) {
+
+			.block-grid,
+			.col {
+				min-width: 320px !important;
+				max-width: 100% !important;
+				display: block !important;
+			}
+
+			.block-grid {
+				width: 100% !important;
+			}
+
+			.col {
+				width: 100% !important;
+			}
+
+			.col>div {
+				margin: 0 auto;
+			}
+
+			img.fullwidth,
+			img.fullwidthOnMobile {
+				max-width: 100% !important;
+			}
+
+			.no-stack .col {
+				min-width: 0 !important;
+				display: table-cell !important;
+			}
+
+			.no-stack.two-up .col {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num8 {
+				width: 66% !important;
+			}
+
+			.no-stack .col.num4 {
+				width: 33% !important;
+			}
+
+			.no-stack .col.num3 {
+				width: 25% !important;
+			}
+
+			.no-stack .col.num6 {
+				width: 50% !important;
+			}
+
+			.no-stack .col.num9 {
+				width: 75% !important;
+			}
+
+			.video-block {
+				max-width: none !important;
+			}
+
+			.mobile_hide {
+				min-height: 0px;
+				max-height: 0px;
+				max-width: 0px;
+				display: none;
+				overflow: hidden;
+				font-size: 0px;
+			}
+
+			.desktop_hide {
+				display: block !important;
+				max-height: none !important;
+			}
+		}
+	</style>
+</head>
+
+<body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #FFFFFF;">
+	<!--[if IE]><div class="ie-browser"><![endif]-->
+	<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
+		style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;"
+		valign="top" width="100%">
+		<tbody>
+			<tr style="vertical-align: top;" valign="top">
+				<td style="word-break: break-word; vertical-align: top;" valign="top">
+					<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color:#FFFFFF"><![endif]-->
+					<div style="background-color:transparent;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:transparent;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:20px; padding-bottom:15px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:20px; padding-bottom:15px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#E7ECEF;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+							<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E7ECEF;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="30" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 30px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="30"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 10px; padding-bottom: 10px; font-family: Georgia, serif"><![endif]-->
+											<div
+												style="color:#555555;font-family:Bitter, Georgia, Times, Times New Roman, serif;line-height:1.2;padding-top:10px;padding-right:20px;padding-bottom:10px;padding-left:20px;">
+												
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:20px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Dear, `+ nama + `</span></p>
+                                                        <br>
+                                                        
+                                                    <p
+														style="font-size: 16px; line-height: 1.5;  font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;">Kami dari <strong>PT. Xsis Mitra Utama</strong> mengundang anda dalam <strong>`+ jadwal + `</strong> yang akan diadakan pada tanggal :
+                                                            <br><br><strong>Tanggal :</strong> `+ tanggal_wawancara + `
+                                                            <br><strong>Lokasi</strong> : `+ lokasi + ` 
+                                                            <br><strong>Waktu</strong> : `+ waktu + ` WIB
+
+                                                            <br><br>Demikian Pemanggilan Wawancara ini Kami harap saudara/i datang 15 menit lebih awal dari jadwal yang sudah di tetapkan
+                                                            </span></p>
+                                                            <br>
+                                                    <p
+														style="font-size: 16px; line-height: 1.5; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #4e5264;"><strong>*Notes : </strong>`+ notes + `</span></p>
+                                                        <br>
+                                                        
+														
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="35" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 35px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="35"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<div style="background-color:#0F7173;">
+						<div class="block-grid"
+							style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: #0F7173;">
+							<div
+								style="border-collapse: collapse;display: table;width: 100%;background-color:#0F7173;background-image:url('images/footer-bg.png');background-position:top center;background-repeat:no-repeat">
+								<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0F7173;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:#0F7173"><![endif]-->
+								<!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:#0F7173;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
+								<div class="col num12"
+									style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+									<div style="width:100% !important;">
+										<!--[if (!mso)&(!IE)]><!-->
+										<div
+											style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+											<!--<![endif]-->
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="15" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 15px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="15"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 15px; font-family: Arial, sans-serif"><![endif]-->
+											<div
+												style="color:#4E5264;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:15px;padding-left:10px;">
+												<div
+													style="font-size: 14px; line-height: 1.5; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #4E5264; mso-line-height-alt: 21px;">
+													<p
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+                                                        <span style="font-size: 16px; color: #b9d6d6;">Terimakasih Atas Perhatiannya.
+                                                            <br>Salam,
+                                                            <br>`+ ro + `
+                                                            <br>PT. Xsis Mitra Utama</span></p>
+
+                                                    <p
+                                                    
+														style="font-size: 16px; line-height: 1.5; text-align: center; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; word-break: break-word; mso-line-height-alt: 24px; margin: 0;">
+														<span style="font-size: 16px; color: #b9d6d6;">
+                                                    <br>
+                                                    <br>© Xsis Mitra Utama
+															Copyright 2020</span></p>
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											
+											<table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation"
+												style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+												valign="top" width="100%">
+												<tbody>
+													<tr style="vertical-align: top;" valign="top">
+														<td class="divider_inner"
+															style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 0px;"
+															valign="top">
+															<table align="center" border="0" cellpadding="0" cellspacing="0" class="divider_content"
+																height="10" role="presentation"
+																style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-top: 0px solid transparent; height: 10px; width: 100%;"
+																valign="top" width="100%">
+																<tbody>
+																	<tr style="vertical-align: top;" valign="top">
+																		<td height="10"
+																			style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;"
+																			valign="top"><span></span></td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!--[if (!mso)&(!IE)]><!-->
+										</div>
+										<!--<![endif]-->
+									</div>
+								</div>
+								<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+								<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+							</div>
+						</div>
+					</div>
+					<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--[if (IE)]></div><![endif]-->
+</body>
+
+</html>`;
+
+			var data = {
+				to: email,
+				subject: sub,
+				text: email_body,
+
+			}
+
+
+			$.ajax({
+				url: 'api/rencana-jadwal-ku/send',
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify(data),
+				success: function (result) {
+
+
+				}, error: function (e) {
+					if (e.responseText = "Email sent Successfully") {
+						swal.hideLoading()
+						swal.fire({
+							title: 'Success',
+							text: 'Email has been Sended',
+							icon: 'success',
+						});
+						$('#modal-rencana_jadwal').modal('show');
+						$('#modal-kirim_undangan').modal('hide');
+
+					} else {
+						swal.hideLoading()
+						swal.fire({
+							title: 'Opps...',
+							text: 'Error Sending Email, Try Again',
+							icon: 'error',
+						});
+					}
+				}
+
+
+			})
+		})
+
+
+	</script>
+</th:block>
+
+</html>

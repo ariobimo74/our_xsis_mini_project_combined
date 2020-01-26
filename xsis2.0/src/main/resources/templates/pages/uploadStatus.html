@@ -1,0 +1,25 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      data-layout-decorate="~{fragments/layout}">
+
+    <h1>Upload Status</h1>
+
+    <div th:if="${message}">
+        <h2 th:text="${message}"/>
+    </div>
+    File in database :<br>
+    <table>
+        <tr th:each="item : ${listFile}">
+            <td th:text="${item.Tanggal}"></td>
+            <td><a th:href="${item.NamaFile}" th:text="${item.NamaFile}" target="_blank"></a></td>
+            <td><img src="/home/etg-user/Pictures/me.jpg" width="100"></img></td>
+        </tr>
+    </table>
+    File in folder :<br>
+    <table>
+        <tr th:each="item : ${allfiles}">
+            <td><a th:href="${item.getName()}" th:text="${item.getName()}" target="_blank"></a></td>
+        </tr>
+    </table>
+
+</html>

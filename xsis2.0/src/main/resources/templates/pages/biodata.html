@@ -1,0 +1,618 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:with="http://www.thymeleaf.org/extras/with" layout:decorate="~{layout}" with:title="'B210'">
+<th:block layout:fragment="content">
+  <div class="bottom p-4">
+    <div class="col">
+      <div class="container-fluid clearfix">
+        <div class="card">
+          <div class="card-block p-4">
+            <div class="row">
+              <div class="col  ml-4">
+                <h3 class="font-weight-bold">Pelamar<label class="badge text-white" id="show-info">10</label>
+                </h3>
+              </div>
+              <div class="col">
+                <h4 class=" float-right">
+                  <a class="mr-2" data-toggle="modal" data-target="" href="#" id="page_sorting1"><i
+                      class="fa fa-sort-alpha-down" aria-hidden="true" id="sort-data1"></i></a>
+
+                  <a class="mr-2" data-toggle="modal" data-target="" href="#" id="page_sorting2"><i
+                      class="fa fa-sort-alpha-up-alt" aria-hidden="true" id="sort-data2"></i></a>
+
+                  <a class="mr-2" data-toggle="dropdown" data-target="" data-display="static" href="" id="page_show"><i
+                      class="fa fa-list" aria-hidden="true" aria-haspopup="true" aria-expanded="false"></i></a>
+                  <div class="dropdown-menu dropdown-menu-lg-right">
+                    <a id="data-show-10" class="dropdown-item" type="button">10 Data Per Page</a>
+                    <a id="data-show-20" class="dropdown-item" type="button">20 Data Per Page</a>
+                    <a id="data-show-30" class="dropdown-item" type="button">30 Data Per Page</a>
+                    <a id="data-show-40" class="dropdown-item" type="button">40 Data Per Page</a>
+                    <a id="data-show-50" class="dropdown-item" type="button">50 Data Per Page</a>
+                  </div>
+
+                  <a class="mr-2" data-toggle="modal" data-target="" href="#" id="add_button"><i
+                      class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                </h4>
+              </div>
+            </div>
+
+            <hr>
+            <div class="row">
+              <div class="col-sm ml-4">
+                <div class="form-group">
+                  <label for="input-search-dari">Nama Pelamar</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-user"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" id="input-search-pelamar" required autocomplete="off">
+                  </div>
+                  <!-- /.input group -->
+                </div>
+              </div>
+
+              <div class="col-sm float-left ml-4">
+                <div class="form-group">
+                  <label class="text-white">action</label>
+                  <div class="input-group">
+                    <button id="btn-search" class="btn btn-primary mr-2"><i class="fa fa-search"></i></button>
+                    <button id="btn-reset" class="btn btn-primary">Reset</button>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="card-block p-4">
+              <div class="row">
+                <div class="col-sm">
+                  <div id="showList">
+                    <!-- Show List Vacancy -->
+                    <table id="my-data" class="table table-hover">
+                      <thead class="">
+                      </thead>
+
+                      <tbody id="data_rows">
+                        <!-- Tempat data di isikan oleh java script -->
+
+                      </tbody>
+                    </table>
+                    <hr>
+                    <tfoot>
+                      <div class="row">
+                        <div class="col-sm col-md">
+                          <p> Total Data:
+                            <a class="badge badge-danger text-white" id="total-data"></a></p>
+                        </div>
+                        <div class="col-sm col-md">
+                          <p> Total Halaman:
+                            <a class="badge badge-warning text-white" id="total-size"></a></p>
+                        </div>
+                        <div class="col-sm col-md">
+                          <p>Data Per Halaman:
+                            <a class="badge badge-success text-white" id="total-page"></a></p>
+                        </div>
+                        <div class="col-sm col-md">
+                          <p> Halaman Ke:
+                            <a class="badge badge-primary text-white" id="total-ke"></a></p>
+                        </div>
+                      </div>
+                    </tfoot>
+
+                  </div>
+                  <hr>
+                  <input type="hidden" id="count-page">
+                  <input type="hidden" id="count-first">
+                  <input type="hidden" id="count-last">
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end mr-2">
+                      <li class="page-item"><button class="page-link" id="prev">Previous</button></li>
+                      <li class="page-item"><button class="page-link diasabled" href="" id="next">Next</button></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal untuk menampilkna cuy..tinggal modif aja isinya sesuai kebutuhan -->
+  <div class="modal fade" id="modal-biodata" style="overflow-y:auto;">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #000066;">
+          <h4 class="modal-judul ">Biodata</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span class="text-white" aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body p-4">
+          <input type="hidden" id="action" value="">
+          <form id="get_form_biodata" class="needs-validation">
+            <input type="hidden" id="get_id" name="id">
+            <input type="hidden" id="get_addressid" name="id">
+
+            <input type="hidden" id="get_companyid" name="id" value="1">
+
+            <input type="hidden" id="get_createdBy" name="createdBy">
+            <input type="hidden" id="get_createdOn" name="createdOn">
+
+
+            <!-- ROw Pertama -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_full_name">Nama Lengkap*</label>
+                  <input type="text" name="fullName" id="get_full_name" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_nickname">Nama Panggilan*</label>
+                  <input type="text" name="nickName" id="get_nickname" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+            <!-- Row kedua -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_pob">Tempat Lahir*</label>
+                  <input type="text" name="pob" id="get_pob" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+
+
+                <div class="form-group">
+                  <label for="get_dob">Tgl Lahir(tttt-bb-hh)*</label>
+
+                  <div class="input-group">
+                    <input type="text" name="dob" id="get_dob" class="form-control get_biodata" required
+                      placeholder="Tahun-Bulan-Hari">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_gender">Jenis Kelamin*</label>
+                  <select class="form-control  get_biodata" id="get_gender" name="gender">
+                    <option selected>Pilih...</option>
+                    <option value="true">Laki-laki</option>
+                    <option value="false">Perempuan</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <!-- Menampilkan nama Agama -->
+                  <label for="get_religion">Agama*</label>
+                  <select class="form-control  get_biodata" id="get_religion" name="religion" required>
+                    <!-- <option value="">- Pilih -</option> -->
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- row ketiga -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_hight">Tinggi(cm)*</label>
+                  <input min="0" type="text" name="hight" id="get_hight" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_weight">Berat Badan(Kg)*</label>
+                  <input min="0" type="text" name="weight" id="get_weight" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_nationality">Kewarganegaraan*</label>
+                  <input type="text" name="nationality" id="get_nationality" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_ethnic">Suku Bangsa</label>
+                  <input type="text" name="ethnic" id="get_ethnic" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke empat -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_hobby">Kegemaran/Hobi</label>
+                  <input type="text" name="hobby" id="get_hobby" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_type_identity">Jenis Identitas*</label>
+                      <!-- di isi dengan javascrip menggunakan ajax -->
+                      <select class="form-control  get_biodata" id="get_type_identity" name="identityType"></select>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_no_indentity">Nomor Identitas</label>
+                      <input type="text" name="identityNo" id="get_no_indentity" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- row kelima -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_email">Email*</label>
+                  <input type="email" name="email" id="get_email" class="form-control get_biodata x-email" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_no_hp1">No. HP*</label>
+                  <input type="text" min="0" name="phoneNumber1" id="get_no_hp1" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_no_hp2">No. HP Alternatif</label>
+                  <input type="text" min="0" name="phoneNumber2" id="get_no_hp2" class="form-control get_biodata"
+                    onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_parent_telphone">No. Tlp Orang Tua*</label>
+                  <input type="text" min="0" name="parentPhoneNumber" id="get_parent_telphone"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke enam -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_child_secuence">Anak ke*</label>
+                  <input min="0" type="text" name="childSequence" id="get_child_secuence"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_how_many_brother">Dari berapa saudara*</label>
+                  <input type="text" min="0" name="howManyBrothers" id="get_how_many_brother"
+                    class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                    required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_marital_status">Status Pernikahan*</label>
+                  <!-- Bagian Status Pernikahan  -->
+                  <select class="form-control  get_biodata" id="get_marital_status" name="maritalStatus"></select>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_marriage_year">Tahun Pernikahan</label>
+                  <!-- Diisi dengan javascript -->
+                  <select class="form-control marr_sts year_marriage" id="get_marriage_year" name="marriageYear">
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke 7 -->
+            <div class="row mt-3">
+              <div class="col-sm col-md">
+                <h5><strong>Alamat Sesuai Kartu Indentitas</strong></h5>
+                <hr>
+              </div>
+              <div class="col-sm col-md">
+                <h5><strong>Alamat Sesuai Tempat Tinggal saat Ini</strong></h5>
+                <hr>
+              </div>
+            </div>
+
+            <!-- row ke 8 -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <input type="hidden" name="biodataId" id="get_bioId" class="form-control get_biodata" required>
+
+                <div class="form-group">
+                  <label for="get_address1">Alamat*</label>
+                  <input type="text" name="address1" id="get_address1" class="form-control get_biodata" required>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="form-group">
+                  <label for="get_ddress2">Alamat*</label>
+                  <input type="text" name="address2" id="get_address2" class="form-control get_biodata" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- row ke 9 -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md-6">
+                    <div class="form-group">
+                      <label for="get_postal_code1">Kode Pos</label>
+                      <input min="0" type="text" name="postalCode1" id="get_postal_code1"
+                        class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rt1">RT*</label>
+                      <input min="0" type="text" name="rt1" id="get_rt1" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rw1">RW*</label>
+                      <input min="0" type="text" name="rw1" id="get_rw1" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md-6">
+                    <div class="form-group">
+                      <label for="get_postal_code2">Kode Pos</label>
+                      <input min="0" type="text" name="postalCode2" id="get_postal_code2"
+                        class="form-control get_biodata" onkeypress="return event.charCode>=48&&event.charCode<=57"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rt2">RT*</label>
+                      <input min="0" type="text" name="rt2" id="get_rt2" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md-3">
+                    <div class="form-group">
+                      <label for="get_rw2">RW*</label>
+                      <input min="0" type="text" name="rw2" id="get_rw2" class="form-control get_biodata"
+                        onkeypress="return event.charCode>=48&&event.charCode<=57" required>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- row kesepuluh -->
+            <div class="row">
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kelurahan1">Desa/Kelurahan*</label>
+                      <input min="0" type="text" name="kelurahan1" id="get_kelurahan1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kecamatan1">Kecamatan*</label>
+                      <input min="0" type="text" name="kecamatan1" id="get_kecamatan1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_region1">Kota*</label>
+                      <input min="0" type="text" name="region1" id="get_region1" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm col-md">
+                <div class="row">
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kelurahan2">Desa/Kelurahan*</label>
+                      <input min="0" type="text" name="kelurahan2" id="get_kelurahan2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_kecamatan2">Kecamatan*</label>
+                      <input min="0" type="text" name="kecamatan2" id="get_kecamatan2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-sm col-md">
+                    <div class="form-group">
+                      <label for="get_region2">Kota*</label>
+                      <input min="0" type="text" name="region2" id="get_region2" class="form-control get_biodata"
+                        required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- </div>
+      </div>
+    </div> -->
+          <!-- </div> -->
+        </div> <!-- /.modal-body -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary get_biodata x-hide" id="save_button">Simpan
+          </button>
+        </div> <!-- /.modal-footer -->
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- menampilkan detail biodata -->
+
+  <div class="modal fade" id="detailBiodata" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" style="overflow-y:auto;">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Detail Pelamar</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="sidebar-nav">
+                <div class="navbar navbar-default" role="navigation">
+                  <div class="navbar-collapse sidebar-navbar-collapse">
+                    <div class="list-group" id="list-tab" role="tablist">
+                      <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list"
+                        href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+                      <a class="list-group-item list-group-item-action" id="list-biodata-list" data-toggle="list"
+                        href="#list-biodata" role="tab" aria-controls="biodata">Biodata</a>
+                      <a class="list-group-item list-group-item-action" id="list-pengalaman-kerja-list"
+                        data-toggle="list" href="#list-pengalaman-kerja" role="tab"
+                        aria-controls="pengalaman-kerja">Pengalamann Kerja</a>
+                      <a class="list-group-item list-group-item-action" id="list-pendidikan-list" data-toggle="list"
+                        href="#list-pendidikan" role="tab" aria-controls="pendidikan">Pendidikan</a>
+                      <a class="list-group-item list-group-item-action" id="list-pelatihan-list" data-toggle="list"
+                        href="#list-pelatihan" role="tab" aria-controls="pelatihan">Pelatihan</a>
+                      <a class="list-group-item list-group-item-action" id="list-sertifikasi-list" data-toggle="list"
+                        href="#list-sertifikasi" role="tab" aria-controls="sertifikasi">Sertifikasi</a>
+                      <a class="list-group-item list-group-item-action" id="list-sumber-lowongan-kerja-list"
+                        data-toggle="list" href="#list-sumber-lowongan-kerja" role="tab"
+                        aria-controls="sumber-lowongan-kerja">Sumber Lowongan Kerja</a>
+                      <a class="list-group-item list-group-item-action" id="list-organisasi-list" data-toggle="list"
+                        href="#list-organisasi" role="tab" aria-controls="organisasi">Organisasi</a>
+                      <a class="list-group-item list-group-item-action" id="list-keluarga-list" data-toggle="list"
+                        href="#list-keluarga" role="tab" aria-controls="keluarga">Keluarga</a>
+                      <a class="list-group-item list-group-item-action" id="list-keahlian-list" data-toggle="list"
+                        href="#list-keahlian" role="tab" aria-controls="keahlian">Keahlian</a>
+                      <a class="list-group-item list-group-item-action" id="list-lain-lain-list" data-toggle="list"
+                        href="#list-lain-lain" role="tab" aria-controls="lain-lain">Lain - Lain</a>
+                      <a class="list-group-item list-group-item-action" id="list-dokumen-list" data-toggle="list"
+                        href="#list-dokumen" role="tab" aria-controls="dokumen">Dokumen</a>
+                      <a class="list-group-item list-group-item-action" id="list-catatan-list" data-toggle="list"
+                        href="#list-catatan" role="tab" aria-controls="catatan">Catatan</a>
+                      <a class="list-group-item list-group-item-action" id="list-aktivasi-akun-list" data-toggle="list"
+                        href="#list-aktivasi-akun" role="tab" aria-controls="aktivasi-akun">Aktivasi Akun</a>
+                      <a class="list-group-item list-group-item-action" id="list-lihat-tes-list" data-toggle="list"
+                        href="#list-lihat-tes" role="tab" aria-controls="lihat-tes">Lihat Tes</a>
+                      <a class="list-group-item list-group-item-action" id="list-hasil-tes-list" data-toggle="list"
+                        href="#list-hasil-tes" role="tab" aria-controls="hasil-tes">Hasil Tes</a>
+                    </div>
+                  </div>
+                  <!--/.nav-collapse -->
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="list-profile" role="tabpanel"
+                  aria-labelledby="list-profile-list">...</div>
+
+
+                <!-- --bagian eko sutrisno-- -->
+                <div class="tab-pane fade show" id="list-biodata" role="tabpanel" aria-labelledby="list-biodata-list">
+                  <h4 class="font-weight-bold">Biodata <a data-toggle="modal" data-target="#addModal" href="#"
+                      onclick="get_edit()" id="showEdit"><i class="fa fa-edit" aria-hidden="true"></i></a></h4>
+                  <hr>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-striped font-weight-bold">
+                        <thead>
+                          <tr class="text-center">
+                          </tr>
+                        </thead>
+                        <tbody id="biodata-rows">
+                          <!-- mengisi data pelamara  -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- --ending bagian eko sutrisno-- -->
+
+                <div class="tab-pane fade" id="list-pendidikan" role="tabpanel" aria-labelledby="list-pendidikan-list">
+                  <h4>Pendidikan <a data-toggle="modal" data-target="#addModal" href="#" id="showAddData"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i></a></h4>
+                  <div class="card">
+                    <div class="card-block">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col">SEKOLAH/INSTANSI</th>
+                            <th scope="col">JENJANG</th>
+                            <th scope="col">PERIODE</th>
+                            <th scope="col">JURUSAN</th>
+                            <th scope="col">IPK</th>
+                            <th scope="col">#</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbEducation">
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Content will be loaded here...  -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ending menampilkan detail data  -->
+
+
+</th:block>
+
+<th:block layout:fragment="biodata">
+  <script th:src="@{/js/biodata.js}"></script>
+</th:block>
